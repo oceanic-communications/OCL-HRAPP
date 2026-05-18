@@ -10,7 +10,7 @@
             <p class="mt-2 text-sm text-muted-foreground">HR portal</p>
         </div>
 
-        <div class="portal-card pacific-texture overflow-hidden">
+        <div class="portal-card overflow-hidden">
             <div class="relative z-10 border-b border-border px-6 py-5">
                 @if ($showOtpStep ?? false)
                     <h2 class="text-xl font-semibold text-foreground">Check your email</h2>

@@ -217,34 +217,6 @@ html {
     }
 }
 
-/* Pacific texture (matches grants-portal-design) */
-.pacific-texture {
-    position: relative;
-}
-
-.pacific-texture::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image:
-        repeating-linear-gradient(
-            45deg,
-            transparent,
-            transparent 10px,
-            rgba(30, 39, 73, 0.03) 10px,
-            rgba(30, 39, 73, 0.03) 20px
-        ),
-        repeating-linear-gradient(
-            -45deg,
-            transparent,
-            transparent 10px,
-            rgba(28, 175, 191, 0.02) 10px,
-            rgba(28, 175, 191, 0.02) 20px
-        );
-    pointer-events: none;
-    border-radius: inherit;
-}
-
 @layer components {
     /* WCAG 2.2 — 2.5.8 Target Size (Minimum): at least 24×24 CSS px for pointer targets (exceptions: inline text, UA controls) */
     .portal-touch-target {

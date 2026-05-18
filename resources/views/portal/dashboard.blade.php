@@ -16,7 +16,7 @@
 
 <div class="mx-auto max-w-6xl space-y-6 sm:space-y-8">
     @if ($portalHr)
-        <div class="pacific-texture relative overflow-hidden rounded-2xl bg-gradient-to-br from-violet-600 via-violet-500 to-purple-600 p-5 text-white shadow-lg sm:p-6 lg:p-8">
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-violet-600 via-violet-500 to-purple-600 p-5 text-white shadow-lg sm:p-6 lg:p-8">
             <div class="pointer-events-none absolute right-0 top-0 h-72 w-72 -translate-y-1/2 translate-x-1/2 rounded-full bg-white/5 sm:h-96 sm:w-96"></div>
             <div class="pointer-events-none absolute bottom-0 left-0 h-48 w-48 -translate-x-1/2 translate-y-1/2 rounded-full bg-white/5 sm:h-64 sm:w-64"></div>
             <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
@@ -58,7 +58,7 @@
             </div>
         </div>
     @else
-        <div class="pacific-texture relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary via-primary/90 to-primary/70 p-5 text-primary-foreground shadow-lg sm:p-6 lg:p-8">
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary via-primary/90 to-primary/70 p-5 text-primary-foreground shadow-lg sm:p-6 lg:p-8">
             <div class="pointer-events-none absolute right-0 top-0 h-72 w-72 -translate-y-1/2 translate-x-1/2 rounded-full bg-white/5 sm:h-96 sm:w-96"></div>
             <div class="pointer-events-none absolute bottom-0 left-0 h-48 w-48 -translate-x-1/2 translate-y-1/2 rounded-full bg-white/5 sm:h-64 sm:w-64"></div>
             <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
