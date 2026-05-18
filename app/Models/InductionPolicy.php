@@ -35,4 +35,18 @@ class InductionPolicy extends Model
             ->orderByDesc('published_at')
             ->first();
     }
+
+    public function ensureEditableVersion(): InductionPolicyVersion
+    {
+        $published = $this->publishedVersion();
+        if ($published !== null) {
+            return $published;
+        }
+
+        return $this->versions()->create([
+            'version_label' => 'Current',
+            'published_at' => now(),
+            'created_by' => auth()->id(),
+        ]);
+    }
 }

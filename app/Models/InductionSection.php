@@ -40,12 +40,4 @@ class InductionSection extends Model
     {
         return $this->hasMany(InductionSectionCompletion::class);
     }
-
-    /**
-     * @return HasMany<InductionSectionQuestion, $this>
-     */
-    public function questions(): HasMany
-    {
-        return $this->hasMany(InductionSectionQuestion::class)->orderBy('sort_order');
-    }
 }

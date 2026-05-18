@@ -4,15 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\InductionPolicy;
-use App\Models\InductionPolicyVersion;
 use App\Models\InductionSection;
-use App\Models\InductionSectionQuestion;
 use App\Services\Induction\InductionPolicyAdminChangeService;
 use App\Support\PortalPermissions;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -58,7 +55,10 @@ class InductionPolicyAdminController extends Controller
         $this->authorizeManage();
 
         $policies = InductionPolicy::query()
-            ->with(['versions' => fn ($q) => $q->orderByDesc('published_at')->orderByDesc('id')])
+            ->with([
+                'versions' => fn ($q) => $q->whereNotNull('published_at')->orderByDesc('published_at')->limit(1),
+                'versions.sections' => fn ($q) => $q->orderBy('sort_order'),
+            ])
             ->orderBy('name')
             ->get();
 
@@ -70,23 +70,23 @@ class InductionPolicyAdminController extends Controller
         $this->authorizeManage();
         $data = $request->validate([
             'create_name' => ['required', 'string', 'max:255'],
-            'create_slug' => ['nullable', 'string', 'max:64', Rule::unique('induction_policies', 'slug')],
         ]);
         $repeat = $this->validateStaffRepeatChoice($request);
 
-        $slug = $data['create_slug'] ?? null;
-        if (! is_string($slug) || $slug === '') {
-            $slug = $this->uniqueSlugFromName($data['create_name']);
-        }
-
-        $policy = null;
+        $slug = $this->uniqueSlugFromName($data['create_name']);
         $ctx = $this->auditRequestContext($request);
 
-        DB::transaction(function () use (&$policy, $data, $slug, $repeat, $ctx): void {
+        DB::transaction(function () use ($data, $slug, $repeat, $ctx): void {
             $policy = InductionPolicy::query()->create([
                 'name' => $data['create_name'],
                 'slug' => $slug,
                 'is_active' => true,
+            ]);
+
+            $version = $policy->versions()->create([
+                'version_label' => 'Current',
+                'published_at' => now(),
+                'created_by' => auth()->id(),
             ]);
 
             $this->adminChangeService->record(
@@ -95,15 +95,15 @@ class InductionPolicyAdminController extends Controller
                 subjectType: InductionPolicy::class,
                 subjectId: $policy->id,
                 policyId: $policy->id,
-                versionId: null,
+                versionId: $version->id,
                 metadata: ['after' => $policy->only(['name', 'slug', 'is_active'])],
                 staffRepeatRequested: $repeat,
-                versionForRepeat: null,
+                versionForRepeat: $version,
                 complianceContext: $ctx,
             );
         });
 
-        return redirect()->route('admin.induction.index')->with('success', 'Policy created.');
+        return redirect()->route('admin.induction.index')->with('success', 'Policy created. Add sections below.');
     }
 
     public function updatePolicy(Request $request, InductionPolicy $policy): RedirectResponse
@@ -116,25 +116,25 @@ class InductionPolicyAdminController extends Controller
         $repeat = $this->validateStaffRepeatChoice($request);
 
         $before = $policy->only(['name', 'slug', 'is_active']);
+        $version = $policy->ensureEditableVersion();
         $ctx = $this->auditRequestContext($request);
 
-        DB::transaction(function () use ($policy, $data, $repeat, $before, $ctx): void {
+        DB::transaction(function () use ($policy, $data, $repeat, $before, $version, $ctx): void {
             $policy->forceFill([
                 'name' => $data['policy'][$policy->id]['name'],
                 'is_active' => $data['policy'][$policy->id]['is_active'] === '1',
             ])->save();
 
-            $published = $policy->publishedVersion();
             $this->adminChangeService->record(
                 actor: auth()->user(),
                 action: 'induction_policy.updated',
                 subjectType: InductionPolicy::class,
                 subjectId: $policy->id,
                 policyId: $policy->id,
-                versionId: $published?->id,
+                versionId: $version->id,
                 metadata: ['before' => $before, 'after' => $policy->only(['name', 'slug', 'is_active'])],
                 staffRepeatRequested: $repeat,
-                versionForRepeat: $published,
+                versionForRepeat: $version,
                 complianceContext: $ctx,
             );
         });
@@ -142,80 +142,27 @@ class InductionPolicyAdminController extends Controller
         return redirect()->route('admin.induction.index')->with('success', 'Policy saved.');
     }
 
-    public function storeVersion(Request $request, InductionPolicy $policy): RedirectResponse
-    {
-        $this->authorizeManage();
-        $data = $request->validate([
-            "version.{$policy->id}.version_label" => ['required', 'string', 'max:64'],
-            "version.{$policy->id}.effective_date" => ['nullable', 'date'],
-        ]);
-        $repeat = $this->validateStaffRepeatChoice($request);
-
-        $version = null;
-        $ctx = $this->auditRequestContext($request);
-
-        DB::transaction(function () use (&$version, $policy, $data, $repeat, $ctx): void {
-            $row = $data['version'][$policy->id];
-            $version = InductionPolicyVersion::query()->create([
-                'induction_policy_id' => $policy->id,
-                'version_label' => $row['version_label'],
-                'effective_date' => $row['effective_date'] ?? null,
-                'published_at' => null,
-                'created_by' => auth()->id(),
-            ]);
-
-            $this->adminChangeService->record(
-                actor: auth()->user(),
-                action: 'induction_policy_version.created',
-                subjectType: InductionPolicyVersion::class,
-                subjectId: $version->id,
-                policyId: $policy->id,
-                versionId: $version->id,
-                metadata: ['after' => $version->only(['version_label', 'effective_date', 'published_at'])],
-                staffRepeatRequested: $repeat,
-                versionForRepeat: $version,
-                complianceContext: $ctx,
-            );
-        });
-
-        return redirect()->route('admin.induction.versions.show', $version)->with('success', 'Draft version created.');
-    }
-
-    public function showVersion(InductionPolicyVersion $version): View
-    {
-        $this->authorizeManage();
-        $version->load([
-            'policy',
-            'sections' => fn ($q) => $q->orderBy('sort_order')->with(['questions' => fn ($q) => $q->orderBy('sort_order')]),
-        ]);
-
-        return view('admin.induction.version', compact('version'));
-    }
-
-    public function storeSection(Request $request, InductionPolicyVersion $version): RedirectResponse
+    public function storeSection(Request $request, InductionPolicy $policy): RedirectResponse
     {
         $this->authorizeManage();
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'body' => ['required', 'string'],
-            'requires_signature' => ['sometimes', 'boolean'],
-            'acknowledgement_hint' => ['nullable', 'string', 'max:2000'],
-            'sort_order' => ['nullable', 'integer', 'min:0', 'max:9999'],
         ]);
         $repeat = $this->validateStaffRepeatChoice($request);
 
-        $section = null;
+        $version = $policy->ensureEditableVersion();
         $ctx = $this->auditRequestContext($request);
 
-        DB::transaction(function () use (&$section, $request, $version, $data, $repeat, $ctx): void {
+        DB::transaction(function () use ($version, $data, $repeat, $ctx): void {
             $max = (int) $version->sections()->max('sort_order');
             $section = InductionSection::query()->create([
                 'induction_policy_version_id' => $version->id,
-                'sort_order' => $data['sort_order'] ?? ($max + 1),
+                'sort_order' => $max + 1,
                 'title' => $data['title'],
                 'body' => $data['body'],
-                'requires_signature' => $request->boolean('requires_signature'),
-                'acknowledgement_hint' => $data['acknowledgement_hint'] ?? null,
+                'requires_signature' => true,
+                'acknowledgement_hint' => null,
             ]);
 
             $this->adminChangeService->record(
@@ -225,39 +172,36 @@ class InductionPolicyAdminController extends Controller
                 subjectId: $section->id,
                 policyId: $version->induction_policy_id,
                 versionId: $version->id,
-                metadata: ['after' => $section->only(['title', 'sort_order', 'requires_signature'])],
+                metadata: ['after' => $section->only(['title', 'sort_order'])],
                 staffRepeatRequested: $repeat,
                 versionForRepeat: $version,
                 complianceContext: $ctx,
             );
         });
 
-        return redirect()->route('admin.induction.versions.show', $version)->with('success', 'Section added.');
+        return redirect()->route('admin.induction.index')->with('success', 'Section added.');
     }
 
-    public function updateSection(Request $request, InductionPolicyVersion $version, InductionSection $section): RedirectResponse
+    public function updateSection(Request $request, InductionPolicy $policy, InductionSection $section): RedirectResponse
     {
         $this->authorizeManage();
+        $version = $policy->ensureEditableVersion();
         abort_unless($section->induction_policy_version_id === $version->id, 404);
 
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'body' => ['required', 'string'],
-            'requires_signature' => ['sometimes', 'boolean'],
-            'acknowledgement_hint' => ['nullable', 'string', 'max:2000'],
             'sort_order' => ['required', 'integer', 'min:0', 'max:9999'],
         ]);
         $repeat = $this->validateStaffRepeatChoice($request);
 
-        $before = $section->only(['title', 'body', 'sort_order', 'requires_signature', 'acknowledgement_hint']);
+        $before = $section->only(['title', 'body', 'sort_order']);
         $ctx = $this->auditRequestContext($request);
 
-        DB::transaction(function () use ($request, $section, $version, $data, $repeat, $before, $ctx): void {
+        DB::transaction(function () use ($section, $version, $data, $repeat, $before, $ctx): void {
             $section->update([
                 'title' => $data['title'],
                 'body' => $data['body'],
-                'requires_signature' => $request->boolean('requires_signature'),
-                'acknowledgement_hint' => $data['acknowledgement_hint'] ?? null,
                 'sort_order' => $data['sort_order'],
             ]);
 
@@ -268,129 +212,24 @@ class InductionPolicyAdminController extends Controller
                 subjectId: $section->id,
                 policyId: $version->induction_policy_id,
                 versionId: $version->id,
-                metadata: ['before' => $before, 'after' => $section->fresh()->only(['title', 'body', 'sort_order', 'requires_signature', 'acknowledgement_hint'])],
+                metadata: ['before' => $before, 'after' => $section->fresh()->only(['title', 'body', 'sort_order'])],
                 staffRepeatRequested: $repeat,
                 versionForRepeat: $version,
                 complianceContext: $ctx,
             );
         });
 
-        return redirect()->route('admin.induction.versions.show', $version)->with('success', 'Section updated.');
+        return redirect()->route('admin.induction.index')->with('success', 'Section saved.');
     }
 
-    public function storeQuestion(Request $request, InductionPolicyVersion $version, InductionSection $section): RedirectResponse
+    public function destroySection(Request $request, InductionPolicy $policy, InductionSection $section): RedirectResponse
     {
         $this->authorizeManage();
-        abort_unless($section->induction_policy_version_id === $version->id, 404);
-
-        $data = $request->validate([
-            'prompt' => ['required', 'string', 'max:2000'],
-        ]);
-        $repeat = $this->validateStaffRepeatChoice($request);
-
-        $ctx = $this->auditRequestContext($request);
-
-        DB::transaction(function () use ($section, $version, $data, $repeat, $ctx): void {
-            $max = (int) $section->questions()->max('sort_order');
-            $question = InductionSectionQuestion::query()->create([
-                'induction_section_id' => $section->id,
-                'sort_order' => $max + 1,
-                'prompt' => $data['prompt'],
-            ]);
-
-            $this->adminChangeService->record(
-                actor: auth()->user(),
-                action: 'induction_section_question.created',
-                subjectType: InductionSectionQuestion::class,
-                subjectId: $question->id,
-                policyId: $version->induction_policy_id,
-                versionId: $version->id,
-                metadata: ['after' => $question->only(['prompt', 'sort_order']), 'induction_section_id' => $section->id],
-                staffRepeatRequested: $repeat,
-                versionForRepeat: $version,
-                complianceContext: $ctx,
-            );
-        });
-
-        return redirect()->route('admin.induction.versions.show', $version)->with('success', 'Question added.');
-    }
-
-    public function updateQuestion(Request $request, InductionPolicyVersion $version, InductionSection $section, InductionSectionQuestion $question): RedirectResponse
-    {
-        $this->authorizeManage();
-        abort_unless($section->induction_policy_version_id === $version->id, 404);
-        abort_unless($question->induction_section_id === $section->id, 404);
-
-        $data = $request->validate([
-            'prompt' => ['required', 'string', 'max:2000'],
-            'sort_order' => ['required', 'integer', 'min:0', 'max:9999'],
-        ]);
-        $repeat = $this->validateStaffRepeatChoice($request);
-
-        $before = $question->only(['prompt', 'sort_order']);
-        $ctx = $this->auditRequestContext($request);
-
-        DB::transaction(function () use ($question, $section, $version, $data, $repeat, $before, $ctx): void {
-            $question->update([
-                'prompt' => $data['prompt'],
-                'sort_order' => $data['sort_order'],
-            ]);
-
-            $this->adminChangeService->record(
-                actor: auth()->user(),
-                action: 'induction_section_question.updated',
-                subjectType: InductionSectionQuestion::class,
-                subjectId: $question->id,
-                policyId: $version->induction_policy_id,
-                versionId: $version->id,
-                metadata: ['before' => $before, 'after' => $question->fresh()->only(['prompt', 'sort_order']), 'induction_section_id' => $section->id],
-                staffRepeatRequested: $repeat,
-                versionForRepeat: $version,
-                complianceContext: $ctx,
-            );
-        });
-
-        return redirect()->route('admin.induction.versions.show', $version)->with('success', 'Question updated.');
-    }
-
-    public function destroyQuestion(Request $request, InductionPolicyVersion $version, InductionSection $section, InductionSectionQuestion $question): RedirectResponse
-    {
-        $this->authorizeManage();
-        abort_unless($section->induction_policy_version_id === $version->id, 404);
-        abort_unless($question->induction_section_id === $section->id, 404);
-        $repeat = $this->validateStaffRepeatChoice($request);
-
-        $snapshot = $question->only(['id', 'prompt', 'sort_order']);
-        $ctx = $this->auditRequestContext($request);
-
-        DB::transaction(function () use ($question, $section, $version, $repeat, $snapshot, $ctx): void {
-            $questionId = $question->id;
-            $question->delete();
-
-            $this->adminChangeService->record(
-                actor: auth()->user(),
-                action: 'induction_section_question.deleted',
-                subjectType: InductionSectionQuestion::class,
-                subjectId: $questionId,
-                policyId: $version->induction_policy_id,
-                versionId: $version->id,
-                metadata: ['deleted' => $snapshot, 'induction_section_id' => $section->id],
-                staffRepeatRequested: $repeat,
-                versionForRepeat: $version,
-                complianceContext: $ctx,
-            );
-        });
-
-        return redirect()->route('admin.induction.versions.show', $version)->with('success', 'Question removed.');
-    }
-
-    public function destroySection(Request $request, InductionPolicyVersion $version, InductionSection $section): RedirectResponse
-    {
-        $this->authorizeManage();
+        $version = $policy->ensureEditableVersion();
         abort_unless($section->induction_policy_version_id === $version->id, 404);
         $repeat = $this->validateStaffRepeatChoice($request);
 
-        $snapshot = $section->only(['id', 'title', 'sort_order', 'requires_signature']);
+        $snapshot = $section->only(['id', 'title', 'sort_order']);
         $ctx = $this->auditRequestContext($request);
 
         DB::transaction(function () use ($section, $version, $repeat, $snapshot, $ctx): void {
@@ -411,108 +250,7 @@ class InductionPolicyAdminController extends Controller
             );
         });
 
-        return redirect()->route('admin.induction.versions.show', $version)->with('success', 'Section removed.');
-    }
-
-    public function publishVersion(Request $request, InductionPolicyVersion $version): RedirectResponse
-    {
-        $this->authorizeManage();
-        $repeat = $this->validateStaffRepeatChoice($request);
-        $ctx = $this->auditRequestContext($request);
-
-        DB::transaction(function () use ($version, $repeat, $ctx): void {
-            InductionPolicyVersion::query()
-                ->where('induction_policy_id', $version->induction_policy_id)
-                ->whereKeyNot($version->id)
-                ->update(['published_at' => null]);
-
-            $version->forceFill(['published_at' => now()])->save();
-            $version->refresh();
-
-            $this->adminChangeService->record(
-                actor: auth()->user(),
-                action: 'induction_policy_version.published',
-                subjectType: InductionPolicyVersion::class,
-                subjectId: $version->id,
-                policyId: $version->induction_policy_id,
-                versionId: $version->id,
-                metadata: ['after' => $version->only(['version_label', 'published_at'])],
-                staffRepeatRequested: $repeat,
-                versionForRepeat: $version,
-                complianceContext: $ctx,
-            );
-        });
-
-        return redirect()->route('admin.induction.versions.show', $version)->with('success', 'This version is now the published induction.');
-    }
-
-    public function uploadMasterPdf(Request $request, InductionPolicyVersion $version): RedirectResponse
-    {
-        $this->authorizeManage();
-        $request->validate([
-            'policy_pdf' => ['required', 'file', 'mimes:pdf', 'max:20480'],
-        ]);
-        $repeat = $this->validateStaffRepeatChoice($request);
-
-        $before = $version->only(['policy_pdf_disk', 'policy_pdf_path']);
-        $ctx = $this->auditRequestContext($request);
-
-        DB::transaction(function () use ($request, $version, $repeat, $before, $ctx): void {
-            $path = $request->file('policy_pdf')->store('induction/policy-masters/'.$version->id, 'local');
-            $version->forceFill([
-                'policy_pdf_disk' => 'local',
-                'policy_pdf_path' => $path,
-            ])->save();
-
-            $this->adminChangeService->record(
-                actor: auth()->user(),
-                action: 'induction_policy_version.master_pdf_uploaded',
-                subjectType: InductionPolicyVersion::class,
-                subjectId: $version->id,
-                policyId: $version->induction_policy_id,
-                versionId: $version->id,
-                metadata: ['before' => $before, 'after' => $version->only(['policy_pdf_disk', 'policy_pdf_path'])],
-                staffRepeatRequested: $repeat,
-                versionForRepeat: $version,
-                complianceContext: $ctx,
-            );
-        });
-
-        return redirect()->route('admin.induction.versions.show', $version)->with('success', 'Policy PDF stored.');
-    }
-
-    public function destroyMasterPdf(Request $request, InductionPolicyVersion $version): RedirectResponse
-    {
-        $this->authorizeManage();
-        $repeat = $this->validateStaffRepeatChoice($request);
-
-        $before = $version->only(['policy_pdf_disk', 'policy_pdf_path']);
-        $ctx = $this->auditRequestContext($request);
-
-        DB::transaction(function () use ($version, $repeat, $before, $ctx): void {
-            if ($version->policy_pdf_disk && $version->policy_pdf_path) {
-                Storage::disk($version->policy_pdf_disk)->delete($version->policy_pdf_path);
-            }
-            $version->forceFill([
-                'policy_pdf_disk' => null,
-                'policy_pdf_path' => null,
-            ])->save();
-
-            $this->adminChangeService->record(
-                actor: auth()->user(),
-                action: 'induction_policy_version.master_pdf_removed',
-                subjectType: InductionPolicyVersion::class,
-                subjectId: $version->id,
-                policyId: $version->induction_policy_id,
-                versionId: $version->id,
-                metadata: ['before' => $before],
-                staffRepeatRequested: $repeat,
-                versionForRepeat: $version,
-                complianceContext: $ctx,
-            );
-        });
-
-        return redirect()->route('admin.induction.versions.show', $version)->with('success', 'Policy PDF removed.');
+        return redirect()->route('admin.induction.index')->with('success', 'Section removed.');
     }
 
     private function uniqueSlugFromName(string $name): string

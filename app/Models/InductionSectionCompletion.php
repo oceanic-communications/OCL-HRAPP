@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class InductionSectionCompletion extends Model
 {
@@ -41,13 +40,5 @@ class InductionSectionCompletion extends Model
     public function section(): BelongsTo
     {
         return $this->belongsTo(InductionSection::class, 'induction_section_id');
-    }
-
-    /**
-     * @return HasMany<InductionSectionQuestionResponse, $this>
-     */
-    public function questionResponses(): HasMany
-    {
-        return $this->hasMany(InductionSectionQuestionResponse::class);
     }
 }

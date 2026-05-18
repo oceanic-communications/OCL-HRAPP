@@ -28,20 +28,13 @@ function updateInductionSubmitState(form) {
     const submitBtn = form.querySelector('[data-induction-submit]');
     const checkbox = form.querySelector('[data-induction-acknowledge]');
     const canvas = form.querySelector('[data-induction-signature-canvas]');
-    const questions = Array.from(form.querySelectorAll('[data-induction-question]'));
 
     const acked = checkbox instanceof HTMLInputElement && checkbox.checked;
     const pad = canvas instanceof HTMLCanvasElement ? canvas._inductionSignaturePad : undefined;
     const signed = pad instanceof Object && 'isEmpty' in pad && typeof pad.isEmpty === 'function' && !pad.isEmpty();
-    const questionsAnswered = questions.every((input) => {
-        if (!(input instanceof HTMLInputElement)) {
-            return true;
-        }
-        return input.value.trim().length > 0;
-    });
 
     if (submitBtn instanceof HTMLButtonElement) {
-        submitBtn.disabled = !(acked && signed && questionsAnswered);
+        submitBtn.disabled = !(acked && signed);
     }
 }
 
@@ -58,9 +51,6 @@ export function initInductionSignature(form) {
     const checkbox = form.querySelector('[data-induction-acknowledge]');
 
     checkbox?.addEventListener('change', () => updateInductionSubmitState(form));
-    form.querySelectorAll('[data-induction-question]').forEach((input) => {
-        input.addEventListener('input', () => updateInductionSubmitState(form));
-    });
 
     form.addEventListener('submit', (e) => {
         syncInductionSignature(form);

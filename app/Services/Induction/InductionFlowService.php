@@ -7,7 +7,6 @@ use App\Models\InductionEnrollment;
 use App\Models\InductionPolicyVersion;
 use App\Models\InductionSection;
 use App\Models\InductionSectionCompletion;
-use App\Models\InductionSectionQuestionResponse;
 use App\Models\User;
 use App\Support\InductionApplicationAuditEventCode;
 use Illuminate\Support\Facades\DB;
@@ -100,7 +99,7 @@ final class InductionFlowService
     }
 
     /**
-     * @param  array{acknowledge: bool, signature_data?: string|null, question_answers?: array<int|string, string>}  $input
+     * @param  array{acknowledge: bool, signature_data?: string|null}  $input
      */
     public function completeSection(User $user, InductionSection $section, array $input, ?string $ip, ?string $userAgent): void
     {
@@ -136,20 +135,9 @@ final class InductionFlowService
             ]);
         }
 
-        $section->loadMissing('questions');
-        $questionAnswers = is_array($input['question_answers'] ?? null) ? $input['question_answers'] : [];
-        foreach ($section->questions as $question) {
-            $answer = trim((string) ($questionAnswers[$question->id] ?? $questionAnswers[(string) $question->id] ?? ''));
-            if ($answer === '') {
-                throw ValidationException::withMessages([
-                    "question_answers.{$question->id}" => 'Please answer all section questions before submitting.',
-                ]);
-            }
-        }
-
         $shouldFinalize = false;
 
-        DB::transaction(function () use ($user, $section, $enrollment, $input, $ip, $userAgent, &$shouldFinalize, $questionAnswers): void {
+        DB::transaction(function () use ($user, $section, $enrollment, $input, $ip, $userAgent, &$shouldFinalize): void {
             $raw = $input['signature_data'];
             $b64 = preg_replace('#^data:image/png;base64,#', '', (string) $raw);
             $binary = base64_decode((string) $b64, true);
@@ -174,15 +162,6 @@ final class InductionFlowService
                 'signature_path' => $signaturePath,
             ]);
 
-            foreach ($section->questions as $question) {
-                $answer = trim((string) ($questionAnswers[$question->id] ?? $questionAnswers[(string) $question->id] ?? ''));
-                InductionSectionQuestionResponse::query()->create([
-                    'induction_section_completion_id' => $completion->id,
-                    'induction_section_question_id' => $question->id,
-                    'response' => $answer,
-                ]);
-            }
-
             $this->applicationAudit->record($user, InductionApplicationAuditEventCode::SECTION_ACKNOWLEDGED, [
                 'induction_policy_id' => $section->version->induction_policy_id,
                 'induction_policy_version_id' => $section->induction_policy_version_id,
@@ -192,9 +171,7 @@ final class InductionFlowService
                 'ip_address' => $ip,
                 'user_agent' => $userAgent,
                 'payload' => [
-                    'requires_signature' => (bool) $section->requires_signature,
                     'digital_signature_stored' => true,
-                    'question_count' => $section->questions->count(),
                 ],
             ]);
 

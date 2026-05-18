@@ -39,32 +39,6 @@
     <form action="{{ route('portal.induction.section.complete', $section) }}" method="POST" class="portal-card space-y-5 p-4 sm:p-6" data-induction-form novalidate>
         @csrf
 
-        @if ($section->questions->isNotEmpty())
-            <div class="space-y-4 rounded-xl border border-border bg-muted/20 p-4">
-                <h2 class="text-sm font-semibold text-foreground">Section questions</h2>
-                <p class="text-xs text-muted-foreground">Answer each question before you can submit your acknowledgement.</p>
-                @foreach ($section->questions as $question)
-                    <div class="space-y-2">
-                        <label class="block text-sm leading-relaxed text-foreground" for="question_{{ $question->id }}">{{ $question->prompt }}</label>
-                        <input
-                            type="text"
-                            id="question_{{ $question->id }}"
-                            name="question_answers[{{ $question->id }}]"
-                            value="{{ old('question_answers.'.$question->id) }}"
-                            class="portal-input"
-                            placeholder="Your response"
-                            data-induction-question
-                            maxlength="2000"
-                            required
-                        >
-                        @error('question_answers.'.$question->id)
-                            <p class="text-sm text-destructive">{{ $message }}</p>
-                        @enderror
-                    </div>
-                @endforeach
-            </div>
-        @endif
-
         <div class="flex items-start gap-3 rounded-xl border border-border bg-card p-4">
             <input
                 type="checkbox"
@@ -85,9 +59,6 @@
         @enderror
 
         <div data-induction-signature class="space-y-4">
-            @if ($section->acknowledgement_hint)
-                <p class="text-sm text-muted-foreground">{{ $section->acknowledgement_hint }}</p>
-            @endif
             <div class="grid gap-4 sm:grid-cols-2">
                 <div class="space-y-2 sm:col-span-2">
                     <p class="text-sm font-medium text-foreground">Digital signature</p>
