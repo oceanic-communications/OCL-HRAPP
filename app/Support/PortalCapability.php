@@ -22,7 +22,7 @@ final readonly class PortalCapability
             return null;
         }
 
-        if ($user->is_staff_super_user) {
+        if ($user->isStaffSuperUser()) {
             return new self(
                 staffUserRead: true,
                 staffUserCreate: true,

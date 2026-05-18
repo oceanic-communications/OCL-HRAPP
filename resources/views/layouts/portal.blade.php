@@ -39,6 +39,9 @@
                     </div>
                 </div>
                 <div class="flex shrink-0 items-center gap-2 sm:gap-3">
+                    <nav class="hidden flex-wrap items-center gap-2 text-sm font-medium lg:flex" aria-label="Administration">
+                        @include('components.portal-admin-nav-links')
+                    </nav>
                     @isset($portalHeaderNotifications)
                         <details class="relative">
                             <summary class="flex cursor-pointer list-none items-center gap-2 rounded-lg px-2 py-2 text-sm font-medium text-foreground hover:bg-muted sm:px-3 [&::-webkit-details-marker]:hidden">

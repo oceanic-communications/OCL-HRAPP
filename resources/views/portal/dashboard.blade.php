@@ -109,6 +109,33 @@
         </div>
     @endif
 
+    @if (($portalCap?->staffUserRead ?? false) || ($portalCap?->inductionPolicyManage ?? false) || $u->isStaffSuperUser())
+        <div class="portal-card space-y-4 p-4 sm:p-5">
+            <h2 class="font-heading text-lg font-semibold text-foreground">Administration</h2>
+            <p class="text-sm text-muted-foreground">Manage staff accounts and induction policy content (sections, acknowledgements, publishing).</p>
+            <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                @if ($portalCap?->staffUserRead ?? false)
+                    <a href="{{ route('admin.users.index') }}" class="block rounded-lg border border-border p-4 transition-shadow hover:shadow-md">
+                        <p class="font-semibold text-foreground">User management</p>
+                        <p class="mt-1 text-xs text-muted-foreground">View and edit portal users, roles, and access.</p>
+                    </a>
+                @endif
+                @if ($portalCap?->inductionPolicyManage ?? false)
+                    <a href="{{ route('admin.induction.index') }}" class="block rounded-lg border border-border p-4 transition-shadow hover:shadow-md">
+                        <p class="font-semibold text-foreground">Induction policies</p>
+                        <p class="mt-1 text-xs text-muted-foreground">Create policies, versions, wizard sections, and publish updates.</p>
+                    </a>
+                @endif
+                @if ($u->isStaffSuperUser())
+                    <a href="{{ route('admin.role-templates.index') }}" class="block rounded-lg border border-border p-4 transition-shadow hover:shadow-md">
+                        <p class="font-semibold text-foreground">Role templates</p>
+                        <p class="mt-1 text-xs text-muted-foreground">Configure which permissions each HR role receives.</p>
+                    </a>
+                @endif
+            </div>
+        </div>
+    @endif
+
     <div id="notifications" class="portal-card space-y-4 p-4 sm:p-5">
         <div class="flex flex-wrap items-center justify-between gap-2">
             <h2 class="font-heading text-lg font-semibold text-foreground">Notifications</h2>

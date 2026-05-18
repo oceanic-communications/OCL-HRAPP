@@ -20,15 +20,7 @@
             <a href="{{ route('dashboard') }}" class="text-lg font-semibold text-foreground">{{ config('app.name') }}</a>
             <nav class="flex flex-wrap items-center gap-3 text-sm font-medium">
                 <a href="{{ route('dashboard') }}" class="text-foreground hover:text-primary">Dashboard</a>
-                @if ($portalCap?->staffUserRead ?? false)
-                    <a href="{{ route('admin.users.index') }}" class="text-foreground hover:text-primary">Users</a>
-                @endif
-                @if ($portalCap?->inductionPolicyManage ?? false)
-                    <a href="{{ route('admin.induction.index') }}" class="text-foreground hover:text-primary">Induction policies</a>
-                @endif
-                @if (auth()->user()?->isStaffSuperUser())
-                    <a href="{{ route('admin.role-templates.index') }}" class="text-foreground hover:text-primary">Role templates</a>
-                @endif
+                @include('components.portal-admin-nav-links')
                 <form action="{{ route('logout') }}" method="POST" class="inline">
                     @csrf
                     <button type="submit" class="text-muted-foreground hover:text-foreground">Sign out</button>

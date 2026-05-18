@@ -22,9 +22,24 @@
         <p class="mb-2 px-3 text-[10px] font-semibold uppercase tracking-wider text-sidebar-foreground/40">Menu</p>
         <nav class="space-y-1" aria-label="Primary">
             <x-portal-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" icon="layout" label="Dashboard" />
-            <x-portal-nav-link :href="route('portal.induction')" :active="request()->routeIs('portal.induction')" icon="book" label="Induction" />
+            <x-portal-nav-link :href="route('portal.induction')" :active="request()->routeIs('portal.induction*')" icon="book" label="My induction" />
             <x-portal-nav-link :href="route('portal.settings')" :active="request()->routeIs('portal.settings')" icon="cog" label="Settings" />
         </nav>
+
+        @if (($portalCap?->staffUserRead ?? false) || ($portalCap?->inductionPolicyManage ?? false) || $u->isStaffSuperUser())
+            <p class="mb-2 mt-6 px-3 text-[10px] font-semibold uppercase tracking-wider text-sidebar-foreground/40">Administration</p>
+            <nav class="space-y-1" aria-label="Administration">
+                @if ($portalCap?->staffUserRead ?? false)
+                    <x-portal-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users*')" icon="users" label="User management" />
+                @endif
+                @if ($portalCap?->inductionPolicyManage ?? false)
+                    <x-portal-nav-link :href="route('admin.induction.index')" :active="request()->routeIs('admin.induction*')" icon="document-plus" label="Induction policies" />
+                @endif
+                @if ($u->isStaffSuperUser())
+                    <x-portal-nav-link :href="route('admin.role-templates.index')" :active="request()->routeIs('admin.role-templates*')" icon="shield" label="Role templates" />
+                @endif
+            </nav>
+        @endif
     </div>
 
     <div class="shrink-0 border-t border-sidebar-border p-3">
