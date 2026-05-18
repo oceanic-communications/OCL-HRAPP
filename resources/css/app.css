@@ -1,0 +1,506 @@
+@import "tailwindcss";
+
+/* Tailwind v4: scan Blade so non-utility classnames (e.g. .prog-bar) are not dropped from the CSS output */
+@source "../views/**/*.blade.php";
+
+/* Help walkthrough: classes toggled from help-walkthrough.js */
+@source inline("opacity-0");
+@source inline("opacity-100");
+@source inline("translate-y-0");
+@source inline("translate-y-1");
+@import "flatpickr/dist/flatpickr.min.css";
+
+/* Flatpickr — align with portal tokens */
+.flatpickr-calendar {
+    background: var(--card);
+    color: var(--card-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow:
+        0 10px 40px -10px rgb(0 0 0 / 0.12),
+        0 4px 12px -4px rgb(0 0 0 / 0.08);
+    font-family: var(--font-sans-stack);
+}
+
+.flatpickr-months .flatpickr-month {
+    background: var(--card);
+    color: var(--foreground);
+    fill: var(--foreground);
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months,
+.flatpickr-current-month input.cur-year {
+    background: var(--muted);
+    color: var(--foreground);
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+}
+
+.flatpickr-weekdays {
+    background: var(--card);
+}
+
+span.flatpickr-weekday {
+    color: var(--muted-foreground);
+    font-weight: 600;
+}
+
+.flatpickr-day {
+    border-radius: var(--radius-sm);
+    color: var(--foreground);
+}
+
+.flatpickr-day:hover,
+.flatpickr-day:focus {
+    background: var(--muted);
+    border-color: var(--muted);
+}
+
+.flatpickr-day.today {
+    border-color: var(--ring);
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--primary-foreground);
+}
+
+.flatpickr-day.selected:hover,
+.flatpickr-day.startRange:hover,
+.flatpickr-day.endRange:hover {
+    background: color-mix(in srgb, var(--primary) 92%, black);
+    border-color: color-mix(in srgb, var(--primary) 92%, black);
+}
+
+.flatpickr-day.flatpickr-disabled,
+.flatpickr-day.prevMonthDay,
+.flatpickr-day.nextMonthDay {
+    color: var(--muted-foreground);
+}
+
+.flatpickr-arrow,
+.flatpickr-prev-month svg,
+.flatpickr-next-month svg {
+    fill: var(--foreground);
+}
+
+.flatpickr-prev-month:hover svg,
+.flatpickr-next-month:hover svg {
+    fill: var(--primary);
+}
+
+:root {
+    --ocean-blue: #1e2749;
+    --turquoise: #1cafbf;
+    --reef-green: #2f8f6b;
+    --coral-red: #e05757;
+    --sunshine-gold: #f4b731;
+    --coconut-cream: #f7f3eb;
+    --black-sand: #1c1c1c;
+
+    --background: #f7f3eb;
+    --foreground: #1c1c1c;
+    --card: #ffffff;
+    --card-foreground: #1c1c1c;
+    --popover: #ffffff;
+    --popover-foreground: #1c1c1c;
+    --primary: #1e2749;
+    --primary-foreground: #ffffff;
+    --primary-hover: #e3b108;
+    --secondary: #1cafbf;
+    --secondary-foreground: #ffffff;
+    --muted: #e8e4dc;
+    --muted-foreground: #5a5a5a;
+    --accent: #2f8f6b;
+    --accent-foreground: #ffffff;
+    --destructive: #e05757;
+    --destructive-foreground: #ffffff;
+    --warning: #f4b731;
+    --warning-foreground: #1c1c1c;
+    --border: #d4cfc4;
+    --input: #ffffff;
+    --ring: #1cafbf;
+    --radius: 0.75rem;
+    --sidebar: #1e2749;
+    --sidebar-foreground: #ffffff;
+    /* Nav: selected + hover use brand yellow; label uses primary blue for contrast */
+    --sidebar-primary: var(--primary-hover);
+    --sidebar-primary-foreground: var(--primary);
+    --sidebar-accent: var(--primary-hover);
+    --sidebar-accent-foreground: var(--primary);
+    --sidebar-border: #2e3a66;
+    --sidebar-ring: #1cafbf;
+
+    --font-sans-stack: "Inter", system-ui, -apple-system, sans-serif;
+    --font-heading-stack: "Poppins", system-ui, -apple-system, sans-serif;
+}
+
+@theme {
+    --font-sans: var(--font-sans-stack);
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary-hover: var(--primary-hover);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+    --color-warning: var(--warning);
+    --color-warning-foreground: var(--warning-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --color-sidebar: var(--sidebar);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-ring: var(--sidebar-ring);
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* WCAG 2.2 — 2.4.11 Focus Not Obscured (Minimum): keep focused content clear of sticky header when scrolling */
+html {
+    scroll-padding-top: 5rem;
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-background text-foreground font-sans antialiased;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: var(--font-heading-stack);
+        font-weight: 600;
+    }
+
+    a[href],
+    button,
+    input[type="submit"],
+    input[type="button"],
+    input[type="reset"] {
+        @apply cursor-pointer;
+    }
+
+    button:disabled,
+    button[aria-disabled="true"],
+    input[type="submit"]:disabled,
+    input[type="button"]:disabled,
+    input[type="reset"]:disabled {
+        cursor: not-allowed;
+    }
+}
+
+/* Pacific texture (matches grants-portal-design) */
+.pacific-texture {
+    position: relative;
+}
+
+.pacific-texture::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 10px,
+            rgba(30, 39, 73, 0.03) 10px,
+            rgba(30, 39, 73, 0.03) 20px
+        ),
+        repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 10px,
+            rgba(28, 175, 191, 0.02) 10px,
+            rgba(28, 175, 191, 0.02) 20px
+        );
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+@layer components {
+    /* WCAG 2.2 — 2.5.8 Target Size (Minimum): at least 24×24 CSS px for pointer targets (exceptions: inline text, UA controls) */
+    .portal-touch-target {
+        min-height: 1.5rem;
+        min-width: 1.5rem;
+    }
+
+    .portal-skip-link {
+        @apply sr-only fixed left-4 top-4 z-[200] rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground shadow-lg outline-none ring-offset-2 ring-offset-background transition-none focus:not-sr-only focus:ring-2 focus:ring-ring;
+    }
+
+    .portal-sidebar-link:focus-visible {
+        @apply outline outline-2 outline-offset-2 outline-sidebar-ring;
+    }
+
+    .portal-input {
+        @apply w-full rounded-lg border border-border bg-input px-3 py-2 text-sm text-foreground shadow-sm outline-none transition-shadow placeholder:text-muted-foreground focus:border-ring focus:ring-2 focus:ring-ring/40;
+    }
+
+    /* Applicant wizard: <input type="text" data-portal-auto-grow> is upgraded to textarea; both match until init */
+    textarea[data-portal-auto-grow],
+    input[type='text'][data-portal-auto-grow] {
+        resize: none;
+        overflow-y: hidden;
+        min-height: 2.75rem;
+    }
+
+    .portal-label {
+        @apply mb-2 block text-sm font-medium text-foreground;
+    }
+
+    /* Supplementary copy under a question — visually distinct from the label */
+    .portal-field-hint {
+        @apply border-l-2 border-primary/25 pl-3 text-[14px] italic leading-relaxed text-muted-foreground;
+    }
+
+    .portal-card {
+        @apply rounded-xl border border-border bg-card text-card-foreground shadow-sm;
+    }
+
+    [data-tab-button] {
+        @apply rounded-lg px-4 py-2 text-sm font-medium transition-colors;
+    }
+
+    [data-tab-button][data-active="true"] {
+        @apply bg-primary text-primary-foreground shadow-sm;
+    }
+
+    [data-tab-button][data-active="false"] {
+        @apply bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground;
+    }
+
+    /* Applicant grant wizard — progress bar (bar fill: plum #551C61) */
+    .prog-bar {
+        --p: #551C61;
+        --y: var(--warning);
+        --p-dark: var(--primary);
+        background: var(--p);
+        padding: 16px 24px;
+        border-radius: var(--radius-lg);
+    }
+
+    .prog-bar .steps {
+        display: flex;
+        align-items: center;
+    }
+
+    .prog-bar .step-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .prog-bar .step-item--locked {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+
+    .prog-bar .step-item a,
+    .prog-bar .step-item > span {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        max-width: 5.5rem;
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .prog-bar .step-item a:focus-visible {
+        outline: 2px solid var(--y);
+        outline-offset: 3px;
+        border-radius: 6px;
+    }
+
+    .prog-bar .sdot.active {
+        background: var(--y);
+        border-color: var(--y);
+        color: var(--p-dark);
+    }
+
+    .prog-bar .sdot.done {
+        background: var(--y);
+        border-color: var(--y);
+        color: var(--p-dark);
+    }
+
+    .prog-bar .sdot {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        background: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.5);
+        font-family: Arial, sans-serif;
+        font-weight: 700;
+        transition: all 0.2s;
+        z-index: 1;
+    }
+
+    .prog-bar .slabel.active {
+        color: var(--y);
+    }
+
+    .prog-bar .slabel.done {
+        color: var(--y);
+    }
+
+    .prog-bar .slabel {
+        font-size: 9px;
+        color: rgba(255, 255, 255, 0.5);
+        text-align: center;
+        margin-top: 5px;
+        font-family: Arial, sans-serif;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        max-width: 68px;
+        line-height: 1.3;
+    }
+
+    .prog-bar .sline {
+        flex: 1;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.2);
+        margin: 0 2px;
+        margin-bottom: 16px;
+    }
+
+    .prog-bar .sline.done {
+        background: var(--y);
+    }
+}
+
+@layer utilities {
+    .font-heading {
+        font-family: var(--font-heading-stack);
+    }
+}
+
+/* Employee portal sidebar: full-height flex + mobile drawer */
+.portal-sidebar-shell {
+    min-height: 0;
+}
+
+@media (max-width: 767px) {
+    .portal-sidebar-shell {
+        max-height: 100dvh;
+        padding-bottom: env(safe-area-inset-bottom, 0);
+        overscroll-behavior: contain;
+        transform: translateX(-100%);
+    }
+
+    .portal-sidebar-shell.is-open {
+        transform: translateX(0);
+    }
+}
+
+@media (min-width: 768px) {
+    .portal-sidebar-shell {
+        transform: none;
+    }
+}
+
+/*
+ * Applicant portal — sidebar nav only.
+ * Scoped CSS variables so existing Tailwind sidebar utilities (bg-sidebar-primary, hover:bg-sidebar-accent, …)
+ * pick up the applicant palette without changing other portals.
+ */
+#portal-sidebar.portal-sidebar--applicant {
+    width: 220px;
+    max-width: 220px;
+    flex-shrink: 0;
+    --sidebar: #1e2749;
+    --sidebar-foreground: #ffffff;
+    --sidebar-primary: #551c61;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: rgb(255 255 255 / 0.1);
+    --sidebar-accent-foreground: #ffffff;
+    --sidebar-border: rgb(255 255 255 / 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #portal-sidebar,
+    .portal-sidebar-shell {
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Rich story HTML (TinyMCE output) */
+.story-html-content img,
+.story-html-content video,
+.story-html-content iframe {
+    max-width: 100%;
+    height: auto;
+}
+
+.story-html-content iframe {
+    aspect-ratio: 16 / 9;
+    min-height: 200px;
+}
+
+.story-html-content video {
+    border-radius: var(--radius);
+}
+
+.story-html-content a {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+.story-html-content h2,
+.story-html-content h3,
+.story-html-content h4 {
+    font-family: var(--font-heading-stack);
+    font-weight: 600;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Guest layout footer — social icon hit targets (ported from site theme) */
+.copyright_social .guten-social-icon a {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 80px !important;
+    height: 100% !important;
+    min-height: 64px !important;
+    border-radius: 0 !important;
+    text-decoration: none !important;
+    border: none !important;
+    transition: background-color 0.3s ease !important;
+}

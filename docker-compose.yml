@@ -1,0 +1,93 @@
+name: hr-portal
+
+networks:
+  default:
+    name: ocl_hr_net
+
+volumes:
+  employee_portal_reference_node_modules:
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NPM_BUILD_COMMAND: ${NPM_BUILD_COMMAND:-build:production}
+    ports:
+      - "${APP_PORT:-8090}:80"
+    env_file:
+      - path: .env.development
+      - path: .env
+        required: false
+    environment:
+      # Keep in sync with APP_PORT above (browser hits localhost:APP_PORT).
+      APP_URL: ${APP_URL:-http://localhost:8090}
+      # Never use ${DB_HOST} from .env here: that is often "localhost" for running PHP on the host.
+      # Inside the container, localhost is this container, not XAMPP. Use the host gateway instead.
+      DB_HOST: ${DOCKER_DB_HOST:-host.docker.internal}
+      DB_PORT: ${DB_PORT:-3306}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - mailhog
+    # E2E and `compose run` otherwise start Playwright as soon as the container exists;
+    # Apache may not listen yet (or the app may have exited). Playwright waits on this.
+    healthcheck:
+      # No `$` in the PHP snippet — Compose would otherwise treat `$var` as interpolation.
+      test: ['CMD', 'php', '-r', "exit(fsockopen('127.0.0.1',80)?0:1);"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+      start_period: 90s
+    volumes:
+      - .:/var/www/html
+    # Bind mount replaces image files; refresh PHP deps and assets when needed:
+    #   docker compose exec app composer install
+    #   docker compose exec app npm ci && npm run build:production
+    # Staging asset build: NPM_BUILD_COMMAND=build:staging docker compose build app
+
+  vite:
+    profiles:
+      - dev
+    image: node:22-alpine
+    working_dir: /app
+    command: sh -c "npm ci && npm run dev"
+    ports:
+      - "${VITE_PORT:-5173}:5173"
+    volumes:
+      - .:/app
+    environment:
+      NODE_ENV: development
+      # Browser must load scripts from localhost, not 0.0.0.0 (see vite.config.js server.origin / HMR).
+      VITE_DEV_SERVER_PUBLIC_HOST: ${VITE_DEV_SERVER_PUBLIC_HOST:-localhost}
+      VITE_PORT: ${VITE_PORT:-5173}
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    ports:
+      - "${MAILHOG_SMTP_PORT:-1025}:1025"
+      - "${MAILHOG_WEB_UI_PORT:-8025}:8025"
+
+  # Next.js “employee-portal-ui” in the parent folder — workflow reference for Module 1+.
+  # Start with: docker compose --profile reference-ui up
+  employee-portal-reference:
+    profiles:
+      - reference-ui
+    image: node:22-alpine
+    working_dir: /app
+    command: >-
+      sh -c "corepack enable && corepack prepare pnpm@9 --activate
+      && pnpm install
+      && pnpm exec next dev --hostname 0.0.0.0 --port 3000"
+    ports:
+      - "${EMPLOYEE_PORTAL_UI_PORT:-3000}:3000"
+    volumes:
+      - ../employee-portal-ui:/app
+      - employee_portal_reference_node_modules:/app/node_modules
+    environment:
+      NODE_ENV: development
+      NEXT_TELEMETRY_DISABLED: "1"
