@@ -35,5 +35,4 @@ QUICKSTART.bat
 /public/CUsersKolinioDocumentsProjectsWFFsourceWFFstorageframeworkviews
 .env.testing
 .env.staging
-.env.example
 .env.development

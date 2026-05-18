@@ -6,33 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class InductionSectionCompletion extends Model
+class InductionSectionQuestion extends Model
 {
     protected $fillable = [
-        'induction_enrollment_id',
         'induction_section_id',
-        'completed_at',
-        'employee_name_snapshot',
-        'policy_version_label_snapshot',
-        'ip_address',
-        'user_agent',
-        'signature_disk',
-        'signature_path',
+        'sort_order',
+        'prompt',
     ];
 
     protected function casts(): array
     {
         return [
-            'completed_at' => 'datetime',
+            'sort_order' => 'integer',
         ];
-    }
-
-    /**
-     * @return BelongsTo<InductionEnrollment, $this>
-     */
-    public function enrollment(): BelongsTo
-    {
-        return $this->belongsTo(InductionEnrollment::class, 'induction_enrollment_id');
     }
 
     /**
@@ -46,7 +32,7 @@ class InductionSectionCompletion extends Model
     /**
      * @return HasMany<InductionSectionQuestionResponse, $this>
      */
-    public function questionResponses(): HasMany
+    public function responses(): HasMany
     {
         return $this->hasMany(InductionSectionQuestionResponse::class);
     }

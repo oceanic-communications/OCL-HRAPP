@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\InductionPolicy;
 use App\Models\InductionPolicyVersion;
 use App\Models\InductionSection;
+use App\Models\InductionSectionQuestion;
 use App\Services\Induction\InductionPolicyAdminChangeService;
 use App\Support\PortalPermissions;
 use Illuminate\Http\RedirectResponse;
@@ -183,7 +184,10 @@ class InductionPolicyAdminController extends Controller
     public function showVersion(InductionPolicyVersion $version): View
     {
         $this->authorizeManage();
-        $version->load(['policy', 'sections' => fn ($q) => $q->orderBy('sort_order')]);
+        $version->load([
+            'policy',
+            'sections' => fn ($q) => $q->orderBy('sort_order')->with(['questions' => fn ($q) => $q->orderBy('sort_order')]),
+        ]);
 
         return view('admin.induction.version', compact('version'));
     }
@@ -272,6 +276,112 @@ class InductionPolicyAdminController extends Controller
         });
 
         return redirect()->route('admin.induction.versions.show', $version)->with('success', 'Section updated.');
+    }
+
+    public function storeQuestion(Request $request, InductionPolicyVersion $version, InductionSection $section): RedirectResponse
+    {
+        $this->authorizeManage();
+        abort_unless($section->induction_policy_version_id === $version->id, 404);
+
+        $data = $request->validate([
+            'prompt' => ['required', 'string', 'max:2000'],
+        ]);
+        $repeat = $this->validateStaffRepeatChoice($request);
+
+        $ctx = $this->auditRequestContext($request);
+
+        DB::transaction(function () use ($section, $version, $data, $repeat, $ctx): void {
+            $max = (int) $section->questions()->max('sort_order');
+            $question = InductionSectionQuestion::query()->create([
+                'induction_section_id' => $section->id,
+                'sort_order' => $max + 1,
+                'prompt' => $data['prompt'],
+            ]);
+
+            $this->adminChangeService->record(
+                actor: auth()->user(),
+                action: 'induction_section_question.created',
+                subjectType: InductionSectionQuestion::class,
+                subjectId: $question->id,
+                policyId: $version->induction_policy_id,
+                versionId: $version->id,
+                metadata: ['after' => $question->only(['prompt', 'sort_order']), 'induction_section_id' => $section->id],
+                staffRepeatRequested: $repeat,
+                versionForRepeat: $version,
+                complianceContext: $ctx,
+            );
+        });
+
+        return redirect()->route('admin.induction.versions.show', $version)->with('success', 'Question added.');
+    }
+
+    public function updateQuestion(Request $request, InductionPolicyVersion $version, InductionSection $section, InductionSectionQuestion $question): RedirectResponse
+    {
+        $this->authorizeManage();
+        abort_unless($section->induction_policy_version_id === $version->id, 404);
+        abort_unless($question->induction_section_id === $section->id, 404);
+
+        $data = $request->validate([
+            'prompt' => ['required', 'string', 'max:2000'],
+            'sort_order' => ['required', 'integer', 'min:0', 'max:9999'],
+        ]);
+        $repeat = $this->validateStaffRepeatChoice($request);
+
+        $before = $question->only(['prompt', 'sort_order']);
+        $ctx = $this->auditRequestContext($request);
+
+        DB::transaction(function () use ($question, $section, $version, $data, $repeat, $before, $ctx): void {
+            $question->update([
+                'prompt' => $data['prompt'],
+                'sort_order' => $data['sort_order'],
+            ]);
+
+            $this->adminChangeService->record(
+                actor: auth()->user(),
+                action: 'induction_section_question.updated',
+                subjectType: InductionSectionQuestion::class,
+                subjectId: $question->id,
+                policyId: $version->induction_policy_id,
+                versionId: $version->id,
+                metadata: ['before' => $before, 'after' => $question->fresh()->only(['prompt', 'sort_order']), 'induction_section_id' => $section->id],
+                staffRepeatRequested: $repeat,
+                versionForRepeat: $version,
+                complianceContext: $ctx,
+            );
+        });
+
+        return redirect()->route('admin.induction.versions.show', $version)->with('success', 'Question updated.');
+    }
+
+    public function destroyQuestion(Request $request, InductionPolicyVersion $version, InductionSection $section, InductionSectionQuestion $question): RedirectResponse
+    {
+        $this->authorizeManage();
+        abort_unless($section->induction_policy_version_id === $version->id, 404);
+        abort_unless($question->induction_section_id === $section->id, 404);
+        $repeat = $this->validateStaffRepeatChoice($request);
+
+        $snapshot = $question->only(['id', 'prompt', 'sort_order']);
+        $ctx = $this->auditRequestContext($request);
+
+        DB::transaction(function () use ($question, $section, $version, $repeat, $snapshot, $ctx): void {
+            $questionId = $question->id;
+            $question->delete();
+
+            $this->adminChangeService->record(
+                actor: auth()->user(),
+                action: 'induction_section_question.deleted',
+                subjectType: InductionSectionQuestion::class,
+                subjectId: $questionId,
+                policyId: $version->induction_policy_id,
+                versionId: $version->id,
+                metadata: ['deleted' => $snapshot, 'induction_section_id' => $section->id],
+                staffRepeatRequested: $repeat,
+                versionForRepeat: $version,
+                complianceContext: $ctx,
+            );
+        });
+
+        return redirect()->route('admin.induction.versions.show', $version)->with('success', 'Question removed.');
     }
 
     public function destroySection(Request $request, InductionPolicyVersion $version, InductionSection $section): RedirectResponse

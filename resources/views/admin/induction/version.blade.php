@@ -57,8 +57,8 @@
                 <input id="new_title" name="title" type="text" class="portal-input" required value="{{ old('title') }}">
             </div>
             <div>
-                <label class="portal-label" for="new_body">Body</label>
-                <textarea id="new_body" name="body" rows="6" class="portal-input" required>{{ old('body') }}</textarea>
+                <label class="portal-label" for="new_body">Body content</label>
+                <textarea id="new_body" name="body" rows="8" class="portal-input font-mono text-sm" required placeholder="Policy text shown to employees for this section.">{{ old('body') }}</textarea>
             </div>
             <div class="flex items-center gap-2">
                 <input type="checkbox" name="requires_signature" id="new_sig" value="1" class="h-4 w-4 rounded border-border" {{ old('requires_signature') ? 'checked' : '' }}>
@@ -91,8 +91,8 @@
                         </div>
                     </div>
                     <div>
-                        <label class="portal-label" for="body{{ $section->id }}">Body</label>
-                        <textarea id="body{{ $section->id }}" name="body" rows="8" class="portal-input" required>{{ old('body', $section->body) }}</textarea>
+                        <label class="portal-label" for="body{{ $section->id }}">Body content</label>
+                        <textarea id="body{{ $section->id }}" name="body" rows="8" class="portal-input font-mono text-sm" required>{{ old('body', $section->body) }}</textarea>
                     </div>
                     <div class="flex items-center gap-2">
                         <input type="checkbox" name="requires_signature" id="sig{{ $section->id }}" value="1" class="h-4 w-4 rounded border-border" {{ old('requires_signature', $section->requires_signature) ? 'checked' : '' }}>
@@ -107,6 +107,51 @@
                         <button type="submit" class="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">Save section</button>
                     </div>
                 </form>
+
+                <div class="mt-6 space-y-4 border-t border-border pt-5">
+                    <div>
+                        <h4 class="text-sm font-semibold text-foreground">Questions</h4>
+                        <p class="mt-1 text-xs text-muted-foreground">Optional comprehension prompts. Employees must answer each before acknowledging this section.</p>
+                    </div>
+
+                    @forelse ($section->questions as $question)
+                        <div class="rounded-lg border border-border p-4">
+                            <form action="{{ route('admin.induction.versions.sections.questions.update', [$version, $section, $question]) }}" method="POST" class="space-y-3">
+                                @csrf
+                                @method('PUT')
+                                <div class="flex flex-wrap gap-3">
+                                    <div class="w-24">
+                                        <label class="portal-label" for="qsort{{ $question->id }}">Order</label>
+                                        <input id="qsort{{ $question->id }}" name="sort_order" type="number" class="portal-input" required value="{{ old('sort_order', $question->sort_order) }}" min="0" max="9999">
+                                    </div>
+                                    <div class="min-w-0 flex-1">
+                                        <label class="portal-label" for="qprompt{{ $question->id }}">Prompt</label>
+                                        <textarea id="qprompt{{ $question->id }}" name="prompt" rows="2" class="portal-input" required maxlength="2000">{{ old('prompt', $question->prompt) }}</textarea>
+                                    </div>
+                                </div>
+                                @include('admin.induction.partials.staff-repeat-prompt')
+                                <button type="submit" class="rounded-lg bg-secondary px-3 py-1.5 text-sm font-semibold text-secondary-foreground hover:bg-secondary/90">Save question</button>
+                            </form>
+                            <form action="{{ route('admin.induction.versions.sections.questions.destroy', [$version, $section, $question]) }}" method="POST" class="mt-2" onsubmit="return confirm('Remove this question?');">
+                                @csrf
+                                @method('DELETE')
+                                @include('admin.induction.partials.staff-repeat-prompt')
+                                <button type="submit" class="text-sm font-medium text-destructive hover:underline">Remove question</button>
+                            </form>
+                        </div>
+                    @empty
+                        <p class="text-sm text-muted-foreground">No questions yet.</p>
+                    @endforelse
+
+                    <form action="{{ route('admin.induction.versions.sections.questions.store', [$version, $section]) }}" method="POST" class="space-y-3 rounded-lg border border-dashed border-border p-4">
+                        @csrf
+                        <label class="portal-label" for="new_prompt{{ $section->id }}">Add question prompt</label>
+                        <textarea id="new_prompt{{ $section->id }}" name="prompt" rows="2" class="portal-input" required maxlength="2000" placeholder="e.g. Confirm you understand who to notify for unplanned leave."></textarea>
+                        @include('admin.induction.partials.staff-repeat-prompt')
+                        <button type="submit" class="rounded-lg bg-secondary px-4 py-2 text-sm font-semibold text-secondary-foreground hover:bg-secondary/90">Add question</button>
+                    </form>
+                </div>
+
                 <form action="{{ route('admin.induction.versions.sections.destroy', [$version, $section]) }}" method="POST" class="mt-3 space-y-4" onsubmit="return confirm('Delete this section?');">
                     @csrf
                     @method('DELETE')

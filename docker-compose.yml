@@ -15,14 +15,14 @@ services:
       args:
         NPM_BUILD_COMMAND: ${NPM_BUILD_COMMAND:-build:production}
     ports:
-      - "${APP_PORT:-8090}:80"
+      - "${APP_PORT:-8080}:80"
     env_file:
       - path: .env.development
       - path: .env
         required: false
     environment:
       # Keep in sync with APP_PORT above (browser hits localhost:APP_PORT).
-      APP_URL: ${APP_URL:-http://localhost:8090}
+      APP_URL: ${APP_URL:-http://localhost:8080}
       # Never use ${DB_HOST} from .env here: that is often "localhost" for running PHP on the host.
       # Inside the container, localhost is this container, not XAMPP. Use the host gateway instead.
       DB_HOST: ${DOCKER_DB_HOST:-host.docker.internal}

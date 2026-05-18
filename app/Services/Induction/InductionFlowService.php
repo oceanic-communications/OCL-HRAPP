@@ -7,6 +7,7 @@ use App\Models\InductionEnrollment;
 use App\Models\InductionPolicyVersion;
 use App\Models\InductionSection;
 use App\Models\InductionSectionCompletion;
+use App\Models\InductionSectionQuestionResponse;
 use App\Models\User;
 use App\Support\InductionApplicationAuditEventCode;
 use Illuminate\Support\Facades\DB;
@@ -99,13 +100,13 @@ final class InductionFlowService
     }
 
     /**
-     * @param  array{acknowledge: bool, signature_data?: string|null}  $input
+     * @param  array{acknowledge: bool, signature_data?: string|null, question_answers?: array<int|string, string>}  $input
      */
     public function completeSection(User $user, InductionSection $section, array $input, ?string $ip, ?string $userAgent): void
     {
         if (! ($input['acknowledge'] ?? false)) {
             throw ValidationException::withMessages([
-                'acknowledge' => 'You must confirm you have read and understood this section.',
+                'acknowledge' => 'You must confirm that you have read and understood this section and agree to comply with the policies and procedures outlined above.',
             ]);
         }
 
@@ -128,33 +129,38 @@ final class InductionFlowService
             ]);
         }
 
-        if ($section->requires_signature) {
-            $sig = $input['signature_data'] ?? null;
-            if (! is_string($sig) || ! str_starts_with($sig, 'data:image/png;base64,')) {
+        $sig = $input['signature_data'] ?? null;
+        if (! is_string($sig) || ! str_starts_with($sig, 'data:image/png;base64,')) {
+            throw ValidationException::withMessages([
+                'signature_data' => 'Please sign in the signature box before submitting.',
+            ]);
+        }
+
+        $section->loadMissing('questions');
+        $questionAnswers = is_array($input['question_answers'] ?? null) ? $input['question_answers'] : [];
+        foreach ($section->questions as $question) {
+            $answer = trim((string) ($questionAnswers[$question->id] ?? $questionAnswers[(string) $question->id] ?? ''));
+            if ($answer === '') {
                 throw ValidationException::withMessages([
-                    'signature_data' => 'A digital signature is required for this section.',
+                    "question_answers.{$question->id}" => 'Please answer all section questions before submitting.',
                 ]);
             }
         }
 
         $shouldFinalize = false;
 
-        DB::transaction(function () use ($user, $section, $enrollment, $input, $ip, $userAgent, &$shouldFinalize): void {
-            $signatureDisk = null;
-            $signaturePath = null;
-            if ($section->requires_signature) {
-                $raw = $input['signature_data'];
-                $b64 = preg_replace('#^data:image/png;base64,#', '', $raw);
-                $binary = base64_decode((string) $b64, true);
-                if ($binary === false || strlen($binary) < 40) {
-                    throw ValidationException::withMessages([
-                        'signature_data' => 'Invalid signature image.',
-                    ]);
-                }
-                $signaturePath = 'induction/signatures/'.$enrollment->id.'_'.$section->id.'_'.now()->format('YmdHis').'.png';
-                Storage::disk('local')->put($signaturePath, $binary);
-                $signatureDisk = 'local';
+        DB::transaction(function () use ($user, $section, $enrollment, $input, $ip, $userAgent, &$shouldFinalize, $questionAnswers): void {
+            $raw = $input['signature_data'];
+            $b64 = preg_replace('#^data:image/png;base64,#', '', (string) $raw);
+            $binary = base64_decode((string) $b64, true);
+            if ($binary === false || strlen($binary) < 40) {
+                throw ValidationException::withMessages([
+                    'signature_data' => 'Invalid signature image.',
+                ]);
             }
+            $signaturePath = 'induction/signatures/'.$enrollment->id.'_'.$section->id.'_'.now()->format('YmdHis').'.png';
+            Storage::disk('local')->put($signaturePath, $binary);
+            $signatureDisk = 'local';
 
             $completion = InductionSectionCompletion::query()->create([
                 'induction_enrollment_id' => $enrollment->id,
@@ -168,6 +174,15 @@ final class InductionFlowService
                 'signature_path' => $signaturePath,
             ]);
 
+            foreach ($section->questions as $question) {
+                $answer = trim((string) ($questionAnswers[$question->id] ?? $questionAnswers[(string) $question->id] ?? ''));
+                InductionSectionQuestionResponse::query()->create([
+                    'induction_section_completion_id' => $completion->id,
+                    'induction_section_question_id' => $question->id,
+                    'response' => $answer,
+                ]);
+            }
+
             $this->applicationAudit->record($user, InductionApplicationAuditEventCode::SECTION_ACKNOWLEDGED, [
                 'induction_policy_id' => $section->version->induction_policy_id,
                 'induction_policy_version_id' => $section->induction_policy_version_id,
@@ -178,7 +193,8 @@ final class InductionFlowService
                 'user_agent' => $userAgent,
                 'payload' => [
                     'requires_signature' => (bool) $section->requires_signature,
-                    'digital_signature_stored' => $signatureDisk !== null,
+                    'digital_signature_stored' => true,
+                    'question_count' => $section->questions->count(),
                 ],
             ]);
 

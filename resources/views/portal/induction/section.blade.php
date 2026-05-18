@@ -3,6 +3,9 @@
 @section('title', $section->title.' · Induction · '.config('app.name'))
 
 @section('content')
+@php
+    $acknowledgementAt = now()->timezone(config('app.timezone'));
+@endphp
 <div class="mx-auto max-w-3xl space-y-6">
     <div class="rounded-xl border border-border bg-card p-4 shadow-sm sm:p-5" aria-label="Induction progress">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
@@ -35,29 +38,91 @@
 
     <form action="{{ route('portal.induction.section.complete', $section) }}" method="POST" class="portal-card space-y-5 p-4 sm:p-6" data-induction-form novalidate>
         @csrf
-        <div class="flex items-start gap-3">
-            <input type="checkbox" name="acknowledge" id="acknowledge" value="1" class="mt-1 h-4 w-4 rounded border-border text-primary" {{ old('acknowledge') ? 'checked' : '' }} required>
-            <label for="acknowledge" class="text-sm text-foreground">
-                I confirm that I have read and understood this section, and that the information I provide below is accurate.
-            </label>
-        </div>
 
-        @if ($section->requires_signature)
-            <div data-induction-signature class="space-y-2">
-                @if ($section->acknowledgement_hint)
-                    <p class="text-sm text-muted-foreground">{{ $section->acknowledgement_hint }}</p>
-                @endif
-                <p class="text-sm font-medium text-foreground">Digital signature (draw below)</p>
-                <div class="rounded-lg border border-border bg-white p-2">
-                    <canvas data-induction-signature-canvas class="block w-full max-w-full touch-none" style="height:160px" aria-label="Signature pad"></canvas>
-                </div>
-                <input type="hidden" name="signature_data" value="" data-induction-signature-output>
-                <button type="button" class="text-sm font-medium text-primary hover:underline" data-induction-signature-clear>Clear signature</button>
+        @if ($section->questions->isNotEmpty())
+            <div class="space-y-4 rounded-xl border border-border bg-muted/20 p-4">
+                <h2 class="text-sm font-semibold text-foreground">Section questions</h2>
+                <p class="text-xs text-muted-foreground">Answer each question before you can submit your acknowledgement.</p>
+                @foreach ($section->questions as $question)
+                    <div class="space-y-2">
+                        <label class="block text-sm leading-relaxed text-foreground" for="question_{{ $question->id }}">{{ $question->prompt }}</label>
+                        <input
+                            type="text"
+                            id="question_{{ $question->id }}"
+                            name="question_answers[{{ $question->id }}]"
+                            value="{{ old('question_answers.'.$question->id) }}"
+                            class="portal-input"
+                            placeholder="Your response"
+                            data-induction-question
+                            maxlength="2000"
+                            required
+                        >
+                        @error('question_answers.'.$question->id)
+                            <p class="text-sm text-destructive">{{ $message }}</p>
+                        @enderror
+                    </div>
+                @endforeach
             </div>
         @endif
 
-        <button type="submit" class="w-full rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90 sm:w-auto">
-            Submit acknowledgement
+        <div class="flex items-start gap-3 rounded-xl border border-border bg-card p-4">
+            <input
+                type="checkbox"
+                name="acknowledge"
+                id="acknowledge"
+                value="1"
+                class="mt-1 h-4 w-4 rounded border-border text-primary"
+                data-induction-acknowledge
+                {{ old('acknowledge') ? 'checked' : '' }}
+                required
+            >
+            <label for="acknowledge" class="text-sm leading-relaxed text-foreground">
+                I confirm that I have read and understood this section. I agree to comply with the policies and procedures outlined above.
+            </label>
+        </div>
+        @error('acknowledge')
+            <p class="text-sm text-destructive">{{ $message }}</p>
+        @enderror
+
+        <div data-induction-signature class="space-y-4">
+            @if ($section->acknowledgement_hint)
+                <p class="text-sm text-muted-foreground">{{ $section->acknowledgement_hint }}</p>
+            @endif
+            <div class="grid gap-4 sm:grid-cols-2">
+                <div class="space-y-2 sm:col-span-2">
+                    <p class="text-sm font-medium text-foreground">Digital signature</p>
+                    <p class="text-xs text-muted-foreground">Draw your signature in the box below.</p>
+                    <div class="rounded-lg border border-border bg-white p-2">
+                        <canvas data-induction-signature-canvas class="block w-full max-w-full touch-none" style="height:160px" aria-label="Signature pad"></canvas>
+                    </div>
+                    <input type="hidden" name="signature_data" value="" data-induction-signature-output>
+                    <button type="button" class="text-sm font-medium text-primary hover:underline" data-induction-signature-clear>Clear signature</button>
+                    @error('signature_data')
+                        <p class="text-sm text-destructive">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="space-y-2">
+                    <label class="portal-label" for="acknowledgement_timestamp">Date &amp; time</label>
+                    <input
+                        type="text"
+                        id="acknowledgement_timestamp"
+                        class="portal-input bg-muted/50"
+                        value="{{ $acknowledgementAt->format('d M Y, g:i A') }}"
+                        readonly
+                        tabindex="-1"
+                        aria-readonly="true"
+                    >
+                </div>
+            </div>
+        </div>
+
+        <button
+            type="submit"
+            class="w-full rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+            data-induction-submit
+            disabled
+        >
+            Submit Acknowledgement
         </button>
     </form>
 </div>

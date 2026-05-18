@@ -106,6 +106,9 @@ Route::middleware('auth')->group(function () {
                 Route::post('/versions/{version}/sections', [InductionPolicyAdminController::class, 'storeSection'])->name('versions.sections.store');
                 Route::put('/versions/{version}/sections/{section}', [InductionPolicyAdminController::class, 'updateSection'])->name('versions.sections.update');
                 Route::delete('/versions/{version}/sections/{section}', [InductionPolicyAdminController::class, 'destroySection'])->name('versions.sections.destroy');
+                Route::post('/versions/{version}/sections/{section}/questions', [InductionPolicyAdminController::class, 'storeQuestion'])->name('versions.sections.questions.store');
+                Route::put('/versions/{version}/sections/{section}/questions/{question}', [InductionPolicyAdminController::class, 'updateQuestion'])->name('versions.sections.questions.update');
+                Route::delete('/versions/{version}/sections/{section}/questions/{question}', [InductionPolicyAdminController::class, 'destroyQuestion'])->name('versions.sections.questions.destroy');
                 Route::post('/versions/{version}/publish', [InductionPolicyAdminController::class, 'publishVersion'])->name('versions.publish');
                 Route::post('/versions/{version}/master-pdf', [InductionPolicyAdminController::class, 'uploadMasterPdf'])->name('versions.master-pdf.store');
                 Route::delete('/versions/{version}/master-pdf', [InductionPolicyAdminController::class, 'destroyMasterPdf'])->name('versions.master-pdf.destroy');

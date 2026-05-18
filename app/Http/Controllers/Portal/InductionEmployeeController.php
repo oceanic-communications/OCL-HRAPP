@@ -55,7 +55,11 @@ class InductionEmployeeController extends Controller
 
     public function show(Request $request, InductionSection $induction_section): View|RedirectResponse
     {
-        $section = $induction_section->load('version.policy', 'version.sections');
+        $section = $induction_section->load([
+            'version.policy',
+            'version.sections',
+            'questions' => fn ($q) => $q->orderBy('sort_order'),
+        ]);
         $user = auth()->user();
 
         if (! $this->inductionFlow->canAccessSection($user, $section, $request->ip(), $request->userAgent())) {
@@ -114,6 +118,7 @@ class InductionEmployeeController extends Controller
                 [
                     'acknowledge' => $request->boolean('acknowledge'),
                     'signature_data' => $request->input('signature_data'),
+                    'question_answers' => $request->input('question_answers', []),
                 ],
                 $request->ip(),
                 $request->userAgent(),

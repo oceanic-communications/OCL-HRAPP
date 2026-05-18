@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\InductionPolicy;
 use App\Models\InductionPolicyVersion;
 use App\Models\InductionSection;
+use App\Models\InductionSectionQuestion;
 use Illuminate\Database\Seeder;
 
 class InductionSeeder extends Seeder
@@ -64,14 +65,29 @@ class InductionSeeder extends Seeder
             ],
         ];
 
+        $createdSections = [];
         foreach ($sections as $row) {
-            InductionSection::query()->create([
+            $createdSections[] = InductionSection::query()->create([
                 'induction_policy_version_id' => $version->id,
                 'sort_order' => $row['sort_order'],
                 'title' => $row['title'],
                 'body' => $row['body'],
                 'requires_signature' => $row['requires_signature'],
                 'acknowledgement_hint' => $row['acknowledgement_hint'] ?? null,
+            ]);
+        }
+
+        $first = $createdSections[0] ?? null;
+        if ($first !== null) {
+            InductionSectionQuestion::query()->create([
+                'induction_section_id' => $first->id,
+                'sort_order' => 1,
+                'prompt' => 'Who should you contact first if a policy point is unclear in practice?',
+            ]);
+            InductionSectionQuestion::query()->create([
+                'induction_section_id' => $first->id,
+                'sort_order' => 2,
+                'prompt' => 'In one sentence, state how productivity is defined at Oceanic.',
             ]);
         }
     }

@@ -24,14 +24,54 @@ function syncInductionSignature(form) {
 /**
  * @param {HTMLFormElement} form
  */
+function updateInductionSubmitState(form) {
+    const submitBtn = form.querySelector('[data-induction-submit]');
+    const checkbox = form.querySelector('[data-induction-acknowledge]');
+    const canvas = form.querySelector('[data-induction-signature-canvas]');
+    const questions = Array.from(form.querySelectorAll('[data-induction-question]'));
+
+    const acked = checkbox instanceof HTMLInputElement && checkbox.checked;
+    const pad = canvas instanceof HTMLCanvasElement ? canvas._inductionSignaturePad : undefined;
+    const signed = pad instanceof Object && 'isEmpty' in pad && typeof pad.isEmpty === 'function' && !pad.isEmpty();
+    const questionsAnswered = questions.every((input) => {
+        if (!(input instanceof HTMLInputElement)) {
+            return true;
+        }
+        return input.value.trim().length > 0;
+    });
+
+    if (submitBtn instanceof HTMLButtonElement) {
+        submitBtn.disabled = !(acked && signed && questionsAnswered);
+    }
+}
+
+/**
+ * @param {HTMLFormElement} form
+ */
 export function initInductionSignature(form) {
     if (!(form instanceof HTMLFormElement) || !form.hasAttribute('data-induction-form')) {
         return;
     }
 
     const root = form.querySelector('[data-induction-signature]');
+    const submitBtn = form.querySelector('[data-induction-submit]');
+    const checkbox = form.querySelector('[data-induction-acknowledge]');
+
+    checkbox?.addEventListener('change', () => updateInductionSubmitState(form));
+    form.querySelectorAll('[data-induction-question]').forEach((input) => {
+        input.addEventListener('input', () => updateInductionSubmitState(form));
+    });
+
+    form.addEventListener('submit', (e) => {
+        syncInductionSignature(form);
+        updateInductionSubmitState(form);
+        if (submitBtn instanceof HTMLButtonElement && submitBtn.disabled) {
+            e.preventDefault();
+        }
+    });
+
     if (!(root instanceof HTMLElement)) {
-        form.addEventListener('submit', () => syncInductionSignature(form));
+        updateInductionSubmitState(form);
         return;
     }
 
@@ -39,6 +79,7 @@ export function initInductionSignature(form) {
     const clearBtn = root.querySelector('[data-induction-signature-clear]');
     const hidden = root.querySelector('[data-induction-signature-output]');
     if (!(canvas instanceof HTMLCanvasElement) || !(hidden instanceof HTMLInputElement)) {
+        updateInductionSubmitState(form);
         return;
     }
 
@@ -64,15 +105,19 @@ export function initInductionSignature(form) {
         const ctx = canvas.getContext('2d');
         ctx?.setTransform(ratio, 0, 0, ratio, 0, 0);
         signaturePad.clear();
+        updateInductionSubmitState(form);
     }
 
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
+    signaturePad.addEventListener('endStroke', () => updateInductionSubmitState(form));
+
     clearBtn?.addEventListener('click', () => {
         signaturePad.clear();
         hidden.value = '';
+        updateInductionSubmitState(form);
     });
 
-    form.addEventListener('submit', () => syncInductionSignature(form));
+    updateInductionSubmitState(form);
 }
