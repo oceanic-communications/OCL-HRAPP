@@ -4,7 +4,7 @@
 
 @section('content')
 @php
-    $sections = $version->sections;
+    $sections = $version->activeSections;
     $completed = collect($completedSectionIds);
     $total = $sections->count();
     $doneCount = $completed->count();

@@ -101,9 +101,12 @@ Route::middleware('auth')->group(function () {
                 Route::get('/', [InductionPolicyAdminController::class, 'index'])->name('index');
                 Route::post('/policies', [InductionPolicyAdminController::class, 'storePolicy'])->name('policies.store');
                 Route::put('/policies/{policy}', [InductionPolicyAdminController::class, 'updatePolicy'])->name('policies.update');
+                Route::get('/policies/{policy}/sections/create', [InductionPolicyAdminController::class, 'createSection'])->name('policies.sections.create');
                 Route::post('/policies/{policy}/sections', [InductionPolicyAdminController::class, 'storeSection'])->name('policies.sections.store');
+                Route::get('/policies/{policy}/sections/{section}', [InductionPolicyAdminController::class, 'showSection'])->name('policies.sections.show');
+                Route::get('/policies/{policy}/sections/{section}/edit', [InductionPolicyAdminController::class, 'editSection'])->name('policies.sections.edit');
                 Route::put('/policies/{policy}/sections/{section}', [InductionPolicyAdminController::class, 'updateSection'])->name('policies.sections.update');
-                Route::delete('/policies/{policy}/sections/{section}', [InductionPolicyAdminController::class, 'destroySection'])->name('policies.sections.destroy');
+                Route::post('/policies/{policy}/sections/{section}/archive', [InductionPolicyAdminController::class, 'archiveSection'])->name('policies.sections.archive');
             });
     });
 });

@@ -73,7 +73,7 @@ final class InductionFlowService
             return false;
         }
 
-        $ordered = $section->version->sections()->orderBy('sort_order')->pluck('id');
+        $ordered = $section->version->activeSections()->orderBy('sort_order')->pluck('id');
         $idx = $ordered->search($section->id);
         if ($idx === false) {
             return false;
@@ -175,7 +175,7 @@ final class InductionFlowService
                 ],
             ]);
 
-            $total = $section->version->sections()->count();
+            $total = $section->version->activeSections()->count();
             $done = InductionSectionCompletion::query()
                 ->where('induction_enrollment_id', $enrollment->id)
                 ->count();

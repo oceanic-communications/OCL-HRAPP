@@ -52,6 +52,14 @@ class InductionPolicyVersion extends Model
     }
 
     /**
+     * @return HasMany<InductionSection, $this>
+     */
+    public function activeSections(): HasMany
+    {
+        return $this->sections()->whereNull('archived_at');
+    }
+
+    /**
      * @param  Builder<InductionPolicyVersion>  $query
      * @return Builder<InductionPolicyVersion>
      */

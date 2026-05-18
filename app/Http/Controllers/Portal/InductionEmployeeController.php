@@ -29,7 +29,7 @@ class InductionEmployeeController extends Controller
             return view('portal.induction.unavailable');
         }
 
-        $version->load('sections', 'policy');
+        $version->load(['activeSections', 'policy']);
         $enrollment = $this->inductionFlow->enrollmentFor(auth()->user(), $request->ip(), $request->userAgent());
         if ($enrollment === null) {
             return view('portal.induction.unavailable');
@@ -55,7 +55,10 @@ class InductionEmployeeController extends Controller
 
     public function show(Request $request, InductionSection $induction_section): View|RedirectResponse
     {
-        $section = $induction_section->load('version.policy', 'version.sections');
+        $section = $induction_section->load('version.policy', 'version.activeSections');
+        if ($section->isArchived()) {
+            return redirect()->route('portal.induction')->withErrors(['section' => 'This section is no longer available.']);
+        }
         $user = auth()->user();
 
         if (! $this->inductionFlow->canAccessSection($user, $section, $request->ip(), $request->userAgent())) {
@@ -85,7 +88,7 @@ class InductionEmployeeController extends Controller
         ]);
 
         $version = $section->version;
-        $sectionsOrdered = $version->sections;
+        $sectionsOrdered = $version->activeSections;
         $progressTotal = $sectionsOrdered->count();
         $progressDone = $enrollment->sectionCompletions()->count();
         $progressPct = $progressTotal > 0 ? (int) round(($progressDone / $progressTotal) * 100) : 0;
