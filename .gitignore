@@ -20,6 +20,9 @@
 /.vscode
 /.zed
 /auth.json
+/public/build
+/public/hot
+/public/storage
 /node_modules
 /storage/*.key
 /storage/pail
