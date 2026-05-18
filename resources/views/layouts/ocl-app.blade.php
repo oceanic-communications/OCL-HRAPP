@@ -19,8 +19,6 @@
         <div class="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 md:px-6">
             <a href="{{ route('dashboard') }}" class="text-lg font-semibold text-foreground">{{ config('app.name') }}</a>
             <nav class="flex flex-wrap items-center gap-3 text-sm font-medium">
-                <a href="{{ route('dashboard') }}" class="text-foreground hover:text-primary">Dashboard</a>
-                @include('components.portal-admin-nav-links')
                 <form action="{{ route('logout') }}" method="POST" class="inline">
                     @csrf
                     <button type="submit" class="text-muted-foreground hover:text-foreground">Sign out</button>

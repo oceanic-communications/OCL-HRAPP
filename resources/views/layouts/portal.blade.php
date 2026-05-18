@@ -39,18 +39,15 @@
                     </div>
                 </div>
                 <div class="flex shrink-0 items-center gap-2 sm:gap-3">
-                    <nav class="hidden flex-wrap items-center gap-2 text-sm font-medium lg:flex" aria-label="Administration">
-                        @include('components.portal-admin-nav-links')
-                    </nav>
                     @isset($portalHeaderNotifications)
                         <details class="relative">
-                            <summary class="flex cursor-pointer list-none items-center gap-2 rounded-lg px-2 py-2 text-sm font-medium text-foreground hover:bg-muted sm:px-3 [&::-webkit-details-marker]:hidden">
-                                <span class="inline-flex items-center gap-2">
-                                    <span>Notifications</span>
-                                    @if (($portalUnreadNotificationCount ?? 0) > 0)
-                                        <span class="inline-flex min-h-[1.25rem] min-w-[1.25rem] items-center justify-center rounded-full bg-primary px-1.5 text-[10px] font-bold text-primary-foreground">{{ $portalUnreadNotificationCount }}</span>
-                                    @endif
-                                </span>
+                            <summary class="portal-touch-target relative flex cursor-pointer list-none items-center justify-center rounded-lg p-2 text-foreground hover:bg-muted sm:px-3 [&::-webkit-details-marker]:hidden" aria-label="Notifications">
+                                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+                                </svg>
+                                @if (($portalUnreadNotificationCount ?? 0) > 0)
+                                    <span class="absolute right-1 top-1 inline-flex min-h-[1.125rem] min-w-[1.125rem] items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold leading-none text-primary-foreground">{{ $portalUnreadNotificationCount }}</span>
+                                @endif
                             </summary>
                             <div class="absolute right-0 z-50 mt-2 w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-border bg-card py-2 text-sm shadow-lg">
                                 <p class="border-b border-border px-3 pb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Your notifications</p>
