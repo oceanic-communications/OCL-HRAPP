@@ -1,4 +1,4 @@
-@extends('layouts.ocl-app')
+@extends('layouts.portal')
 
 @section('title', 'Induction policies · '.config('app.name'))
 
@@ -6,7 +6,7 @@
 <div class="space-y-8">
     <div>
         <h1 class="font-heading text-2xl font-bold text-foreground">Induction policies</h1>
-        <p class="text-sm text-muted-foreground">Create and deactivate policies, manage draft and published versions, sections, and master PDFs. Every save is audited.</p>
+        <p class="text-sm text-muted-foreground">Create and deactivate policies, manage draft and published versions and sections.</p>
     </div>
 
     <div class="portal-card p-5">

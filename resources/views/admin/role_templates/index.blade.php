@@ -1,4 +1,4 @@
-@extends('layouts.ocl-app')
+@extends('layouts.portal')
 
 @section('title', 'Role template permissions · '.config('app.name'))
 

@@ -1,4 +1,4 @@
-@extends('layouts.ocl-app')
+@extends('layouts.portal')
 
 @section('title', $version->version_label.' · Induction · '.config('app.name'))
 
