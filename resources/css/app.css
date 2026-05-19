@@ -472,6 +472,69 @@ html {
     margin-bottom: 0.5rem;
 }
 
+/* Tailwind preflight removes list markers; restore them inside rich HTML */
+.rich-html-content ul,
+.rich-html-content ol,
+.story-html-content ul,
+.story-html-content ol {
+    margin: 0.75rem 0;
+    padding-left: 1.625rem;
+}
+
+.rich-html-content ul,
+.story-html-content ul {
+    list-style-type: disc;
+}
+
+.rich-html-content ol,
+.story-html-content ol {
+    list-style-type: decimal;
+}
+
+.rich-html-content li,
+.story-html-content li {
+    display: list-item;
+    margin: 0.25rem 0;
+}
+
+.rich-html-content ul ul,
+.story-html-content ul ul {
+    list-style-type: circle;
+}
+
+.rich-html-content ul ul ul,
+.story-html-content ul ul ul {
+    list-style-type: square;
+}
+
+.rich-html-content ol ol,
+.story-html-content ol ol {
+    list-style-type: lower-alpha;
+}
+
+.rich-html-content p,
+.story-html-content p {
+    margin: 0.5rem 0;
+}
+
+.rich-html-content p:first-child,
+.story-html-content p:first-child {
+    margin-top: 0;
+}
+
+.rich-html-content p:last-child,
+.story-html-content p:last-child {
+    margin-bottom: 0;
+}
+
+.rich-html-content blockquote,
+.story-html-content blockquote {
+    margin: 0.75rem 0;
+    padding-left: 1rem;
+    border-left: 3px solid var(--border);
+    color: var(--muted-foreground);
+}
+
 /* Guest layout footer — social icon hit targets (ported from site theme) */
 .copyright_social .guten-social-icon a {
     display: flex !important;
