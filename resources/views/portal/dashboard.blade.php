@@ -5,13 +5,12 @@
 @section('content')
 @php
     $u = auth()->user();
-    $nameParts = collect(preg_split('/\s+/', trim($u->name)))->filter();
-    $first = $nameParts->first() ?: 'there';
-    $hour = now()->hour;
-    $greet = $hour < 12 ? 'Good morning' : ($hour < 17 ? 'Good afternoon' : 'Good evening');
+    $displayName = collect([$u->title, $u->first_name, $u->last_name])
+        ->filter(fn (?string $v) => $v !== null && $v !== '')
+        ->implode(' ') ?: $u->name;
     $portalHr = $u->isStaffSuperUser() || ($portalCap->staffUserRead ?? false);
     $rolesLabel = $u->roles->pluck('name')->join(', ') ?: 'Team member';
-    $initials = $nameParts->map(fn ($p) => strtoupper(mb_substr($p, 0, 1)))->take(2)->implode('');
+    $initials = strtoupper(mb_substr($u->first_name ?? '', 0, 1).mb_substr($u->last_name ?? '', 0, 1));
 @endphp
 
 <div class="mx-auto max-w-6xl space-y-6 sm:space-y-8">
@@ -25,9 +24,6 @@
                         @include('components.portal-sidebar-icon', ['icon' => 'building'])
                     </div>
                     <div class="min-w-0">
-                        <p class="mb-1 flex items-center gap-2 text-sm text-white/80">
-                            <span aria-hidden="true">☀</span> {{ $greet }}
-                        </p>
                         <h1 class="font-heading text-pretty text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">HR dashboard</h1>
                         <p class="mt-1 text-sm text-white/80 sm:text-base">Oceanic employee portal overview</p>
                     </div>
@@ -65,10 +61,7 @@
                 <div class="flex min-w-0 items-center gap-4 sm:gap-5">
                     <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border-4 border-white/20 bg-white/20 text-xl font-bold shadow-xl sm:h-16 sm:w-16 sm:text-2xl lg:h-20 lg:w-20 lg:text-3xl" aria-hidden="true">{{ $initials }}</span>
                     <div class="min-w-0">
-                        <p class="mb-1 flex items-center gap-2 text-sm text-white/80">
-                            <span aria-hidden="true">☀</span> {{ $greet }}
-                        </p>
-                        <h1 class="font-heading text-pretty text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">{{ $first }}</h1>
+                        <h1 class="font-heading text-pretty text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">{{ $displayName }}</h1>
                         <div class="mt-2 flex min-w-0 flex-col gap-1 text-sm text-white/80 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-2 sm:gap-y-1">
                             <span class="min-w-0 break-words">{{ $rolesLabel }}</span>
                             <span class="hidden text-white/40 sm:inline" aria-hidden="true">|</span>
@@ -76,6 +69,7 @@
                         </div>
                     </div>
                 </div>
+                @if (false) {{-- Annual leave & sick leave — enable when leave module is ready --}}
                 <div class="flex min-w-0 flex-wrap gap-2 sm:gap-3">
                     <div class="flex min-w-0 flex-1 basis-[9rem] items-center gap-2 rounded-xl border border-white/10 bg-white/10 px-3 py-2.5 text-primary-foreground backdrop-blur-sm sm:gap-3 sm:px-4 sm:py-3">
                         @include('components.portal-sidebar-icon', ['icon' => 'calendar'])
@@ -92,6 +86,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
             </div>
         </div>
     @endif

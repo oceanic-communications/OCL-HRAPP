@@ -33,10 +33,7 @@
                         <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
                     </button>
                     <p class="min-w-0 truncate text-sm font-semibold text-foreground md:hidden">{{ config('app.name') }}</p>
-                    <div class="hidden min-w-0 max-w-md flex-1 items-center gap-2 rounded-lg border border-border bg-muted/50 px-3 py-2 md:flex">
-                        @include('components.portal-sidebar-icon', ['icon' => 'search'])
-                        <input type="search" name="q" class="min-w-0 flex-1 border-0 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground" placeholder="Search…" autocomplete="off" disabled aria-disabled="true">
-                    </div>
+                    {{-- Search hidden until search is enabled --}}
                 </div>
                 <div class="flex shrink-0 items-center gap-2 sm:gap-3">
                     @isset($portalHeaderNotifications)

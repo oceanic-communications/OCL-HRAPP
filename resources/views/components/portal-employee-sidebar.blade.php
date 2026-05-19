@@ -23,7 +23,7 @@
         <nav class="space-y-1" aria-label="Primary">
             <x-portal-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" icon="layout" label="Dashboard" />
             <x-portal-nav-link :href="route('portal.induction')" :active="request()->routeIs('portal.induction*')" icon="book" label="My induction" />
-            <x-portal-nav-link :href="route('portal.settings')" :active="request()->routeIs('portal.settings')" icon="cog" label="Settings" />
+            {{-- Settings hidden for now --}}
         </nav>
 
         @if (($portalCap?->staffUserRead ?? false) || ($portalCap?->staffRoleRead ?? false) || ($portalCap?->inductionAdminAccess ?? false) || $u->isStaffSuperUser())
@@ -45,7 +45,7 @@
     <div class="shrink-0 border-t border-sidebar-border p-3">
         <div class="flex min-w-0 items-center gap-3 rounded-lg bg-sidebar-foreground/5 px-3 py-2">
             <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sidebar-primary text-sm font-semibold text-sidebar-primary-foreground" aria-hidden="true">
-                {{ collect(preg_split('/\s+/', trim($u->name)))->filter()->map(fn ($p) => strtoupper(mb_substr($p, 0, 1)))->take(2)->implode('') }}
+                {{ strtoupper(mb_substr($u->first_name ?? '', 0, 1).mb_substr($u->last_name ?? '', 0, 1)) }}
             </span>
             <div class="min-w-0 flex-1 text-xs">
                 <p class="truncate font-medium text-sidebar-foreground">{{ $u->name }}</p>
