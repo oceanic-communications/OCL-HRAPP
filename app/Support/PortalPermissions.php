@@ -15,5 +15,9 @@ final class PortalPermissions
 
     public const STAFF_USER_UPDATE = 'staff_user_management.staff_user.update';
 
+    public const STAFF_ROLE_READ = 'staff_role_management.staff_role.read';
+
+    public const STAFF_ROLE_UPDATE = 'staff_role_management.staff_role.update';
+
     public const INDUCTION_POLICY_MANAGE = 'induction.policy.manage';
 }

@@ -13,6 +13,8 @@ final readonly class PortalCapability
         public bool $staffUserRead,
         public bool $staffUserCreate,
         public bool $staffUserUpdate,
+        public bool $staffRoleRead,
+        public bool $staffRoleUpdate,
         public bool $inductionPolicyManage,
     ) {}
 
@@ -27,6 +29,8 @@ final readonly class PortalCapability
                 staffUserRead: true,
                 staffUserCreate: true,
                 staffUserUpdate: true,
+                staffRoleRead: true,
+                staffRoleUpdate: true,
                 inductionPolicyManage: true,
             );
         }
@@ -35,6 +39,8 @@ final readonly class PortalCapability
             staffUserRead: $user->hasPermission(PortalPermissions::STAFF_USER_READ),
             staffUserCreate: $user->hasPermission(PortalPermissions::STAFF_USER_CREATE),
             staffUserUpdate: $user->hasPermission(PortalPermissions::STAFF_USER_UPDATE),
+            staffRoleRead: $user->hasPermission(PortalPermissions::STAFF_ROLE_READ),
+            staffRoleUpdate: $user->hasPermission(PortalPermissions::STAFF_ROLE_UPDATE),
             inductionPolicyManage: $user->hasPermission(PortalPermissions::INDUCTION_POLICY_MANAGE),
         );
     }

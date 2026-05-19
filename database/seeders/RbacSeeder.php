@@ -63,6 +63,22 @@ class RbacSeeder extends Seeder
                 'created_at' => $now,
                 'updated_at' => $now,
             ],
+            [
+                'slug' => PortalPermissions::STAFF_ROLE_READ,
+                'module_code' => 'staff_role_management',
+                'resource_code' => 'staff_role',
+                'action' => 'read',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'slug' => PortalPermissions::STAFF_ROLE_UPDATE,
+                'module_code' => 'staff_role_management',
+                'resource_code' => 'staff_role',
+                'action' => 'update',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
         ];
 
         DB::table('permissions')->insert($rows);
@@ -151,6 +167,8 @@ class RbacSeeder extends Seeder
             PortalPermissions::STAFF_USER_READ,
             PortalPermissions::STAFF_USER_CREATE,
             PortalPermissions::STAFF_USER_UPDATE,
+            PortalPermissions::STAFF_ROLE_READ,
+            PortalPermissions::STAFF_ROLE_UPDATE,
             PortalPermissions::INDUCTION_POLICY_MANAGE,
         ]);
 

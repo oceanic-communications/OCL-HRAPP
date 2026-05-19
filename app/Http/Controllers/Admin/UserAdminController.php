@@ -37,7 +37,7 @@ class UserAdminController extends Controller
 
     public function create(): View
     {
-        $rolesForCreate = Role::query()->with('roleTemplate')->orderBy('name')->get();
+        $rolesForCreate = Role::query()->active()->with('roleTemplate')->orderBy('name')->get();
 
         return view('admin.users.create', [
             'rolesForCreate' => $rolesForCreate,
@@ -73,7 +73,7 @@ class UserAdminController extends Controller
 
     public function edit(User $user): View
     {
-        $roleOptions = Role::query()->with('roleTemplate')->orderBy('name')->get();
+        $roleOptions = Role::query()->active()->with('roleTemplate')->orderBy('name')->get();
         $user = $user->loadMissing('roles.roleTemplate');
 
         $selectedRoleId = old('role_id', $user->roles->first()?->id);

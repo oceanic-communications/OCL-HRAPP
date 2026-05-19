@@ -109,7 +109,7 @@
         </div>
     @endif
 
-    @if (($portalCap?->staffUserRead ?? false) || ($portalCap?->inductionPolicyManage ?? false) || $u->isStaffSuperUser())
+    @if (($portalCap?->staffUserRead ?? false) || ($portalCap?->staffRoleRead ?? false) || ($portalCap?->inductionPolicyManage ?? false) || $u->isStaffSuperUser())
         <div class="portal-card space-y-4 p-4 sm:p-5">
             <h2 class="font-heading text-lg font-semibold text-foreground">Administration</h2>
             <p class="text-sm text-muted-foreground">Manage staff accounts and induction policy content (sections, acknowledgements, publishing).</p>
@@ -118,6 +118,12 @@
                     <a href="{{ route('admin.users.index') }}" class="block rounded-lg border border-border p-4 transition-shadow hover:shadow-md">
                         <p class="font-semibold text-foreground">User management</p>
                         <p class="mt-1 text-xs text-muted-foreground">View and edit portal users, roles, and access.</p>
+                    </a>
+                @endif
+                @if ($portalCap?->staffRoleRead ?? false)
+                    <a href="{{ route('admin.roles.index') }}" class="block rounded-lg border border-border p-4 transition-shadow hover:shadow-md">
+                        <p class="font-semibold text-foreground">Roles</p>
+                        <p class="mt-1 text-xs text-muted-foreground">View and manage assignable portal roles.</p>
                     </a>
                 @endif
                 @if ($portalCap?->inductionPolicyManage ?? false)

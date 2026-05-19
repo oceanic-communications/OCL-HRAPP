@@ -26,11 +26,14 @@
             <x-portal-nav-link :href="route('portal.settings')" :active="request()->routeIs('portal.settings')" icon="cog" label="Settings" />
         </nav>
 
-        @if (($portalCap?->staffUserRead ?? false) || ($portalCap?->inductionPolicyManage ?? false) || $u->isStaffSuperUser())
+        @if (($portalCap?->staffUserRead ?? false) || ($portalCap?->staffRoleRead ?? false) || ($portalCap?->inductionPolicyManage ?? false) || $u->isStaffSuperUser())
             <p class="mb-2 mt-6 px-3 text-[10px] font-semibold uppercase tracking-wider text-sidebar-foreground/40">Administration</p>
             <nav class="space-y-1" aria-label="Administration">
                 @if ($portalCap?->staffUserRead ?? false)
                     <x-portal-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users*')" icon="users" label="User management" />
+                @endif
+                @if ($portalCap?->staffRoleRead ?? false)
+                    <x-portal-nav-link :href="route('admin.roles.index')" :active="request()->routeIs('admin.roles*')" icon="shield" label="Roles" />
                 @endif
                 @if ($portalCap?->inductionPolicyManage ?? false)
                     <x-portal-nav-link :href="route('admin.induction.index')" :active="request()->routeIs('admin.induction*')" icon="document-plus" label="Induction policies" />

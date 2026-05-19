@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\InductionPolicyAdminController;
+use App\Http\Controllers\Admin\RoleAdminController;
 use App\Http\Controllers\Admin\RoleTemplatePermissionController;
 use App\Http\Controllers\Admin\UserAdminController;
 use App\Http\Controllers\AuthController;
@@ -92,6 +93,17 @@ Route::middleware('auth')->group(function () {
         Route::middleware(['permission:'.PortalPermissions::STAFF_USER_UPDATE])->group(function () {
             Route::get('/users/{user}/edit', [UserAdminController::class, 'edit'])->name('users.edit');
             Route::put('/users/{user}', [UserAdminController::class, 'update'])->name('users.update');
+        });
+
+        Route::middleware(['permission:'.PortalPermissions::STAFF_ROLE_READ])->group(function () {
+            Route::get('/roles', [RoleAdminController::class, 'index'])->name('roles.index');
+            Route::get('/roles/{role}', [RoleAdminController::class, 'show'])->name('roles.show');
+        });
+
+        Route::middleware(['permission:'.PortalPermissions::STAFF_ROLE_UPDATE])->group(function () {
+            Route::get('/roles/{role}/edit', [RoleAdminController::class, 'edit'])->name('roles.edit');
+            Route::put('/roles/{role}', [RoleAdminController::class, 'update'])->name('roles.update');
+            Route::post('/roles/{role}/archive', [RoleAdminController::class, 'archive'])->name('roles.archive');
         });
 
         Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_MANAGE])
