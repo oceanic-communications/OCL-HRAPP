@@ -31,8 +31,8 @@
     </div>
 
     <div class="portal-card p-4 sm:p-6">
-        <div class="max-w-none whitespace-pre-wrap text-sm leading-relaxed text-foreground">
-            {{ $section->body }}
+        <div class="rich-html-content max-w-none text-sm leading-relaxed text-foreground">
+            {!! \App\Support\RichHtmlPurifier::purify($section->body) !!}
         </div>
     </div>
 

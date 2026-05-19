@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class InductionSection extends Model
 {
+    public const BODY_MAX_WORDS = 3000;
+
     protected $fillable = [
         'induction_policy_version_id',
         'sort_order',

@@ -432,7 +432,10 @@ html {
     }
 }
 
-/* Rich story HTML (TinyMCE output) */
+/* Rich HTML (TinyMCE output) */
+.rich-html-content img,
+.rich-html-content video,
+.rich-html-content iframe,
 .story-html-content img,
 .story-html-content video,
 .story-html-content iframe {
@@ -440,20 +443,26 @@ html {
     height: auto;
 }
 
+.rich-html-content iframe,
 .story-html-content iframe {
     aspect-ratio: 16 / 9;
     min-height: 200px;
 }
 
+.rich-html-content video,
 .story-html-content video {
     border-radius: var(--radius);
 }
 
+.rich-html-content a,
 .story-html-content a {
     color: var(--primary);
     text-decoration: underline;
 }
 
+.rich-html-content h2,
+.rich-html-content h3,
+.rich-html-content h4,
 .story-html-content h2,
 .story-html-content h3,
 .story-html-content h4 {

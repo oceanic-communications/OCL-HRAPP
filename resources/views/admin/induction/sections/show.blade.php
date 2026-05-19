@@ -25,7 +25,7 @@
 
     <div class="portal-card p-5">
         <h2 class="text-sm font-semibold text-foreground">Content</h2>
-        <div class="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-foreground">{{ $section->body }}</div>
+        <div class="rich-html-content mt-3 text-sm leading-relaxed text-foreground">{!! \App\Support\RichHtmlPurifier::purify($section->body) !!}</div>
     </div>
 
     <div class="flex flex-wrap gap-3">

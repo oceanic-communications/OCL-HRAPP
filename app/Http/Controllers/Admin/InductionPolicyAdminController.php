@@ -7,10 +7,14 @@ use App\Models\InductionPolicy;
 use App\Models\InductionSection;
 use App\Services\Induction\InductionPolicyAdminChangeService;
 use App\Support\PortalPermissions;
+use App\Support\RichHtmlPurifier;
+use App\Support\RichTextHelper;
+use App\Support\RichTextLimits;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class InductionPolicyAdminController extends Controller
@@ -162,21 +166,21 @@ class InductionPolicyAdminController extends Controller
         $this->authorizeManage();
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'body' => ['required', 'string'],
             'sort_order' => ['nullable', 'integer', 'min:0', 'max:9999'],
         ]);
+        $body = $this->validatedSectionBody($request);
 
         $version = $policy->ensureEditableVersion();
         $ctx = $this->auditRequestContext($request);
         $section = null;
 
-        DB::transaction(function () use (&$section, $version, $data, $ctx): void {
+        DB::transaction(function () use (&$section, $version, $data, $body, $ctx): void {
             $max = (int) $version->sections()->max('sort_order');
             $section = InductionSection::query()->create([
                 'induction_policy_version_id' => $version->id,
                 'sort_order' => $data['sort_order'] ?? ($max + 1),
                 'title' => $data['title'],
-                'body' => $data['body'],
+                'body' => $body,
                 'requires_signature' => true,
                 'acknowledgement_hint' => null,
             ]);
@@ -223,19 +227,19 @@ class InductionPolicyAdminController extends Controller
 
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'body' => ['required', 'string'],
             'sort_order' => ['required', 'integer', 'min:0', 'max:9999'],
         ]);
+        $body = $this->validatedSectionBody($request);
         $repeat = $this->staffRepeatFromRequest($request, required: true);
 
         $version = $policy->ensureEditableVersion();
         $before = $section->only(['title', 'body', 'sort_order', 'archived_at']);
         $ctx = $this->auditRequestContext($request);
 
-        DB::transaction(function () use ($section, $version, $data, $repeat, $before, $ctx): void {
+        DB::transaction(function () use ($section, $version, $data, $body, $repeat, $before, $ctx): void {
             $section->update([
                 'title' => $data['title'],
-                'body' => $data['body'],
+                'body' => $body,
                 'sort_order' => $data['sort_order'],
             ]);
 
@@ -284,6 +288,40 @@ class InductionPolicyAdminController extends Controller
         });
 
         return redirect()->route('admin.induction.index')->with('success', 'Section archived.');
+    }
+
+    private function validatedSectionBody(Request $request): string
+    {
+        $maxWords = InductionSection::BODY_MAX_WORDS;
+        $maxChars = RichTextLimits::maxStoredCharsForWords($maxWords);
+
+        $data = $request->validate([
+            'body' => ['required', 'string', 'max:'.$maxChars],
+        ]);
+
+        $raw = $data['body'];
+
+        if (RichTextHelper::wordCountFromHtml($raw) > $maxWords) {
+            throw ValidationException::withMessages([
+                'body' => ["Maximum {$maxWords} words."],
+            ]);
+        }
+
+        $html = RichHtmlPurifier::purify($raw);
+
+        if (! RichTextHelper::hasTextContent($html)) {
+            throw ValidationException::withMessages([
+                'body' => ['Content is required.'],
+            ]);
+        }
+
+        if (RichTextHelper::wordCountFromHtml($html) > $maxWords) {
+            throw ValidationException::withMessages([
+                'body' => ['Too long after sanitising.'],
+            ]);
+        }
+
+        return $html;
     }
 
     private function uniqueSlugFromName(string $name): string

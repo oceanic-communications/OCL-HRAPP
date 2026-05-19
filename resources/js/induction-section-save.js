@@ -11,6 +11,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const hidden = form.querySelector('input[name="staff_must_repeat_induction"]');
     const errorEl = dialog.querySelector('[data-induction-staff-error]');
 
+    const richEditor = window.inductionRichEditor;
+
+    const syncAndValidate = () => {
+        richEditor?.syncAll();
+        if (richEditor?.validateForm(form)) {
+            return form.reportValidity();
+        }
+        return false;
+    };
+
     const showError = (show) => {
         errorEl?.classList.toggle('hidden', !show);
     };
@@ -20,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     openBtn?.addEventListener('click', () => {
-        if (!form.reportValidity()) {
+        if (!syncAndValidate()) {
             return;
         }
         showError(false);
@@ -45,6 +55,9 @@ document.addEventListener('DOMContentLoaded', () => {
             hidden.value = selected.value;
         }
         dialog.close();
+        if (!syncAndValidate()) {
+            return;
+        }
         form.submit();
     });
 });
