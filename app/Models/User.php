@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\PortalPermissions;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -135,7 +136,15 @@ class User extends Authenticatable
             return true;
         }
 
-        return $this->resolvedPermissionSlugs()->contains($slug);
+        $have = $this->resolvedPermissionSlugs();
+
+        foreach (PortalPermissions::grantingSlugsFor($slug) as $grantingSlug) {
+            if ($have->contains($grantingSlug)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function hasAnyPermission(string ...$slugs): bool

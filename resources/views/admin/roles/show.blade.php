@@ -54,20 +54,29 @@
         </dl>
     </div>
 
-    @php
-        $permissions = $role->roleTemplate?->permissions?->sortBy(['module_code', 'resource_code', 'action']) ?? collect();
-    @endphp
     <div class="portal-card p-6">
-        <h2 class="text-sm font-semibold text-foreground">Permissions from template</h2>
-        @if ($permissions->isEmpty())
-            <p class="mt-3 text-sm text-muted-foreground">No permissions assigned to this template.</p>
-        @else
-            <ul class="mt-3 divide-y divide-border text-sm">
-                @foreach ($permissions as $permission)
-                    <li class="py-2 text-foreground">{{ $permission->slug }}</li>
-                @endforeach
-            </ul>
-        @endif
+        <h2 class="text-sm font-semibold text-foreground">Access levels</h2>
+        <div class="mt-4 space-y-4">
+            @foreach ($accessLevels as $level)
+                <div class="rounded-lg border border-border p-4">
+                    <h3 class="text-sm font-semibold text-foreground">
+                        {{ $level['label'] }}
+                        @if ($level['subtitle'])
+                            <span class="font-normal text-muted-foreground">({{ $level['subtitle'] }})</span>
+                        @endif
+                    </h3>
+                    <ul class="mt-3 flex flex-wrap gap-2">
+                        @foreach ($level['capabilities'] as $capability)
+                            <li>
+                                <span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium {{ $capability['granted'] ? 'bg-accent/15 text-accent' : 'bg-muted text-muted-foreground' }}">
+                                    {{ $capability['label'] }}{{ $capability['granted'] ? '' : ' — not granted' }}
+                                </span>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endforeach
+        </div>
     </div>
 
     @if ($role->users->isNotEmpty())

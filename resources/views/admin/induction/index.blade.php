@@ -13,6 +13,8 @@
         <div class="portal-card border-accent/40 bg-accent/10 p-4 text-sm text-foreground">{{ session('success') }}</div>
     @endif
 
+    @include('admin.induction.partials.user-progress', ['inductionProgress' => $inductionProgress])
+
     <div class="portal-card p-5">
         <h2 class="font-heading text-lg font-semibold text-foreground">New policy</h2>
         <form action="{{ route('admin.induction.policies.store') }}" method="POST" class="mt-4 flex flex-wrap items-end gap-3">

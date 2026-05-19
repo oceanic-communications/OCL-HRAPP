@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\RoleTemplate;
+use App\Support\PortalAccessLevels;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -39,8 +40,11 @@ class RoleAdminController extends Controller
             'users' => fn ($q) => $q->orderBy('last_name')->orderBy('first_name'),
         ]);
 
+        $permissions = $role->roleTemplate?->permissions ?? collect();
+
         return view('admin.roles.show', [
             'role' => $role,
+            'accessLevels' => PortalAccessLevels::summarize($permissions),
         ]);
     }
 

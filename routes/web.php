@@ -106,7 +106,13 @@ Route::middleware('auth')->group(function () {
             Route::post('/roles/{role}/archive', [RoleAdminController::class, 'archive'])->name('roles.archive');
         });
 
-        Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_MANAGE])
+        Route::middleware(['permission:'.implode('|', [
+            PortalPermissions::INDUCTION_POLICY_MANAGE,
+            PortalPermissions::INDUCTION_POLICY_READ,
+            PortalPermissions::INDUCTION_POLICY_CREATE,
+            PortalPermissions::INDUCTION_POLICY_UPDATE,
+            PortalPermissions::INDUCTION_POLICY_ARCHIVE,
+        ])])
             ->prefix('induction')
             ->name('induction.')
             ->group(function () {

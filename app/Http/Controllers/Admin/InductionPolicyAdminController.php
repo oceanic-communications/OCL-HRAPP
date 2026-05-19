@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\InductionPolicy;
 use App\Models\InductionSection;
 use App\Services\Induction\InductionPolicyAdminChangeService;
+use App\Services\Induction\InductionUserProgressService;
 use App\Support\PortalPermissions;
 use App\Support\RichHtmlPurifier;
 use App\Support\RichTextHelper;
@@ -21,13 +22,20 @@ class InductionPolicyAdminController extends Controller
 {
     public function __construct(
         private readonly InductionPolicyAdminChangeService $adminChangeService,
+        private readonly InductionUserProgressService $userProgressService,
     ) {}
 
     private function authorizeManage(): void
     {
         $u = auth()->user();
         abort_unless(
-            $u && ($u->isStaffSuperUser() || $u->hasPermission(PortalPermissions::INDUCTION_POLICY_MANAGE)),
+            $u && ($u->isStaffSuperUser() || $u->hasAnyPermission(
+                PortalPermissions::INDUCTION_POLICY_MANAGE,
+                PortalPermissions::INDUCTION_POLICY_READ,
+                PortalPermissions::INDUCTION_POLICY_CREATE,
+                PortalPermissions::INDUCTION_POLICY_UPDATE,
+                PortalPermissions::INDUCTION_POLICY_ARCHIVE,
+            )),
             403
         );
     }
@@ -75,7 +83,9 @@ class InductionPolicyAdminController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('admin.induction.index', compact('policies'));
+        $inductionProgress = $this->userProgressService->report();
+
+        return view('admin.induction.index', compact('policies', 'inductionProgress'));
     }
 
     public function storePolicy(Request $request): RedirectResponse

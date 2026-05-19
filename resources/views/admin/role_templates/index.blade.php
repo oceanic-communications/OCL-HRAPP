@@ -7,7 +7,7 @@
     <div>
         <h1 class="text-3xl font-bold text-foreground">Role template permissions</h1>
         <p class="mt-2 text-sm text-muted-foreground">
-            Choose a role template to change which permissions are assigned. Only the platform super admin can access this area.
+            Choose a role template to configure access levels (user management, induction management, and user induction progress). Only the platform super admin can access this area.
         </p>
     </div>
 

@@ -8,7 +8,7 @@
         <a href="{{ route('admin.role-templates.index') }}" class="text-sm font-medium text-primary hover:underline">← Role templates</a>
         <h1 class="mt-3 text-3xl font-bold text-foreground">{{ $roleTemplate->name }}</h1>
         <p class="mt-2 text-sm text-muted-foreground">
-            Toggle permissions for this template. Users inherit these capabilities through their assigned role.
+            Configure access levels for this template. Users inherit these capabilities through their assigned role.
         </p>
     </div>
 
@@ -16,28 +16,35 @@
         @csrf
         @method('PUT')
 
-        @foreach ($permissionsByModule as $module => $rows)
+        @foreach ($accessLevels as $level)
             <div class="portal-card overflow-hidden">
-                <h2 class="border-b border-border bg-muted/30 px-4 py-3 text-sm font-semibold text-foreground">
-                    {{ str_replace('_', ' ', (string) $module) }}
-                </h2>
-                <ul class="max-h-80 divide-y divide-border overflow-y-auto sm:max-h-none sm:columns-2 sm:gap-x-6">
-                    @foreach ($rows as $permission)
-                        <li class="break-inside-avoid px-4 py-2">
-                            <label class="flex cursor-pointer items-start gap-3 text-sm">
-                                <input
-                                    type="checkbox"
-                                    name="permissions[]"
-                                    value="{{ $permission->id }}"
-                                    class="mt-1 h-4 w-4 rounded border-border text-primary"
-                                    @checked(in_array($permission->id, $assignedIds, true))
-                                />
-                                <span>
-                                    <span class="font-medium text-foreground">{{ $permission->resource_code }}.{{ $permission->action }}</span>
-                                    <span class="mt-0.5 block text-xs text-muted-foreground">{{ $permission->slug }}</span>
-                                </span>
-                            </label>
-                        </li>
+                <div class="border-b border-border bg-muted/30 px-4 py-3">
+                    <h2 class="text-sm font-semibold text-foreground">
+                        {{ $level['label'] }}
+                        @if ($level['subtitle'])
+                            <span class="font-normal text-muted-foreground">({{ $level['subtitle'] }})</span>
+                        @endif
+                    </h2>
+                </div>
+                <ul class="divide-y divide-border">
+                    @foreach ($level['capabilities'] as $capability)
+                        @php
+                            $permissionId = $permissionIdsBySlug[$capability['slug']] ?? null;
+                        @endphp
+                        @if ($permissionId)
+                            <li class="px-4 py-3">
+                                <label class="flex cursor-pointer items-center gap-3 text-sm">
+                                    <input
+                                        type="checkbox"
+                                        name="permissions[]"
+                                        value="{{ $permissionId }}"
+                                        class="h-4 w-4 rounded border-border text-primary"
+                                        @checked(\App\Support\PortalPermissions::isGranted($capability['slug'], $assignedSlugs))
+                                    />
+                                    <span class="font-medium text-foreground">{{ $capability['label'] }}</span>
+                                </label>
+                            </li>
+                        @endif
                     @endforeach
                 </ul>
             </div>
