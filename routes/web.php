@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\InductionEmployeeProgressController;
 use App\Http\Controllers\Admin\InductionPolicyAdminController;
 use App\Http\Controllers\Admin\RoleAdminController;
 use App\Http\Controllers\Admin\RoleTemplatePermissionController;
@@ -127,6 +128,11 @@ Route::middleware('auth')->group(function () {
                 PortalPermissions::INDUCTION_ENROLLMENT_READ,
             ])])->group(function () {
                 Route::get('/', [InductionPolicyAdminController::class, 'index'])->name('index');
+            });
+
+            Route::middleware(['permission:'.PortalPermissions::INDUCTION_ENROLLMENT_READ])->group(function () {
+                Route::get('/progress', [InductionEmployeeProgressController::class, 'index'])->name('progress.index');
+                Route::get('/progress/{user}', [InductionEmployeeProgressController::class, 'show'])->name('progress.show');
             });
 
             Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_READ])->group(function () {

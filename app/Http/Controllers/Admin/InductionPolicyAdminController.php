@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Models\InductionPolicy;
 use App\Models\InductionSection;
 use App\Services\Induction\InductionPolicyAdminChangeService;
-use App\Services\Induction\InductionUserProgressService;
 use App\Support\PortalAccessRules;
 use App\Support\RichHtmlPurifier;
 use App\Support\RichTextHelper;
@@ -25,7 +24,6 @@ class InductionPolicyAdminController extends Controller
 
     public function __construct(
         private readonly InductionPolicyAdminChangeService $adminChangeService,
-        private readonly InductionUserProgressService $userProgressService,
     ) {}
 
     private function staffRepeatFromRequest(Request $request, bool $required = false): bool
@@ -59,13 +57,16 @@ class InductionPolicyAdminController extends Controller
         return $section;
     }
 
-    public function index(): View
+    public function index(): View|RedirectResponse
     {
         $this->authorizeInductionAdminIndex();
 
         $user = $this->portalUser();
         $canReadPolicies = PortalAccessRules::canReadInductionPolicies($user);
-        $canReadEnrollment = PortalAccessRules::canReadInductionEnrollment($user);
+
+        if (! $canReadPolicies && PortalAccessRules::canReadInductionEnrollment($user)) {
+            return redirect()->route('admin.induction.progress.index');
+        }
 
         $policies = $canReadPolicies
             ? InductionPolicy::query()
@@ -77,9 +78,7 @@ class InductionPolicyAdminController extends Controller
                 ->get()
             : collect();
 
-        $inductionProgress = $canReadEnrollment ? $this->userProgressService->report() : null;
-
-        return view('admin.induction.index', compact('policies', 'inductionProgress', 'canReadPolicies', 'canReadEnrollment'));
+        return view('admin.induction.index', compact('policies', 'canReadPolicies'));
     }
 
     public function storePolicy(Request $request): RedirectResponse

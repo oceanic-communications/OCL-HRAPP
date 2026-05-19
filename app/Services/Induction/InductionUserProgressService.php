@@ -4,6 +4,7 @@ namespace App\Services\Induction;
 
 use App\Models\InductionEnrollment;
 use App\Models\InductionPolicyVersion;
+use App\Models\InductionSectionCompletion;
 use App\Models\User;
 use Illuminate\Support\Collection;
 
@@ -83,6 +84,64 @@ final class InductionUserProgressService
             'version' => $version,
             'total_sections' => $totalSections,
             'rows' => $rows,
+        ];
+    }
+
+    /**
+     * @return array{
+     *     version: InductionPolicyVersion|null,
+     *     total_sections: int,
+     *     enrollment: InductionEnrollment|null,
+     *     summary: array{
+     *         user: User,
+     *         sections_completed: int,
+     *         sections_total: int,
+     *         progress_percent: int,
+     *         status: string,
+     *         started_at: \Illuminate\Support\Carbon|null,
+     *         completed_at: \Illuminate\Support\Carbon|null,
+     *     },
+     *     completions: Collection<int, InductionSectionCompletion>
+     * }
+     */
+    public function detailFor(User $user): array
+    {
+        $report = $this->report();
+        $version = $report['version'];
+        $totalSections = $report['total_sections'];
+
+        $summaryRow = $report['rows']->firstWhere(fn (array $row): bool => $row['user']->id === $user->id);
+        $summary = $summaryRow ?? [
+            'user' => $user,
+            'sections_completed' => 0,
+            'sections_total' => $totalSections,
+            'progress_percent' => 0,
+            'status' => 'not_started',
+            'started_at' => null,
+            'completed_at' => null,
+        ];
+
+        $enrollment = $version !== null
+            ? InductionEnrollment::query()
+                ->where('user_id', $user->id)
+                ->where('induction_policy_version_id', $version->id)
+                ->first()
+            : null;
+
+        $completions = $enrollment !== null
+            ? InductionSectionCompletion::query()
+                ->where('induction_enrollment_id', $enrollment->id)
+                ->with('section')
+                ->orderBy('completed_at')
+                ->get()
+            : collect();
+
+        return [
+            'version' => $version,
+            'total_sections' => $totalSections,
+            'enrollment' => $enrollment,
+            'summary' => $summary,
+            'completions' => $completions,
         ];
     }
 }

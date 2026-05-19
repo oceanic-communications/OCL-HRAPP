@@ -6,21 +6,11 @@
 <div class="space-y-8">
     <div>
         <h1 class="font-heading text-2xl font-bold text-foreground">Induction policies</h1>
-        <p class="text-sm text-muted-foreground">
-            @if ($canReadPolicies ?? false)
-                Manage policy sections staff complete during induction.
-            @else
-                View staff induction completion progress.
-            @endif
-        </p>
+        <p class="text-sm text-muted-foreground">Manage policy sections staff complete during induction.</p>
     </div>
 
     @if (session('success'))
         <div class="portal-card border-accent/40 bg-accent/10 p-4 text-sm text-foreground">{{ session('success') }}</div>
-    @endif
-
-    @if (($canReadEnrollment ?? false) && $inductionProgress !== null)
-        @include('admin.induction.partials.user-progress', ['inductionProgress' => $inductionProgress])
     @endif
 
     @if ($canReadPolicies ?? false)
@@ -132,7 +122,7 @@
         @empty
             <p class="text-sm text-muted-foreground">No policies yet.@if ($portalCap?->inductionPolicyCreate ?? false) Create one above.@endif</p>
         @endforelse
-    @elseif (! ($canReadEnrollment ?? false))
+    @else
         <div class="portal-card p-8 text-center text-sm text-muted-foreground">You do not have permission to view this area.</div>
     @endif
 </div>

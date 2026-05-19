@@ -14,7 +14,7 @@ use Tests\TestCase;
 class InductionUserProgressTest extends TestCase
 {
     #[Test]
-    public function admin_induction_index_shows_user_progress(): void
+    public function admin_progress_pages_show_summary_and_acknowledgement_details(): void
     {
         $admin = User::factory()->create(['is_staff_super_user' => true]);
 
@@ -59,16 +59,29 @@ class InductionUserProgressTest extends TestCase
         InductionSectionCompletion::query()->create([
             'induction_enrollment_id' => $enrollment->id,
             'induction_section_id' => $sectionA->id,
+            'completed_at' => now(),
             'employee_name_snapshot' => $employee->name,
             'policy_version_label_snapshot' => $version->version_label,
+            'ip_address' => '203.0.113.10',
+            'user_agent' => 'Mozilla/5.0 Test Browser',
         ]);
 
         $this->actingAs($admin)
-            ->get(route('admin.induction.index'))
+            ->get(route('admin.induction.progress.index'))
             ->assertOk()
-            ->assertSee('User induction progress')
+            ->assertSee('Employee progress')
             ->assertSee('Sera Naivalurua')
             ->assertSee('1 / 2')
-            ->assertSee('In progress');
+            ->assertSee('In progress')
+            ->assertSee('View details');
+
+        $this->actingAs($admin)
+            ->get(route('admin.induction.progress.show', $employee))
+            ->assertOk()
+            ->assertSee('Section acknowledgements')
+            ->assertSee('Sera Naivalurua')
+            ->assertSee('203.0.113.10')
+            ->assertSee('Mozilla/5.0 Test Browser')
+            ->assertSee('v1');
     }
 }

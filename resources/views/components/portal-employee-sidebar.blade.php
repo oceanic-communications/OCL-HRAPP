@@ -35,8 +35,11 @@
                 @if ($portalCap?->staffRoleRead ?? false)
                     <x-portal-nav-link :href="route('admin.roles.index')" :active="request()->routeIs('admin.roles*')" icon="shield" label="Roles" />
                 @endif
+                @if ($portalCap?->inductionEnrollmentRead ?? false)
+                    <x-portal-nav-link :href="route('admin.induction.progress.index')" :active="request()->routeIs('admin.induction.progress*')" icon="chart" label="Employee progress" />
+                @endif
                 @if ($portalCap?->inductionAdminAccess ?? false)
-                    <x-portal-nav-link :href="route('admin.induction.index')" :active="request()->routeIs('admin.induction*')" icon="document-plus" label="Induction policies" />
+                    <x-portal-nav-link :href="route('admin.induction.index')" :active="request()->routeIs('admin.induction.index') || request()->routeIs('admin.induction.policies.*')" icon="document-plus" label="Induction policies" />
                 @endif
             </nav>
         @endif

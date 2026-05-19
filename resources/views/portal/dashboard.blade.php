@@ -160,23 +160,13 @@
         </ul>
     </div>
 
-    <div class="grid gap-3 sm:grid-cols-2 sm:gap-4">
-        <a href="{{ route('portal.induction') }}" class="portal-card block min-h-[4.5rem] p-4 transition-shadow hover:shadow-md sm:p-5">
-            <div class="flex items-start justify-between gap-3">
-                <h2 class="font-heading text-pretty text-lg font-semibold text-foreground">Induction</h2>
-                <span class="shrink-0 text-foreground" aria-hidden="true">@include('components.portal-sidebar-icon', ['icon' => 'book'])</span>
-            </div>
-            <p class="mt-2 text-sm text-muted-foreground">Policies, modules, and acknowledgements.</p>
-            <p class="mt-4 text-xs font-medium text-primary">Continue →</p>
-        </a>
-        <a href="{{ route('portal.settings') }}" class="portal-card block min-h-[4.5rem] p-4 transition-shadow hover:shadow-md sm:p-5">
-            <div class="flex items-start justify-between gap-3">
-                <h2 class="font-heading text-pretty text-lg font-semibold text-foreground">Settings</h2>
-                <span class="shrink-0 text-foreground" aria-hidden="true">@include('components.portal-sidebar-icon', ['icon' => 'cog'])</span>
-            </div>
-            <p class="mt-2 text-sm text-muted-foreground">Account preferences and security.</p>
-            <p class="mt-4 text-xs font-medium text-primary">Open →</p>
-        </a>
-    </div>
+    <a href="{{ route('portal.induction') }}" class="portal-card block min-h-[4.5rem] p-4 transition-shadow hover:shadow-md sm:p-5">
+        <div class="flex items-start justify-between gap-3">
+            <h2 class="font-heading text-pretty text-lg font-semibold text-foreground">Induction</h2>
+            <span class="shrink-0 text-foreground" aria-hidden="true">@include('components.portal-sidebar-icon', ['icon' => 'book'])</span>
+        </div>
+        <p class="mt-2 text-sm text-muted-foreground">Policies, modules, and acknowledgements.</p>
+        <p class="mt-4 text-xs font-medium text-primary">Continue →</p>
+    </a>
 </div>
 @endsection

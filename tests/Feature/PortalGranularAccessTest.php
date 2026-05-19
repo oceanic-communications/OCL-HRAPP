@@ -30,8 +30,12 @@ class PortalGranularAccessTest extends TestCase
 
         $this->actingAs($user)
             ->get(route('admin.induction.index'))
+            ->assertRedirect(route('admin.induction.progress.index'));
+
+        $this->actingAs($user)
+            ->get(route('admin.induction.progress.index'))
             ->assertOk()
-            ->assertSee('User induction progress')
+            ->assertSee('Employee progress')
             ->assertDontSee('New policy');
     }
 
