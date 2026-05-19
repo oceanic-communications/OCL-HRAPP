@@ -86,9 +86,9 @@
     <div class="portal-card space-y-4 p-5">
         <div>
             <h2 class="font-heading text-lg font-semibold text-foreground">Section acknowledgements</h2>
-            <p class="mt-1 text-sm text-muted-foreground">
+            <!-- <p class="mt-1 text-sm text-muted-foreground">
                 Each row records the employee name, date and time, IP address, device information, and policy version captured at acknowledgement.
-            </p>
+            </p> -->
         </div>
 
         @if ($completions->isEmpty())
