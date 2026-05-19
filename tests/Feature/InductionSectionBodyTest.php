@@ -45,11 +45,24 @@ class InductionSectionBodyTest extends TestCase
 
         $section = InductionSection::query()->where('title', 'Section title')->first();
         $this->assertNotNull($section);
+        $this->assertFalse($section->requires_signature);
         $this->assertStringContainsString('<strong>team</strong>', $section->body);
         $this->assertStringNotContainsString('script', $section->body);
         $this->assertSame(
             RichHtmlPurifier::purify('<p>Hello <strong>team</strong></p>'),
             $section->body
         );
+
+        $this->actingAs($admin)
+            ->post(route('admin.induction.policies.sections.store', $policy), [
+                'title' => 'Signed section',
+                'body' => '<p>Sign here</p>',
+                'requires_signature' => '1',
+            ])
+            ->assertRedirect(route('admin.induction.index'));
+
+        $signed = InductionSection::query()->where('title', 'Signed section')->first();
+        $this->assertNotNull($signed);
+        $this->assertTrue($signed->requires_signature);
     }
 }

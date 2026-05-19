@@ -171,6 +171,7 @@ class InductionPolicyAdminController extends Controller
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'sort_order' => ['nullable', 'integer', 'min:0', 'max:9999'],
+            'requires_signature' => ['sometimes', 'boolean'],
         ]);
         $body = $this->validatedSectionBody($request);
 
@@ -178,14 +179,14 @@ class InductionPolicyAdminController extends Controller
         $ctx = $this->auditRequestContext($request);
         $section = null;
 
-        DB::transaction(function () use (&$section, $version, $data, $body, $ctx): void {
+        DB::transaction(function () use (&$section, $version, $data, $body, $request, $ctx): void {
             $max = (int) $version->sections()->max('sort_order');
             $section = InductionSection::query()->create([
                 'induction_policy_version_id' => $version->id,
                 'sort_order' => $data['sort_order'] ?? ($max + 1),
                 'title' => $data['title'],
                 'body' => $body,
-                'requires_signature' => true,
+                'requires_signature' => $request->boolean('requires_signature'),
                 'acknowledgement_hint' => null,
             ]);
 
@@ -196,7 +197,7 @@ class InductionPolicyAdminController extends Controller
                 subjectId: $section->id,
                 policyId: $version->induction_policy_id,
                 versionId: $version->id,
-                metadata: ['after' => $section->only(['title', 'sort_order'])],
+                metadata: ['after' => $section->only(['title', 'sort_order', 'requires_signature'])],
                 staffRepeatRequested: false,
                 versionForRepeat: $version,
                 complianceContext: $ctx,
@@ -232,19 +233,21 @@ class InductionPolicyAdminController extends Controller
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'sort_order' => ['required', 'integer', 'min:0', 'max:9999'],
+            'requires_signature' => ['sometimes', 'boolean'],
         ]);
         $body = $this->validatedSectionBody($request);
         $repeat = $this->staffRepeatFromRequest($request, required: true);
 
         $version = $policy->ensureEditableVersion();
-        $before = $section->only(['title', 'body', 'sort_order', 'archived_at']);
+        $before = $section->only(['title', 'body', 'sort_order', 'archived_at', 'requires_signature']);
         $ctx = $this->auditRequestContext($request);
 
-        DB::transaction(function () use ($section, $version, $data, $body, $repeat, $before, $ctx): void {
+        DB::transaction(function () use ($section, $version, $data, $body, $repeat, $before, $request, $ctx): void {
             $section->update([
                 'title' => $data['title'],
                 'body' => $body,
                 'sort_order' => $data['sort_order'],
+                'requires_signature' => $request->boolean('requires_signature'),
             ]);
 
             $this->adminChangeService->record(
@@ -254,7 +257,7 @@ class InductionPolicyAdminController extends Controller
                 subjectId: $section->id,
                 policyId: $version->induction_policy_id,
                 versionId: $version->id,
-                metadata: ['before' => $before, 'after' => $section->fresh()->only(['title', 'body', 'sort_order', 'archived_at'])],
+                metadata: ['before' => $before, 'after' => $section->fresh()->only(['title', 'body', 'sort_order', 'archived_at', 'requires_signature'])],
                 staffRepeatRequested: $repeat,
                 versionForRepeat: $version,
                 complianceContext: $ctx,

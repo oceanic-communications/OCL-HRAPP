@@ -227,11 +227,19 @@ final class InductionFlowService
             $enrollment->refresh()->load(['user', 'version.policy', 'sectionCompletions.section']);
             $this->inductionPdfService->generateAndStoreCompletionPdf($enrollment);
 
+            $enrollmentForMail = $enrollment->fresh(['user', 'version.policy', 'sectionCompletions.section']);
+
+            Mail::to($enrollmentForMail->user->email)->queue(
+                new InductionCompletedMail($enrollmentForMail, InductionCompletedMail::RECIPIENT_EMPLOYEE),
+            );
+
             $hr = config('induction.hr_notification_email');
-            Mail::to($enrollment->user->email)->queue(new InductionCompletedMail(
-                $enrollment->fresh(['user', 'version.policy', 'sectionCompletions.section']),
-                is_string($hr) ? $hr : null,
-            ));
+            if (is_string($hr) && filter_var($hr, FILTER_VALIDATE_EMAIL)
+                && strtolower($hr) !== strtolower($enrollmentForMail->user->email)) {
+                Mail::to($hr)->queue(
+                    new InductionCompletedMail($enrollmentForMail, InductionCompletedMail::RECIPIENT_HR),
+                );
+            }
         }
     }
 }

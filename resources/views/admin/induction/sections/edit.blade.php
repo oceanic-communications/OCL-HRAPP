@@ -88,7 +88,24 @@
 
         />
 
-
+        <div class="rounded-lg border border-border bg-muted/20 p-4">
+            <label class="flex cursor-pointer items-start gap-3">
+                <input
+                    type="checkbox"
+                    name="requires_signature"
+                    value="1"
+                    class="mt-1 h-4 w-4 rounded border-border text-primary"
+                    @checked(old('requires_signature', $section->requires_signature))
+                >
+                <span>
+                    <span class="text-sm font-medium text-foreground">Require digital signature</span>
+                    <span class="mt-1 block text-xs text-muted-foreground">When enabled, employees must draw a signature on the canvas before they can submit this section.</span>
+                </span>
+            </label>
+            @error('requires_signature')
+                <p class="mt-2 text-sm text-destructive">{{ $message }}</p>
+            @enderror
+        </div>
 
         <div class="flex flex-wrap gap-3 border-t border-border pt-4">
 

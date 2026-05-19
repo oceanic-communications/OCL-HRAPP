@@ -16,30 +16,37 @@ class InductionCompletedMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
+    public const RECIPIENT_EMPLOYEE = 'employee';
+
+    public const RECIPIENT_HR = 'hr';
+
     public function __construct(
         public InductionEnrollment $enrollment,
-        public ?string $hrCopyEmail = null,
+        public string $recipient = self::RECIPIENT_EMPLOYEE,
     ) {}
 
     public function envelope(): Envelope
     {
-        $envelope = new Envelope(
-            subject: 'Induction completed – '.config('app.name'),
-        );
+        $policyName = $this->enrollment->version->policy->name;
+        $employeeName = $this->enrollment->user->name;
 
-        $hr = $this->hrCopyEmail;
-        if (is_string($hr) && filter_var($hr, FILTER_VALIDATE_EMAIL)
-            && strtolower($hr) !== strtolower($this->enrollment->user->email)) {
-            $envelope = $envelope->cc($hr);
+        if ($this->recipient === self::RECIPIENT_HR) {
+            return new Envelope(
+                subject: 'Induction completed – '.$employeeName.' – '.config('app.name'),
+            );
         }
 
-        return $envelope;
+        return new Envelope(
+            subject: 'Induction completed – '.config('app.name'),
+        );
     }
 
     public function content(): Content
     {
         return new Content(
-            view: 'emails.induction-completed',
+            view: $this->recipient === self::RECIPIENT_HR
+                ? 'emails.induction-completed-hr'
+                : 'emails.induction-completed',
         );
     }
 
@@ -54,9 +61,13 @@ class InductionCompletedMail extends Mailable implements ShouldQueue
             return [];
         }
 
+        $filename = $this->recipient === self::RECIPIENT_HR
+            ? 'induction-acknowledgement-'.$this->enrollment->user->id.'.pdf'
+            : 'induction-acknowledgement.pdf';
+
         return [
             Attachment::fromStorageDisk($disk, $path)
-                ->as('induction-acknowledgement.pdf')
+                ->as($filename)
                 ->withMime('application/pdf'),
         ];
     }

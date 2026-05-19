@@ -23,7 +23,15 @@
         <div class="portal-card border-accent/40 bg-accent/10 p-4 text-sm text-foreground">{{ session('success') }}</div>
     @endif
 
-    <div class="portal-card p-5">
+    <div class="portal-card p-5 space-y-3">
+        <p class="text-sm text-muted-foreground">
+            Digital signature:
+            @if ($section->requires_signature)
+                <span class="font-medium text-foreground">Required</span>
+            @else
+                <span class="font-medium text-foreground">Not required</span>
+            @endif
+        </p>
         <h2 class="text-sm font-semibold text-foreground">Content</h2>
         <div class="rich-html-content mt-3 text-sm leading-relaxed text-foreground">{!! \App\Support\RichHtmlPurifier::purify($section->body) !!}</div>
     </div>
