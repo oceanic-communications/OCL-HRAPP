@@ -12,6 +12,7 @@ import { initHelpWalkthrough } from './help-walkthrough';
 import { initPortalAutoGrowTextareas } from './portal-auto-grow-textarea';
 import { initPortalDatepickers } from './portal-datepicker';
 import { initInductionSignature } from './induction-signature';
+import './induction-section-save';
 
 const focusableSelector =
     'a[href], button:not([disabled]), textarea, input:not([type="hidden"]), select, [tabindex]:not([tabindex="-1"])';

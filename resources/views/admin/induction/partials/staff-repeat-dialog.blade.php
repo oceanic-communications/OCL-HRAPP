@@ -28,9 +28,3 @@
         </div>
     </div>
 </dialog>
-
-@once
-    @push('scripts')
-        @vite('resources/js/induction-section-save.js')
-    @endpush
-@endonce
