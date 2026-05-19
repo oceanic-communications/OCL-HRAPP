@@ -98,6 +98,24 @@ final class InductionFlowService
             ->exists();
     }
 
+    public function canViewSection(User $user, InductionSection $section, ?string $auditIp = null, ?string $auditUserAgent = null): bool
+    {
+        $enrollment = $this->enrollmentFor($user, $auditIp, $auditUserAgent);
+        if ($enrollment === null) {
+            return false;
+        }
+
+        if ($section->induction_policy_version_id !== $enrollment->induction_policy_version_id) {
+            return false;
+        }
+
+        if ($this->isSectionCompleted($enrollment, $section)) {
+            return true;
+        }
+
+        return $this->canAccessSection($user, $section, $auditIp, $auditUserAgent);
+    }
+
     /**
      * @param  array{acknowledge: bool, signature_data?: string|null}  $input
      */
@@ -128,27 +146,34 @@ final class InductionFlowService
             ]);
         }
 
-        $sig = $input['signature_data'] ?? null;
-        if (! is_string($sig) || ! str_starts_with($sig, 'data:image/png;base64,')) {
-            throw ValidationException::withMessages([
-                'signature_data' => 'Please sign in the signature box before submitting.',
-            ]);
+        $signatureDisk = null;
+        $signaturePath = null;
+
+        if ($section->requires_signature) {
+            $sig = $input['signature_data'] ?? null;
+            if (! is_string($sig) || ! str_starts_with($sig, 'data:image/png;base64,')) {
+                throw ValidationException::withMessages([
+                    'signature_data' => 'Please sign in the signature box before submitting.',
+                ]);
+            }
         }
 
         $shouldFinalize = false;
 
-        DB::transaction(function () use ($user, $section, $enrollment, $input, $ip, $userAgent, &$shouldFinalize): void {
-            $raw = $input['signature_data'];
-            $b64 = preg_replace('#^data:image/png;base64,#', '', (string) $raw);
-            $binary = base64_decode((string) $b64, true);
-            if ($binary === false || strlen($binary) < 40) {
-                throw ValidationException::withMessages([
-                    'signature_data' => 'Invalid signature image.',
-                ]);
+        DB::transaction(function () use ($user, $section, $enrollment, $input, $ip, $userAgent, &$shouldFinalize, &$signatureDisk, &$signaturePath): void {
+            if ($section->requires_signature) {
+                $raw = $input['signature_data'];
+                $b64 = preg_replace('#^data:image/png;base64,#', '', (string) $raw);
+                $binary = base64_decode((string) $b64, true);
+                if ($binary === false || strlen($binary) < 40) {
+                    throw ValidationException::withMessages([
+                        'signature_data' => 'Invalid signature image.',
+                    ]);
+                }
+                $signaturePath = 'induction/signatures/'.$enrollment->id.'_'.$section->id.'_'.now()->format('YmdHis').'.png';
+                Storage::disk('local')->put($signaturePath, $binary);
+                $signatureDisk = 'local';
             }
-            $signaturePath = 'induction/signatures/'.$enrollment->id.'_'.$section->id.'_'.now()->format('YmdHis').'.png';
-            Storage::disk('local')->put($signaturePath, $binary);
-            $signatureDisk = 'local';
 
             $completion = InductionSectionCompletion::query()->create([
                 'induction_enrollment_id' => $enrollment->id,

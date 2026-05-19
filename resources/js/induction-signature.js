@@ -30,11 +30,13 @@ function updateInductionSubmitState(form) {
     const canvas = form.querySelector('[data-induction-signature-canvas]');
 
     const acked = checkbox instanceof HTMLInputElement && checkbox.checked;
+    const needsSignature = form.querySelector('[data-induction-signature]') !== null;
     const pad = canvas instanceof HTMLCanvasElement ? canvas._inductionSignaturePad : undefined;
     const signed = pad instanceof Object && 'isEmpty' in pad && typeof pad.isEmpty === 'function' && !pad.isEmpty();
+    const signatureOk = !needsSignature || signed;
 
     if (submitBtn instanceof HTMLButtonElement) {
-        submitBtn.disabled = !(acked && signed);
+        submitBtn.disabled = !(acked && signatureOk);
     }
 }
 

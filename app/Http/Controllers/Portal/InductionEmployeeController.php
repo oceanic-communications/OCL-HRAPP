@@ -61,22 +61,18 @@ class InductionEmployeeController extends Controller
         }
         $user = auth()->user();
 
-        if (! $this->inductionFlow->canAccessSection($user, $section, $request->ip(), $request->userAgent())) {
-            return redirect()
-                ->route('portal.induction')
-                ->withErrors(['section' => 'Complete the previous section first, or this section is not available.']);
-        }
-
         $enrollment = $this->inductionFlow->enrollmentFor($user, $request->ip(), $request->userAgent());
         if ($enrollment === null) {
             return redirect()->route('portal.induction');
         }
 
-        if ($this->inductionFlow->isSectionCompleted($enrollment, $section)) {
+        if (! $this->inductionFlow->canViewSection($user, $section, $request->ip(), $request->userAgent())) {
             return redirect()
                 ->route('portal.induction')
-                ->with('success', 'You have already completed this section.');
+                ->withErrors(['section' => 'Complete the previous section first, or this section is not available.']);
         }
+
+        $sectionCompleted = $this->inductionFlow->isSectionCompleted($enrollment, $section);
 
         $this->applicationAudit->record($user, InductionApplicationAuditEventCode::SECTION_PRESENTED, [
             'induction_policy_id' => $section->version->induction_policy_id,
@@ -89,8 +85,9 @@ class InductionEmployeeController extends Controller
 
         $version = $section->version;
         $sectionsOrdered = $version->activeSections;
+        $completedSectionIds = $enrollment->sectionCompletions()->pluck('induction_section_id')->all();
         $progressTotal = $sectionsOrdered->count();
-        $progressDone = $enrollment->sectionCompletions()->count();
+        $progressDone = count($completedSectionIds);
         $progressPct = $progressTotal > 0 ? (int) round(($progressDone / $progressTotal) * 100) : 0;
         $stepIndex = $sectionsOrdered->search(fn ($s) => $s->id === $section->id);
         $progressStep = $stepIndex !== false ? $stepIndex + 1 : 0;
@@ -99,6 +96,9 @@ class InductionEmployeeController extends Controller
             'section' => $section,
             'enrollment' => $enrollment,
             'version' => $version,
+            'sections' => $sectionsOrdered,
+            'completedSectionIds' => $completedSectionIds,
+            'sectionCompleted' => $sectionCompleted,
             'progressTotal' => $progressTotal,
             'progressDone' => $progressDone,
             'progressPct' => $progressPct,
@@ -128,11 +128,24 @@ class InductionEmployeeController extends Controller
                 ->withInput();
         }
 
-        if ($this->inductionFlow->enrollmentFor(auth()->user(), $request->ip(), $request->userAgent())?->isCompleted()) {
+        $enrollment = $this->inductionFlow->enrollmentFor(auth()->user(), $request->ip(), $request->userAgent());
+
+        if ($enrollment?->isCompleted()) {
             return redirect()->route('portal.induction')->with('success', 'Induction complete. A PDF acknowledgement has been generated and emailed to you'.(config('induction.hr_notification_email') ? ' and HR.' : '.'));
         }
 
-        return redirect()->route('portal.induction')->with('success', 'Section completed. Continue with the next section.');
+        $completedIds = $enrollment?->sectionCompletions()->pluck('induction_section_id')->all() ?? [];
+        $nextSection = $section->version
+            ->activeSections
+            ->first(fn (InductionSection $s) => ! in_array($s->id, $completedIds, true));
+
+        if ($nextSection !== null) {
+            return redirect()
+                ->route('portal.induction.section', $nextSection)
+                ->with('success', 'Section completed. Continue with the next section.');
+        }
+
+        return redirect()->route('portal.induction')->with('success', 'Section completed.');
     }
 
     public function masterPolicy(Request $request, InductionPolicyVersion $induction_policy_version): StreamedResponse|RedirectResponse
