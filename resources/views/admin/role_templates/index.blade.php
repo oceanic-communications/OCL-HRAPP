@@ -4,11 +4,16 @@
 
 @section('content')
 <div class="mx-auto max-w-3xl space-y-6">
-    <div>
-        <h1 class="text-3xl font-bold text-foreground">Role template permissions</h1>
-        <p class="mt-2 text-sm text-muted-foreground">
-            Choose a role template to configure access levels (user management, induction management, and user induction progress). Only the platform super admin can access this area.
-        </p>
+    <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+        <div>
+            <h1 class="text-3xl font-bold text-foreground">Role template permissions</h1>
+            <p class="mt-2 text-sm text-muted-foreground">
+                Choose a role template to configure access levels (user management, induction management, and user induction progress). Only the platform super admin can access this area.
+            </p>
+        </div>
+        <a href="{{ route('admin.role-templates.create') }}" class="inline-flex w-fit shrink-0 items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover hover:text-primary">
+            Add new role template
+        </a>
     </div>
 
     <div class="portal-card overflow-hidden">

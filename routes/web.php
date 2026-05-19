@@ -75,6 +75,8 @@ Route::middleware('auth')->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::middleware(['admin.only'])->group(function () {
             Route::get('/role-templates', [RoleTemplatePermissionController::class, 'index'])->name('role-templates.index');
+            Route::get('/role-templates/create', [RoleTemplatePermissionController::class, 'create'])->name('role-templates.create');
+            Route::post('/role-templates', [RoleTemplatePermissionController::class, 'store'])->name('role-templates.store');
             Route::get('/role-templates/{roleTemplate}/permissions', [RoleTemplatePermissionController::class, 'edit'])->name('role-templates.permissions.edit');
             Route::put('/role-templates/{roleTemplate}/permissions', [RoleTemplatePermissionController::class, 'update'])->name('role-templates.permissions.update');
         });
@@ -97,13 +99,18 @@ Route::middleware('auth')->group(function () {
 
         Route::middleware(['permission:'.PortalPermissions::STAFF_ROLE_READ])->group(function () {
             Route::get('/roles', [RoleAdminController::class, 'index'])->name('roles.index');
-            Route::get('/roles/{role}', [RoleAdminController::class, 'show'])->name('roles.show');
         });
 
         Route::middleware(['permission:'.PortalPermissions::STAFF_ROLE_UPDATE])->group(function () {
+            Route::get('/roles/create', [RoleAdminController::class, 'create'])->name('roles.create');
+            Route::post('/roles', [RoleAdminController::class, 'store'])->name('roles.store');
             Route::get('/roles/{role}/edit', [RoleAdminController::class, 'edit'])->name('roles.edit');
             Route::put('/roles/{role}', [RoleAdminController::class, 'update'])->name('roles.update');
             Route::post('/roles/{role}/archive', [RoleAdminController::class, 'archive'])->name('roles.archive');
+        });
+
+        Route::middleware(['permission:'.PortalPermissions::STAFF_ROLE_READ])->group(function () {
+            Route::get('/roles/{role}', [RoleAdminController::class, 'show'])->name('roles.show');
         });
 
         Route::middleware(['permission:'.implode('|', [
