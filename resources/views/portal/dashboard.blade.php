@@ -109,7 +109,7 @@
         </div>
     @endif
 
-    @if (($portalCap?->staffUserRead ?? false) || ($portalCap?->staffRoleRead ?? false) || ($portalCap?->inductionPolicyManage ?? false) || $u->isStaffSuperUser())
+    @if (($portalCap?->staffUserRead ?? false) || ($portalCap?->staffRoleRead ?? false) || ($portalCap?->inductionAdminAccess ?? false) || $u->isStaffSuperUser())
         <div class="portal-card space-y-4 p-4 sm:p-5">
             <h2 class="font-heading text-lg font-semibold text-foreground">Administration</h2>
             <p class="text-sm text-muted-foreground">Manage staff accounts and induction policy content (sections, acknowledgements, publishing).</p>
@@ -123,19 +123,13 @@
                 @if ($portalCap?->staffRoleRead ?? false)
                     <a href="{{ route('admin.roles.index') }}" class="block rounded-lg border border-border p-4 transition-shadow hover:shadow-md">
                         <p class="font-semibold text-foreground">Roles</p>
-                        <p class="mt-1 text-xs text-muted-foreground">View and manage assignable portal roles.</p>
+                        <p class="mt-1 text-xs text-muted-foreground">Manage roles, permission templates, and access levels.</p>
                     </a>
                 @endif
-                @if ($portalCap?->inductionPolicyManage ?? false)
+                @if ($portalCap?->inductionAdminAccess ?? false)
                     <a href="{{ route('admin.induction.index') }}" class="block rounded-lg border border-border p-4 transition-shadow hover:shadow-md">
-                        <p class="font-semibold text-foreground">Induction policies</p>
-                        <p class="mt-1 text-xs text-muted-foreground">Create policies, versions, wizard sections, and publish updates.</p>
-                    </a>
-                @endif
-                @if ($u->isStaffSuperUser())
-                    <a href="{{ route('admin.role-templates.index') }}" class="block rounded-lg border border-border p-4 transition-shadow hover:shadow-md">
-                        <p class="font-semibold text-foreground">Role templates</p>
-                        <p class="mt-1 text-xs text-muted-foreground">Configure which permissions each HR role receives.</p>
+                        <p class="font-semibold text-foreground">Induction</p>
+                        <p class="mt-1 text-xs text-muted-foreground">Manage policies and sections, or view staff induction progress.</p>
                     </a>
                 @endif
             </div>

@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Concerns\AuthorizesPortalAccess;
 use App\Http\Controllers\Controller;
 use App\Models\InductionPolicy;
 use App\Models\InductionSection;
 use App\Services\Induction\InductionPolicyAdminChangeService;
 use App\Services\Induction\InductionUserProgressService;
-use App\Support\PortalPermissions;
+use App\Support\PortalAccessRules;
 use App\Support\RichHtmlPurifier;
 use App\Support\RichTextHelper;
 use App\Support\RichTextLimits;
@@ -20,25 +21,12 @@ use Illuminate\View\View;
 
 class InductionPolicyAdminController extends Controller
 {
+    use AuthorizesPortalAccess;
+
     public function __construct(
         private readonly InductionPolicyAdminChangeService $adminChangeService,
         private readonly InductionUserProgressService $userProgressService,
     ) {}
-
-    private function authorizeManage(): void
-    {
-        $u = auth()->user();
-        abort_unless(
-            $u && ($u->isStaffSuperUser() || $u->hasAnyPermission(
-                PortalPermissions::INDUCTION_POLICY_MANAGE,
-                PortalPermissions::INDUCTION_POLICY_READ,
-                PortalPermissions::INDUCTION_POLICY_CREATE,
-                PortalPermissions::INDUCTION_POLICY_UPDATE,
-                PortalPermissions::INDUCTION_POLICY_ARCHIVE,
-            )),
-            403
-        );
-    }
 
     private function staffRepeatFromRequest(Request $request, bool $required = false): bool
     {
@@ -73,24 +61,30 @@ class InductionPolicyAdminController extends Controller
 
     public function index(): View
     {
-        $this->authorizeManage();
+        $this->authorizeInductionAdminIndex();
 
-        $policies = InductionPolicy::query()
-            ->with([
-                'versions' => fn ($q) => $q->whereNotNull('published_at')->orderByDesc('published_at')->limit(1),
-                'versions.sections' => fn ($q) => $q->orderBy('sort_order'),
-            ])
-            ->orderBy('name')
-            ->get();
+        $user = $this->portalUser();
+        $canReadPolicies = PortalAccessRules::canReadInductionPolicies($user);
+        $canReadEnrollment = PortalAccessRules::canReadInductionEnrollment($user);
 
-        $inductionProgress = $this->userProgressService->report();
+        $policies = $canReadPolicies
+            ? InductionPolicy::query()
+                ->with([
+                    'versions' => fn ($q) => $q->whereNotNull('published_at')->orderByDesc('published_at')->limit(1),
+                    'versions.sections' => fn ($q) => $q->orderBy('sort_order'),
+                ])
+                ->orderBy('name')
+                ->get()
+            : collect();
 
-        return view('admin.induction.index', compact('policies', 'inductionProgress'));
+        $inductionProgress = $canReadEnrollment ? $this->userProgressService->report() : null;
+
+        return view('admin.induction.index', compact('policies', 'inductionProgress', 'canReadPolicies', 'canReadEnrollment'));
     }
 
     public function storePolicy(Request $request): RedirectResponse
     {
-        $this->authorizeManage();
+        $this->authorizeCreateInductionPolicies();
         $data = $request->validate([
             'create_name' => ['required', 'string', 'max:255'],
         ]);
@@ -130,7 +124,7 @@ class InductionPolicyAdminController extends Controller
 
     public function updatePolicy(Request $request, InductionPolicy $policy): RedirectResponse
     {
-        $this->authorizeManage();
+        $this->authorizeUpdateInductionPolicies();
         $data = $request->validate([
             "policy.{$policy->id}.name" => ['required', 'string', 'max:255'],
             "policy.{$policy->id}.is_active" => ['required', 'in:0,1'],
@@ -165,7 +159,7 @@ class InductionPolicyAdminController extends Controller
 
     public function createSection(InductionPolicy $policy): View
     {
-        $this->authorizeManage();
+        $this->authorizeCreateInductionPolicies();
         $policy->ensureEditableVersion();
 
         return view('admin.induction.sections.create', compact('policy'));
@@ -173,7 +167,7 @@ class InductionPolicyAdminController extends Controller
 
     public function storeSection(Request $request, InductionPolicy $policy): RedirectResponse
     {
-        $this->authorizeManage();
+        $this->authorizeCreateInductionPolicies();
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'sort_order' => ['nullable', 'integer', 'min:0', 'max:9999'],
@@ -216,7 +210,7 @@ class InductionPolicyAdminController extends Controller
 
     public function showSection(InductionPolicy $policy, InductionSection $section): View
     {
-        $this->authorizeManage();
+        $this->authorizeReadInductionPolicies();
         $section = $this->resolveSection($policy, $section);
 
         return view('admin.induction.sections.show', compact('policy', 'section'));
@@ -224,7 +218,7 @@ class InductionPolicyAdminController extends Controller
 
     public function editSection(InductionPolicy $policy, InductionSection $section): View
     {
-        $this->authorizeManage();
+        $this->authorizeUpdateInductionPolicies();
         $section = $this->resolveSection($policy, $section);
 
         return view('admin.induction.sections.edit', compact('policy', 'section'));
@@ -232,7 +226,7 @@ class InductionPolicyAdminController extends Controller
 
     public function updateSection(Request $request, InductionPolicy $policy, InductionSection $section): RedirectResponse
     {
-        $this->authorizeManage();
+        $this->authorizeUpdateInductionPolicies();
         $section = $this->resolveSection($policy, $section);
 
         $data = $request->validate([
@@ -274,7 +268,7 @@ class InductionPolicyAdminController extends Controller
 
     public function archiveSection(Request $request, InductionPolicy $policy, InductionSection $section): RedirectResponse
     {
-        $this->authorizeManage();
+        $this->authorizeArchiveInductionPolicies();
         $section = $this->resolveSection($policy, $section);
 
         $version = $policy->ensureEditableVersion();

@@ -97,6 +97,10 @@ Route::middleware('auth')->group(function () {
             Route::put('/users/{user}', [UserAdminController::class, 'update'])->name('users.update');
         });
 
+        Route::post('/users/{user}/archive', [UserAdminController::class, 'archive'])
+            ->middleware(['permission:'.PortalPermissions::STAFF_USER_ARCHIVE])
+            ->name('users.archive');
+
         Route::middleware(['permission:'.PortalPermissions::STAFF_ROLE_READ])->group(function () {
             Route::get('/roles', [RoleAdminController::class, 'index'])->name('roles.index');
         });
@@ -113,25 +117,37 @@ Route::middleware('auth')->group(function () {
             Route::get('/roles/{role}', [RoleAdminController::class, 'show'])->name('roles.show');
         });
 
-        Route::middleware(['permission:'.implode('|', [
-            PortalPermissions::INDUCTION_POLICY_MANAGE,
-            PortalPermissions::INDUCTION_POLICY_READ,
-            PortalPermissions::INDUCTION_POLICY_CREATE,
-            PortalPermissions::INDUCTION_POLICY_UPDATE,
-            PortalPermissions::INDUCTION_POLICY_ARCHIVE,
-        ])])
-            ->prefix('induction')
-            ->name('induction.')
-            ->group(function () {
+        Route::prefix('induction')->name('induction.')->group(function () {
+            Route::middleware(['permission:'.implode('|', [
+                PortalPermissions::INDUCTION_POLICY_MANAGE,
+                PortalPermissions::INDUCTION_POLICY_READ,
+                PortalPermissions::INDUCTION_POLICY_CREATE,
+                PortalPermissions::INDUCTION_POLICY_UPDATE,
+                PortalPermissions::INDUCTION_POLICY_ARCHIVE,
+                PortalPermissions::INDUCTION_ENROLLMENT_READ,
+            ])])->group(function () {
                 Route::get('/', [InductionPolicyAdminController::class, 'index'])->name('index');
+            });
+
+            Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_READ])->group(function () {
+                Route::get('/policies/{policy}/sections/{section}', [InductionPolicyAdminController::class, 'showSection'])->name('policies.sections.show');
+            });
+
+            Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_CREATE])->group(function () {
                 Route::post('/policies', [InductionPolicyAdminController::class, 'storePolicy'])->name('policies.store');
-                Route::put('/policies/{policy}', [InductionPolicyAdminController::class, 'updatePolicy'])->name('policies.update');
                 Route::get('/policies/{policy}/sections/create', [InductionPolicyAdminController::class, 'createSection'])->name('policies.sections.create');
                 Route::post('/policies/{policy}/sections', [InductionPolicyAdminController::class, 'storeSection'])->name('policies.sections.store');
-                Route::get('/policies/{policy}/sections/{section}', [InductionPolicyAdminController::class, 'showSection'])->name('policies.sections.show');
+            });
+
+            Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_UPDATE])->group(function () {
+                Route::put('/policies/{policy}', [InductionPolicyAdminController::class, 'updatePolicy'])->name('policies.update');
                 Route::get('/policies/{policy}/sections/{section}/edit', [InductionPolicyAdminController::class, 'editSection'])->name('policies.sections.edit');
                 Route::put('/policies/{policy}/sections/{section}', [InductionPolicyAdminController::class, 'updateSection'])->name('policies.sections.update');
+            });
+
+            Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_ARCHIVE])->group(function () {
                 Route::post('/policies/{policy}/sections/{section}/archive', [InductionPolicyAdminController::class, 'archiveSection'])->name('policies.sections.archive');
             });
+        });
     });
 });

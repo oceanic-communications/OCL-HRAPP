@@ -4,37 +4,40 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Role;
-use App\Models\RoleTemplate;
 use App\Support\PortalAccessLevels;
+use App\Support\RoleSetup;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class RoleAdminController extends Controller
 {
     public function create(): View
     {
-        $roleTemplates = RoleTemplate::query()->orderBy('name')->get();
-
-        return view('admin.roles.create', [
-            'roleTemplates' => $roleTemplates,
-        ]);
+        return $this->formView(null);
     }
 
     public function store(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:128'],
-            'role_template_id' => ['required', 'integer', 'exists:role_templates,id'],
-        ]);
+        $canManageTemplates = $request->user()?->isStaffSuperUser() ?? false;
+        $validated = RoleSetup::validate($request, $canManageTemplates);
 
-        $role = Role::create([
-            'name' => $validated['name'],
-            'role_template_id' => $validated['role_template_id'],
-        ]);
+        $role = DB::transaction(function () use ($request, $validated, $canManageTemplates): Role {
+            $template = RoleSetup::resolveTemplate($request, $validated, $canManageTemplates);
+
+            if ($canManageTemplates) {
+                RoleSetup::syncTemplatePermissions($template, $validated['permissions'] ?? []);
+            }
+
+            return Role::create([
+                'name' => $validated['name'],
+                'role_template_id' => $template->id,
+            ]);
+        });
 
         return redirect()
-            ->route('admin.roles.show', $role)
+            ->route('admin.roles.edit', $role)
             ->with('success', 'Role created.');
     }
 
@@ -59,8 +62,13 @@ class RoleAdminController extends Controller
         ]);
     }
 
-    public function show(Role $role): View
+    public function show(Request $request, Role $role): RedirectResponse|View
     {
+        $cap = $request->attributes->get('portal_cap');
+        if ($request->user()?->isStaffSuperUser() || ($cap?->staffRoleUpdate ?? false)) {
+            return redirect()->route('admin.roles.edit', $role);
+        }
+
         $role->load([
             'roleTemplate.permissions',
             'users' => fn ($q) => $q->orderBy('last_name')->orderBy('first_name'),
@@ -74,19 +82,15 @@ class RoleAdminController extends Controller
         ]);
     }
 
-    public function edit(Role $role): View
+    public function edit(Role $role): View|RedirectResponse
     {
         if ($role->isArchived()) {
-            abort(404);
+            return redirect()
+                ->route('admin.roles.index')
+                ->withErrors(['archive' => 'Archived roles cannot be edited.']);
         }
 
-        $role->load('roleTemplate');
-        $roleTemplates = RoleTemplate::query()->orderBy('name')->get();
-
-        return view('admin.roles.edit', [
-            'role' => $role,
-            'roleTemplates' => $roleTemplates,
-        ]);
+        return $this->formView($role);
     }
 
     public function update(Request $request, Role $role): RedirectResponse
@@ -95,28 +99,32 @@ class RoleAdminController extends Controller
             abort(404);
         }
 
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:128'],
-            'role_template_id' => ['required', 'integer', 'exists:role_templates,id'],
-        ]);
+        $canManageTemplates = $request->user()?->isStaffSuperUser() ?? false;
+        $validated = RoleSetup::validate($request, $canManageTemplates, $role);
 
-        $templateChanged = (int) $role->role_template_id !== (int) $validated['role_template_id'];
+        $previousTemplateId = (int) $role->role_template_id;
 
-        $role->fill([
-            'name' => $validated['name'],
-            'role_template_id' => $validated['role_template_id'],
-        ]);
-        $role->save();
+        DB::transaction(function () use ($request, $validated, $canManageTemplates, $role, $previousTemplateId): void {
+            $template = RoleSetup::resolveTemplate($request, $validated, $canManageTemplates, $role);
 
-        if ($templateChanged) {
-            foreach ($role->users()->get() as $user) {
-                $user->flushResolvedPermissionSlugs();
+            if ($canManageTemplates) {
+                RoleSetup::syncTemplatePermissions($template, $validated['permissions'] ?? []);
             }
-        }
+
+            $role->fill([
+                'name' => $validated['name'],
+                'role_template_id' => $template->id,
+            ]);
+            $role->save();
+
+            if ($previousTemplateId !== (int) $template->id || $canManageTemplates) {
+                RoleSetup::flushUsersForRole($role);
+            }
+        });
 
         return redirect()
-            ->route('admin.roles.show', $role)
-            ->with('success', 'Role updated.');
+            ->route('admin.roles.edit', $role)
+            ->with('success', 'Role saved.');
     }
 
     public function archive(Request $request, Role $role): RedirectResponse
@@ -127,12 +135,26 @@ class RoleAdminController extends Controller
 
         if ($role->users()->exists()) {
             return redirect()
-                ->route('admin.roles.show', $role)
+                ->route('admin.roles.edit', $role)
                 ->withErrors(['archive' => 'This role is assigned to one or more users. Reassign those users before archiving.']);
         }
 
         $role->forceFill(['archived_at' => now()])->save();
 
         return redirect()->route('admin.roles.index')->with('success', 'Role archived.');
+    }
+
+    private function formView(?Role $role): View
+    {
+        if ($role !== null) {
+            $role->loadCount('users');
+        }
+
+        $context = RoleSetup::formContext($role);
+
+        return view('admin.roles.form', array_merge($context, [
+            'role' => $role,
+            'isEdit' => $role !== null,
+        ]));
     }
 }

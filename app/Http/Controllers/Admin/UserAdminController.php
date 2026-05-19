@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Concerns\AuthorizesPortalAccess;
 use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\User;
@@ -14,8 +15,11 @@ use Illuminate\View\View;
 
 class UserAdminController extends Controller
 {
+    use AuthorizesPortalAccess;
+
     public function index(Request $request): View
     {
+        $this->authorizeReadUsers();
         $users = User::query()
             ->with(['roles.roleTemplate'])
             ->orderBy('last_name')
@@ -37,6 +41,8 @@ class UserAdminController extends Controller
 
     public function create(): View
     {
+        $this->authorizeCreateUsers();
+
         $rolesForCreate = Role::query()->active()->with('roleTemplate')->orderBy('name')->get();
 
         return view('admin.users.create', [
@@ -46,6 +52,8 @@ class UserAdminController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        $this->authorizeCreateUsers();
+
         $validated = $request->validate([
             'title' => ['nullable', 'string', 'max:20'],
             'first_name' => ['required', 'string', 'max:255'],
@@ -73,6 +81,8 @@ class UserAdminController extends Controller
 
     public function edit(User $user): View
     {
+        $this->authorizeUpdateUsers();
+
         $roleOptions = Role::query()->active()->with('roleTemplate')->orderBy('name')->get();
         $user = $user->loadMissing('roles.roleTemplate');
 
@@ -87,6 +97,8 @@ class UserAdminController extends Controller
 
     public function update(Request $request, User $user): RedirectResponse
     {
+        $this->authorizeUpdateUsers();
+
         if ($user->is_staff_super_user && ! $request->user()?->isStaffSuperUser()) {
             abort(403);
         }
@@ -123,5 +135,22 @@ class UserAdminController extends Controller
         $user->save();
 
         return redirect()->route('admin.users.index')->with('success', 'User updated.');
+    }
+
+    public function archive(Request $request, User $user): RedirectResponse
+    {
+        $this->authorizeArchiveUsers();
+
+        if ($user->is_staff_super_user) {
+            abort(403, 'Super admin accounts cannot be archived.');
+        }
+
+        if ($user->isArchived()) {
+            return redirect()->route('admin.users.index')->with('success', 'User is already archived.');
+        }
+
+        $user->forceFill(['archived_at' => now()])->save();
+
+        return redirect()->route('admin.users.index')->with('success', 'User archived.');
     }
 }

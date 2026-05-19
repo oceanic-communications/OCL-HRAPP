@@ -12,6 +12,7 @@ import { initHelpWalkthrough } from './help-walkthrough';
 import { initPortalAutoGrowTextareas } from './portal-auto-grow-textarea';
 import { initPortalDatepickers } from './portal-datepicker';
 import { initInductionSignature } from './induction-signature';
+import { initRoleSetupForm } from './role-setup-form';
 import './induction-section-save';
 
 const focusableSelector =
@@ -32,6 +33,7 @@ function listFocusable(container) {
 document.addEventListener('DOMContentLoaded', () => {
     initPortalDatepickers();
     initWffFormLoading();
+    initRoleSetupForm();
 
     document.querySelectorAll('form[data-induction-form]').forEach((form) => {
         if (form instanceof HTMLFormElement) {

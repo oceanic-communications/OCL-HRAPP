@@ -29,8 +29,10 @@
     </div>
 
     <div class="flex flex-wrap gap-3">
-        @if (! $section->isArchived())
+        @if (! $section->isArchived() && ($portalCap?->inductionPolicyUpdate ?? false))
             <a href="{{ route('admin.induction.policies.sections.edit', [$policy, $section]) }}" class="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90">Edit section</a>
+        @endif
+        @if (! $section->isArchived() && ($portalCap?->inductionPolicyArchive ?? false))
             <form action="{{ route('admin.induction.policies.sections.archive', [$policy, $section]) }}" method="POST" onsubmit="return confirm('Archive this section? Staff will no longer see it during induction.');">
                 @csrf
                 <button type="submit" class="rounded-lg border border-destructive/40 px-4 py-2 text-sm font-semibold text-destructive hover:bg-destructive/10">Archive</button>

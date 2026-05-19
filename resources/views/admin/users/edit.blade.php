@@ -47,6 +47,24 @@
         </form>
         <x-form.loading-overlay message="Saving user…" />
     </div>
+
+    @php
+        $canArchive = ($portalCap?->staffUserArchive ?? false) || auth()->user()?->isStaffSuperUser();
+        $canArchiveThis = $canArchive && ! $user->is_staff_super_user && ! $user->isArchived();
+    @endphp
+    @if ($canArchiveThis)
+        <form
+            action="{{ route('admin.users.archive', $user) }}"
+            method="POST"
+            class="flex justify-end"
+            onsubmit="return confirm('Archive this user? They will no longer be able to sign in.');"
+        >
+            @csrf
+            <button type="submit" class="inline-flex rounded-lg border border-destructive/40 px-5 py-2.5 text-sm font-medium text-destructive hover:bg-destructive/10">
+                Archive user
+            </button>
+        </form>
+    @endif
     @endif
 </div>
 @endsection

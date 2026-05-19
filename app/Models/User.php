@@ -157,10 +157,8 @@ class User extends Authenticatable
             return false;
         }
 
-        $have = $this->resolvedPermissionSlugs();
-
         foreach ($slugs as $slug) {
-            if ($have->contains($slug)) {
+            if ($this->hasPermission($slug)) {
                 return true;
             }
         }

@@ -3,91 +3,49 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Permission;
+use App\Models\Role;
 use App\Models\RoleTemplate;
-use App\Support\PortalAccessLevels;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Illuminate\View\View;
-
+/**
+ * Legacy routes — role templates are managed via the unified role form.
+ */
 class RoleTemplatePermissionController extends Controller
 {
-    public function index(): View
+    public function index(): RedirectResponse
     {
-        $roleTemplates = RoleTemplate::query()
-            ->orderBy('audience')
-            ->orderBy('name')
-            ->withCount('permissions')
-            ->get();
-
-        return view('admin.role_templates.index', [
-            'roleTemplates' => $roleTemplates,
-        ]);
+        return redirect()->route('admin.roles.index');
     }
 
-    public function create(): View
+    public function create(): RedirectResponse
     {
-        return view('admin.role_templates.create');
+        return redirect()->route('admin.roles.create');
     }
 
     public function store(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:128'],
-            'slug' => ['required', 'string', 'max:64', 'regex:/^[a-z0-9_]+$/', 'unique:role_templates,slug'],
-            'audience' => ['required', 'string', Rule::in([RoleTemplate::AUDIENCE_STAFF])],
-        ]);
-
-        $roleTemplate = RoleTemplate::create([
-            'name' => $validated['name'],
-            'slug' => $validated['slug'],
-            'audience' => $validated['audience'],
-        ]);
-
-        return redirect()
-            ->route('admin.role-templates.permissions.edit', $roleTemplate)
-            ->with('success', 'Role template created. Configure permissions below.');
+        return redirect()->route('admin.roles.create');
     }
 
-    public function edit(RoleTemplate $roleTemplate): View
+    public function edit(RoleTemplate $roleTemplate): RedirectResponse
     {
-        $roleTemplate->load('permissions');
+        $role = Role::query()
+            ->where('role_template_id', $roleTemplate->id)
+            ->active()
+            ->orderBy('id')
+            ->first();
 
-        $permissions = Permission::query()
-            ->whereIn('slug', PortalAccessLevels::permissionSlugs())
-            ->orderBy('module_code')
-            ->orderBy('resource_code')
-            ->orderBy('action')
-            ->get();
+        if ($role !== null) {
+            return redirect()->route('admin.roles.edit', $role);
+        }
 
-        return view('admin.role_templates.edit', [
-            'roleTemplate' => $roleTemplate,
-            'accessLevels' => PortalAccessLevels::definitions(),
-            'permissionIdsBySlug' => PortalAccessLevels::permissionIdsBySlug($permissions),
-            'assignedSlugs' => $roleTemplate->permissions->pluck('slug')->all(),
-        ]);
+        return redirect()
+            ->route('admin.roles.create')
+            ->withErrors(['role_template_id' => 'No active role uses this template. Create a role and link it to this template, or pick another template.']);
     }
 
     public function update(Request $request, RoleTemplate $roleTemplate): RedirectResponse
     {
-        $roleTemplate->loadMissing('permissions');
-
-        $validated = $request->validate([
-            'permissions' => ['nullable', 'array'],
-            'permissions.*' => ['integer', 'exists:permissions,id'],
-        ]);
-
-        $submittedIds = array_values(array_unique(array_map('intval', $validated['permissions'] ?? [])));
-        $accessSlugs = PortalAccessLevels::permissionSlugs();
-        $preservedIds = $roleTemplate->permissions
-            ->reject(fn (Permission $permission) => in_array($permission->slug, $accessSlugs, true))
-            ->pluck('id')
-            ->all();
-        $roleTemplate->permissions()->sync(array_values(array_unique(array_merge($preservedIds, $submittedIds))));
-
-        return redirect()
-            ->route('admin.role-templates.permissions.edit', $roleTemplate)
-            ->with('success', 'Permissions updated for '.$roleTemplate->name.'.');
+        return $this->edit($roleTemplate);
     }
 }

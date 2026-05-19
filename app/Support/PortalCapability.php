@@ -5,7 +5,7 @@ namespace App\Support;
 use App\Models\User;
 
 /**
- * View helper: which user-management actions the signed-in user may perform.
+ * View helper: which portal actions the signed-in user may perform.
  */
 final readonly class PortalCapability
 {
@@ -13,9 +13,14 @@ final readonly class PortalCapability
         public bool $staffUserRead,
         public bool $staffUserCreate,
         public bool $staffUserUpdate,
+        public bool $staffUserArchive,
         public bool $staffRoleRead,
         public bool $staffRoleUpdate,
-        public bool $inductionPolicyManage,
+        public bool $inductionAdminAccess,
+        public bool $inductionPolicyRead,
+        public bool $inductionPolicyCreate,
+        public bool $inductionPolicyUpdate,
+        public bool $inductionPolicyArchive,
         public bool $inductionEnrollmentRead,
     ) {}
 
@@ -25,32 +30,19 @@ final readonly class PortalCapability
             return null;
         }
 
-        if ($user->isStaffSuperUser()) {
-            return new self(
-                staffUserRead: true,
-                staffUserCreate: true,
-                staffUserUpdate: true,
-                staffRoleRead: true,
-                staffRoleUpdate: true,
-                inductionPolicyManage: true,
-                inductionEnrollmentRead: true,
-            );
-        }
-
         return new self(
-            staffUserRead: $user->hasPermission(PortalPermissions::STAFF_USER_READ),
-            staffUserCreate: $user->hasPermission(PortalPermissions::STAFF_USER_CREATE),
-            staffUserUpdate: $user->hasPermission(PortalPermissions::STAFF_USER_UPDATE),
-            staffRoleRead: $user->hasPermission(PortalPermissions::STAFF_ROLE_READ),
-            staffRoleUpdate: $user->hasPermission(PortalPermissions::STAFF_ROLE_UPDATE),
-            inductionPolicyManage: $user->hasAnyPermission(
-                PortalPermissions::INDUCTION_POLICY_MANAGE,
-                PortalPermissions::INDUCTION_POLICY_READ,
-                PortalPermissions::INDUCTION_POLICY_CREATE,
-                PortalPermissions::INDUCTION_POLICY_UPDATE,
-                PortalPermissions::INDUCTION_POLICY_ARCHIVE,
-            ),
-            inductionEnrollmentRead: $user->hasPermission(PortalPermissions::INDUCTION_ENROLLMENT_READ),
+            staffUserRead: PortalAccessRules::canReadUsers($user),
+            staffUserCreate: PortalAccessRules::canCreateUsers($user),
+            staffUserUpdate: PortalAccessRules::canUpdateUsers($user),
+            staffUserArchive: PortalAccessRules::canArchiveUsers($user),
+            staffRoleRead: PortalAccessRules::canReadRoles($user),
+            staffRoleUpdate: PortalAccessRules::canUpdateRoles($user),
+            inductionAdminAccess: PortalAccessRules::canAccessInductionAdmin($user),
+            inductionPolicyRead: PortalAccessRules::canReadInductionPolicies($user),
+            inductionPolicyCreate: PortalAccessRules::canCreateInductionPolicies($user),
+            inductionPolicyUpdate: PortalAccessRules::canUpdateInductionPolicies($user),
+            inductionPolicyArchive: PortalAccessRules::canArchiveInductionPolicies($user),
+            inductionEnrollmentRead: PortalAccessRules::canReadInductionEnrollment($user),
         );
     }
 }

@@ -7,7 +7,7 @@
     <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <div>
             <h1 class="text-3xl font-bold text-foreground">Roles</h1>
-            <p class="mt-2 text-muted-foreground">View and manage assignable portal roles linked to permission templates.</p>
+            <p class="mt-2 text-muted-foreground">Manage roles, permission templates, and access levels in one place.</p>
             @if (($stats['archived'] ?? 0) > 0)
                 <p class="mt-2 text-sm text-muted-foreground">
                     <span class="font-medium text-foreground">{{ $stats['archived'] }}</span> archived role{{ $stats['archived'] === 1 ? '' : 's' }}.
@@ -16,7 +16,7 @@
         </div>
         @if ($portalCap?->staffRoleUpdate ?? false)
             <a href="{{ route('admin.roles.create') }}" class="inline-flex w-fit shrink-0 items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover hover:text-primary">
-                Add new role
+                Create role
             </a>
         @endif
     </div>
@@ -66,13 +66,10 @@
                             </td>
                             <td class="px-4 py-3 text-right">
                                 <div class="flex flex-wrap justify-end gap-2">
-                                    <a href="{{ route('admin.roles.show', $role) }}" class="font-medium text-primary hover:underline">View</a>
                                     @if (! $role->isArchived() && ($portalCap?->staffRoleUpdate ?? false))
-                                        <a href="{{ route('admin.roles.edit', $role) }}" class="font-medium text-primary hover:underline">Edit</a>
-                                        <form action="{{ route('admin.roles.archive', $role) }}" method="POST" class="inline" onsubmit="return confirm('Archive this role? It will no longer be available when assigning users.');">
-                                            @csrf
-                                            <button type="submit" class="font-medium text-destructive hover:underline">Archive</button>
-                                        </form>
+                                        <a href="{{ route('admin.roles.edit', $role) }}" class="font-medium text-primary hover:underline">Manage</a>
+                                    @else
+                                        <a href="{{ route('admin.roles.show', $role) }}" class="font-medium text-primary hover:underline">View</a>
                                     @endif
                                 </div>
                             </td>

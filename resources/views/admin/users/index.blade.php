@@ -71,10 +71,20 @@
                                     $actor = auth()->user();
                                     $canEdit = ($portalCap?->staffUserUpdate ?? false) || $actor?->isStaffSuperUser();
                                     $canEditThis = $canEdit && (! $u->is_staff_super_user || $actor?->isStaffSuperUser());
+                                    $canArchive = ($portalCap?->staffUserArchive ?? false) || $actor?->isStaffSuperUser();
+                                    $canArchiveThis = $canArchive && ! $u->is_staff_super_user && ! $u->isArchived();
                                 @endphp
-                                @if ($canEditThis)
-                                    <a href="{{ route('admin.users.edit', $u) }}" class="text-primary hover:underline">Edit</a>
-                                @endif
+                                <div class="flex flex-wrap justify-end gap-2">
+                                    @if ($canEditThis)
+                                        <a href="{{ route('admin.users.edit', $u) }}" class="text-primary hover:underline">Edit</a>
+                                    @endif
+                                    @if ($canArchiveThis)
+                                        <form action="{{ route('admin.users.archive', $u) }}" method="POST" class="inline" onsubmit="return confirm('Archive this user? They will no longer be able to sign in.');">
+                                            @csrf
+                                            <button type="submit" class="text-destructive hover:underline">Archive</button>
+                                        </form>
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                     @endforeach
