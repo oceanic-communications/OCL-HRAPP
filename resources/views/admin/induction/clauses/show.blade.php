@@ -9,7 +9,7 @@
         <div class="mt-2 flex flex-wrap items-start justify-between gap-3">
             <div>
                 <h1 class="font-heading text-2xl font-bold text-foreground">{{ $section->title }}</h1>
-                <p class="text-sm text-muted-foreground">{{ $policy->name }} · Order {{ $section->sort_order }}</p>
+                <p class="text-sm text-muted-foreground">{{ $policy->name }}</p>
             </div>
             @if ($section->isArchived())
                 <span class="rounded-full bg-muted px-2 py-0.5 text-xs font-medium">Archived</span>

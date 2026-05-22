@@ -18,6 +18,7 @@ class InductionSectionBodyTest extends TestCase
         $admin = User::factory()->create(['is_staff_super_user' => true]);
         $policy = InductionPolicy::query()->create([
             'name' => 'Test policy',
+            'abbreviation' => 'TST',
             'slug' => 'test-policy',
             'is_active' => true,
         ]);

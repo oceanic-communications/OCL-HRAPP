@@ -17,6 +17,7 @@ class InductionSeeder extends Seeder
 
         $policy = InductionPolicy::query()->create([
             'name' => 'Productivity principles & policies',
+            'abbreviation' => 'PP',
             'slug' => 'productivity-policies',
             'is_active' => true,
         ]);

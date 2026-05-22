@@ -10,7 +10,11 @@
 <div class="space-y-6">
     <div>
         <a href="{{ route('admin.induction.index') }}" class="text-sm font-medium text-primary hover:underline">← Back to policies</a>
-        <h1 class="font-heading mt-2 text-2xl font-bold text-foreground">{{ $policy->name }}</h1>
+        <h1 class="font-heading mt-2 text-2xl font-bold text-foreground">
+            <span class="text-primary">{{ $policy->abbreviation }}</span>
+            <span class="text-muted-foreground">·</span>
+            {{ $policy->name }}
+        </h1>
         <p class="text-sm text-muted-foreground">Manage clauses staff complete for this policy during induction.</p>
     </div>
 
@@ -24,6 +28,13 @@
                 @csrf
                 @method('PUT')
                 <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:gap-6">
+                    <div class="w-full sm:w-32">
+                        <label class="portal-label" for="policy_abbreviation_{{ $policy->id }}">Abbreviation</label>
+                        <input id="policy_abbreviation_{{ $policy->id }}" name="policy[{{ $policy->id }}][abbreviation]" type="text" class="portal-input mt-1 uppercase" required value="{{ old('policy.'.$policy->id.'.abbreviation', $policy->abbreviation) }}" maxlength="{{ \App\Models\InductionPolicy::ABBREVIATION_MAX_LENGTH }}" autocapitalize="characters" spellcheck="false">
+                        @error("policy.{$policy->id}.abbreviation")
+                            <p class="mt-1 text-sm text-destructive">{{ $message }}</p>
+                        @enderror
+                    </div>
                     <div class="min-w-0 flex-1">
                         <label class="portal-label" for="policy_name_{{ $policy->id }}">Policy name</label>
                         <input id="policy_name_{{ $policy->id }}" name="policy[{{ $policy->id }}][name]" type="text" class="portal-input mt-1" required value="{{ old('policy.'.$policy->id.'.name', $policy->name) }}" maxlength="255">
@@ -46,7 +57,8 @@
             </form>
         @else
             <div class="border-b border-border bg-muted/30 px-5 py-4">
-                <p class="text-sm text-muted-foreground">{{ $policy->is_active ? 'Active' : 'Inactive' }}</p>
+                <p class="text-sm font-semibold text-foreground">{{ $policy->abbreviation }}</p>
+                <p class="mt-1 text-sm text-muted-foreground">{{ $policy->is_active ? 'Active' : 'Inactive' }}</p>
             </div>
         @endif
 
@@ -76,7 +88,7 @@
                         <tbody class="divide-y divide-border bg-card">
                             @foreach ($clauses as $clause)
                                 <tr class="{{ $clause->isArchived() ? 'bg-muted/20 text-muted-foreground' : '' }}">
-                                    <td class="whitespace-nowrap px-4 py-3">{{ $clause->sort_order }}</td>
+                                    <td class="whitespace-nowrap px-4 py-3">{{ $loop->iteration }}</td>
                                     <td class="px-4 py-3 font-medium">{{ $clause->title }}</td>
                                     <td class="whitespace-nowrap px-4 py-3">
                                         @if ($clause->isArchived())

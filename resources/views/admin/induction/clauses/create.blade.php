@@ -21,10 +21,6 @@
             <label class="portal-label" for="title">Title</label>
             <input id="title" name="title" type="text" class="portal-input" required value="{{ old('title') }}" maxlength="255">
         </div>
-        <div>
-            <label class="portal-label" for="sort_order">Order (optional)</label>
-            <input id="sort_order" name="sort_order" type="number" class="portal-input w-28" min="0" max="9999" value="{{ old('sort_order') }}" placeholder="Auto">
-        </div>
         <x-rich-editor
             name="body"
             :value="old('body', '')"

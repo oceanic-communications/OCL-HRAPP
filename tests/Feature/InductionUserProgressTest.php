@@ -25,6 +25,7 @@ class InductionUserProgressTest extends TestCase
 
         $policy = InductionPolicy::query()->create([
             'name' => 'Test policy',
+            'abbreviation' => 'TST',
             'slug' => 'test-policy-progress',
             'is_active' => true,
         ]);

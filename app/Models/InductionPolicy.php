@@ -7,8 +7,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class InductionPolicy extends Model
 {
+    public const ABBREVIATION_MAX_LENGTH = 16;
+
     protected $fillable = [
         'name',
+        'abbreviation',
         'slug',
         'is_active',
     ];

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Concerns\AuthorizesPortalAccess;
 use App\Http\Controllers\Controller;
 use App\Models\InductionPolicy;
+use App\Models\InductionPolicyVersion;
 use App\Models\InductionSection;
 use App\Services\Induction\InductionPolicyAdminChangeService;
 use App\Support\PortalAccessRules;
@@ -15,6 +16,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -102,17 +104,21 @@ class InductionPolicyAdminController extends Controller
     public function storePolicy(Request $request): RedirectResponse
     {
         $this->authorizeCreateInductionPolicies();
+        $this->mergeNormalizedAbbreviation($request, 'create_abbreviation');
         $data = $request->validate([
             'create_name' => ['required', 'string', 'max:255'],
+            'create_abbreviation' => $this->policyAbbreviationRules(),
         ]);
 
         $slug = $this->uniqueSlugFromName($data['create_name']);
+        $abbreviation = $data['create_abbreviation'];
         $ctx = $this->auditRequestContext($request);
         $policy = null;
 
-        DB::transaction(function () use ($data, $slug, $ctx, &$policy): void {
+        DB::transaction(function () use ($data, $slug, $abbreviation, $ctx, &$policy): void {
             $policy = InductionPolicy::query()->create([
                 'name' => $data['create_name'],
+                'abbreviation' => $abbreviation,
                 'slug' => $slug,
                 'is_active' => true,
             ]);
@@ -130,7 +136,7 @@ class InductionPolicyAdminController extends Controller
                 subjectId: $policy->id,
                 policyId: $policy->id,
                 versionId: $version->id,
-                metadata: ['after' => $policy->only(['name', 'slug', 'is_active'])],
+                metadata: ['after' => $policy->only(['name', 'abbreviation', 'slug', 'is_active'])],
                 staffRepeatRequested: false,
                 versionForRepeat: $version,
                 complianceContext: $ctx,
@@ -145,18 +151,22 @@ class InductionPolicyAdminController extends Controller
     public function updatePolicy(Request $request, InductionPolicy $policy): RedirectResponse
     {
         $this->authorizeUpdateInductionPolicies();
+        $this->mergeNormalizedAbbreviation($request, "policy.{$policy->id}.abbreviation");
         $data = $request->validate([
             "policy.{$policy->id}.name" => ['required', 'string', 'max:255'],
+            "policy.{$policy->id}.abbreviation" => $this->policyAbbreviationRules($policy),
             "policy.{$policy->id}.is_active" => ['required', 'in:0,1'],
         ]);
 
-        $before = $policy->only(['name', 'slug', 'is_active']);
+        $before = $policy->only(['name', 'abbreviation', 'slug', 'is_active']);
         $version = $policy->ensureEditableVersion();
         $ctx = $this->auditRequestContext($request);
+        $abbreviation = $data['policy'][$policy->id]['abbreviation'];
 
-        DB::transaction(function () use ($policy, $data, $before, $version, $ctx): void {
+        DB::transaction(function () use ($policy, $data, $abbreviation, $before, $version, $ctx): void {
             $policy->forceFill([
                 'name' => $data['policy'][$policy->id]['name'],
+                'abbreviation' => $abbreviation,
                 'is_active' => $data['policy'][$policy->id]['is_active'] === '1',
             ])->save();
 
@@ -167,7 +177,7 @@ class InductionPolicyAdminController extends Controller
                 subjectId: $policy->id,
                 policyId: $policy->id,
                 versionId: $version->id,
-                metadata: ['before' => $before, 'after' => $policy->only(['name', 'slug', 'is_active'])],
+                metadata: ['before' => $before, 'after' => $policy->only(['name', 'abbreviation', 'slug', 'is_active'])],
                 staffRepeatRequested: false,
                 versionForRepeat: $version,
                 complianceContext: $ctx,
@@ -192,7 +202,6 @@ class InductionPolicyAdminController extends Controller
         $this->authorizeCreateInductionPolicies();
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'sort_order' => ['nullable', 'integer', 'min:0', 'max:9999'],
             'requires_signature' => ['sometimes', 'boolean'],
         ]);
         $body = $this->validatedSectionBody($request);
@@ -202,10 +211,9 @@ class InductionPolicyAdminController extends Controller
         $section = null;
 
         DB::transaction(function () use (&$section, $version, $data, $body, $request, $ctx): void {
-            $max = (int) $version->sections()->max('sort_order');
             $section = InductionSection::query()->create([
                 'induction_policy_version_id' => $version->id,
-                'sort_order' => $data['sort_order'] ?? ($max + 1),
+                'sort_order' => $this->nextSectionSortOrder($version),
                 'title' => $data['title'],
                 'body' => $body,
                 'requires_signature' => $request->boolean('requires_signature'),
@@ -254,7 +262,6 @@ class InductionPolicyAdminController extends Controller
 
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'sort_order' => ['required', 'integer', 'min:0', 'max:9999'],
             'requires_signature' => ['sometimes', 'boolean'],
         ]);
         $body = $this->validatedSectionBody($request);
@@ -268,7 +275,6 @@ class InductionPolicyAdminController extends Controller
             $section->update([
                 'title' => $data['title'],
                 'body' => $body,
-                'sort_order' => $data['sort_order'],
                 'requires_signature' => $request->boolean('requires_signature'),
             ]);
 
@@ -353,6 +359,40 @@ class InductionPolicyAdminController extends Controller
         }
 
         return $html;
+    }
+
+    private function nextSectionSortOrder(InductionPolicyVersion $version): int
+    {
+        return (int) $version->sections()->max('sort_order') + 1;
+    }
+
+    /**
+     * @return array<int, mixed>
+     */
+    private function policyAbbreviationRules(?InductionPolicy $policy = null): array
+    {
+        return [
+            'required',
+            'string',
+            'min:2',
+            'max:'.InductionPolicy::ABBREVIATION_MAX_LENGTH,
+            'regex:/^[A-Za-z0-9]+$/',
+            Rule::unique('induction_policies', 'abbreviation')->ignore($policy?->id),
+        ];
+    }
+
+    private function mergeNormalizedAbbreviation(Request $request, string $key): void
+    {
+        if (! $request->has($key)) {
+            return;
+        }
+
+        $request->merge([$key => $this->normalizeAbbreviation((string) $request->input($key))]);
+    }
+
+    private function normalizeAbbreviation(string $value): string
+    {
+        return strtoupper(trim($value));
     }
 
     private function uniqueSlugFromName(string $name): string

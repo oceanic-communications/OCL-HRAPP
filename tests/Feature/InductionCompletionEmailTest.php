@@ -29,6 +29,7 @@ class InductionCompletionEmailTest extends TestCase
 
         $policy = InductionPolicy::query()->create([
             'name' => 'Safety induction',
+            'abbreviation' => 'SAF',
             'slug' => 'safety-induction-email',
             'is_active' => true,
         ]);
@@ -107,6 +108,7 @@ class InductionCompletionEmailTest extends TestCase
         $employee = User::factory()->create();
         $policy = InductionPolicy::query()->create([
             'name' => 'Policy',
+            'abbreviation' => 'POL',
             'slug' => 'policy-no-hr',
             'is_active' => true,
         ]);

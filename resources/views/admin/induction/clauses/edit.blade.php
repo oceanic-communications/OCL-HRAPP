@@ -27,10 +27,6 @@
         @method('PUT')
         <input type="hidden" name="staff_must_repeat_induction" value="{{ old('staff_must_repeat_induction', '') }}">
 
-        <div class="w-28">
-            <label class="portal-label" for="sort_order">Order</label>
-            <input id="sort_order" name="sort_order" type="number" class="portal-input" required value="{{ old('sort_order', $section->sort_order) }}" min="0" max="9999">
-        </div>
         <div>
             <label class="portal-label" for="title">Title</label>
             <input id="title" name="title" type="text" class="portal-input" required value="{{ old('title', $section->title) }}" maxlength="255">
