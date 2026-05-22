@@ -81,6 +81,7 @@
                             <tr>
                                 <th scope="col" class="px-4 py-3 text-left font-semibold text-foreground">Order</th>
                                 <th scope="col" class="px-4 py-3 text-left font-semibold text-foreground">Title</th>
+                                <th scope="col" class="px-4 py-3 text-left font-semibold text-foreground">Sub-clauses</th>
                                 <th scope="col" class="px-4 py-3 text-left font-semibold text-foreground">Status</th>
                                 <th scope="col" class="px-4 py-3 text-right font-semibold text-foreground">Actions</th>
                             </tr>
@@ -90,6 +91,7 @@
                                 <tr class="{{ $clause->isArchived() ? 'bg-muted/20 text-muted-foreground' : '' }}">
                                     <td class="whitespace-nowrap px-4 py-3">{{ $loop->iteration }}</td>
                                     <td class="px-4 py-3 font-medium">{{ $clause->title }}</td>
+                                    <td class="whitespace-nowrap px-4 py-3 text-muted-foreground">{{ (int) ($clause->active_sub_clauses_count ?? 0) }}</td>
                                     <td class="whitespace-nowrap px-4 py-3">
                                         @if ($clause->isArchived())
                                             <span class="rounded-full bg-muted px-2 py-0.5 text-xs font-medium">Archived</span>

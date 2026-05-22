@@ -138,22 +138,28 @@ Route::middleware('auth')->group(function () {
             Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_READ])->group(function () {
                 Route::get('/policies/{policy}', [InductionPolicyAdminController::class, 'showPolicy'])->name('policies.show');
                 Route::get('/policies/{policy}/clauses/{section}', [InductionPolicyAdminController::class, 'showSection'])->name('policies.clauses.show');
+                Route::get('/policies/{policy}/clauses/{section}/sub-clauses/{sub_clause}', [InductionPolicyAdminController::class, 'showSubClause'])->name('policies.clauses.sub-clauses.show');
             });
 
             Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_CREATE])->group(function () {
                 Route::post('/policies', [InductionPolicyAdminController::class, 'storePolicy'])->name('policies.store');
                 Route::get('/policies/{policy}/clauses/create', [InductionPolicyAdminController::class, 'createSection'])->name('policies.clauses.create');
                 Route::post('/policies/{policy}/clauses', [InductionPolicyAdminController::class, 'storeSection'])->name('policies.clauses.store');
+                Route::get('/policies/{policy}/clauses/{section}/sub-clauses/create', [InductionPolicyAdminController::class, 'createSubClause'])->name('policies.clauses.sub-clauses.create');
+                Route::post('/policies/{policy}/clauses/{section}/sub-clauses', [InductionPolicyAdminController::class, 'storeSubClause'])->name('policies.clauses.sub-clauses.store');
             });
 
             Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_UPDATE])->group(function () {
                 Route::put('/policies/{policy}', [InductionPolicyAdminController::class, 'updatePolicy'])->name('policies.update');
                 Route::get('/policies/{policy}/clauses/{section}/edit', [InductionPolicyAdminController::class, 'editSection'])->name('policies.clauses.edit');
                 Route::put('/policies/{policy}/clauses/{section}', [InductionPolicyAdminController::class, 'updateSection'])->name('policies.clauses.update');
+                Route::get('/policies/{policy}/clauses/{section}/sub-clauses/{sub_clause}/edit', [InductionPolicyAdminController::class, 'editSubClause'])->name('policies.clauses.sub-clauses.edit');
+                Route::put('/policies/{policy}/clauses/{section}/sub-clauses/{sub_clause}', [InductionPolicyAdminController::class, 'updateSubClause'])->name('policies.clauses.sub-clauses.update');
             });
 
             Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_ARCHIVE])->group(function () {
                 Route::post('/policies/{policy}/clauses/{section}/archive', [InductionPolicyAdminController::class, 'archiveSection'])->name('policies.clauses.archive');
+                Route::post('/policies/{policy}/clauses/{section}/sub-clauses/{sub_clause}/archive', [InductionPolicyAdminController::class, 'archiveSubClause'])->name('policies.clauses.sub-clauses.archive');
             });
         });
     });

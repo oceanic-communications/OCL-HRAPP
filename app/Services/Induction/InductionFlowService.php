@@ -224,10 +224,10 @@ final class InductionFlowService
         });
 
         if ($shouldFinalize) {
-            $enrollment->refresh()->load(['user', 'version.policy', 'sectionCompletions.section']);
+            $enrollment->refresh()->load(['user', 'version.policy', 'sectionCompletions.section.activeSubClauses']);
             $this->inductionPdfService->generateAndStoreCompletionPdf($enrollment);
 
-            $enrollmentForMail = $enrollment->fresh(['user', 'version.policy', 'sectionCompletions.section']);
+            $enrollmentForMail = $enrollment->fresh(['user', 'version.policy', 'sectionCompletions.section.activeSubClauses']);
 
             Mail::to($enrollmentForMail->user->email)->queue(
                 new InductionCompletedMail($enrollmentForMail, InductionCompletedMail::RECIPIENT_EMPLOYEE),

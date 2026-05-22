@@ -67,6 +67,19 @@
                     <div class="rich-html-content max-w-none text-sm leading-relaxed text-foreground">
                         {!! \App\Support\RichHtmlPurifier::purify($section->body) !!}
                     </div>
+
+                    @if ($section->activeSubClauses->isNotEmpty())
+                        <div class="mt-8 space-y-6 border-t border-border pt-6">
+                            @foreach ($section->activeSubClauses as $subClause)
+                                <article class="space-y-2">
+                                    <h2 class="font-heading text-base font-semibold text-foreground">{{ $loop->iteration }}. {{ $subClause->title }}</h2>
+                                    <div class="rich-html-content text-sm leading-relaxed text-foreground">
+                                        {!! \App\Support\RichHtmlPurifier::purify($subClause->body) !!}
+                                    </div>
+                                </article>
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
             </div>
 

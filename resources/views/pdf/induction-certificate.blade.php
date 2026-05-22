@@ -39,6 +39,19 @@
 
             <div class="section-body">
                 {!! $sectionBodyHtml !!}
+
+                @foreach ($c->section->activeSubClauses ?? [] as $subClause)
+                    @php
+                        $subBody = $subClause->body ?? '';
+                        $subBodyHtml = str_contains($subBody, '<')
+                            ? \App\Support\RichHtmlPurifier::purify($subBody)
+                            : nl2br(e($subBody));
+                    @endphp
+                    <div style="margin-top:14px;padding-top:10px;border-top:1px solid #e0e0e0;">
+                        <p style="margin:0 0 6px;font-weight:bold;">{{ $subClause->title }}</p>
+                        {!! $subBodyHtml !!}
+                    </div>
+                @endforeach
             </div>
 
             <div class="signoff">

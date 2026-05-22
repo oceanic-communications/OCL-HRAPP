@@ -55,7 +55,7 @@ class InductionEmployeeController extends Controller
 
     public function show(Request $request, InductionSection $induction_section): View|RedirectResponse
     {
-        $section = $induction_section->load('version.policy', 'version.activeSections');
+        $section = $induction_section->load('version.policy', 'version.activeSections', 'activeSubClauses');
         if ($section->isArchived()) {
             return redirect()->route('portal.induction')->withErrors(['section' => 'This section is no longer available.']);
         }

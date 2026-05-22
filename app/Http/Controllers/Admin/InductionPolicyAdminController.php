@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\InductionPolicy;
 use App\Models\InductionPolicyVersion;
 use App\Models\InductionSection;
+use App\Models\InductionSubClause;
 use App\Services\Induction\InductionPolicyAdminChangeService;
 use App\Support\PortalAccessRules;
 use App\Support\RichHtmlPurifier;
@@ -59,6 +60,14 @@ class InductionPolicyAdminController extends Controller
         return $section;
     }
 
+    private function resolveSubClause(InductionPolicy $policy, InductionSection $section, InductionSubClause $subClause): InductionSubClause
+    {
+        $section = $this->resolveSection($policy, $section);
+        abort_unless($subClause->induction_section_id === $section->id, 404);
+
+        return $subClause;
+    }
+
     public function index(): View|RedirectResponse
     {
         $this->authorizeInductionAdminIndex();
@@ -95,7 +104,9 @@ class InductionPolicyAdminController extends Controller
                 ->whereNotNull('published_at')
                 ->orderByDesc('published_at')
                 ->limit(1),
-            'versions.sections' => fn ($q) => $q->orderBy('sort_order'),
+            'versions.sections' => fn ($q) => $q
+                ->orderBy('sort_order')
+                ->withCount(['subClauses as active_sub_clauses_count' => fn ($q) => $q->whereNull('archived_at')]),
         ]);
 
         return view('admin.induction.policies.show', compact('policy'));
@@ -243,6 +254,7 @@ class InductionPolicyAdminController extends Controller
     {
         $this->authorizeReadInductionPolicies();
         $section = $this->resolveSection($policy, $section);
+        $section->load(['subClauses' => fn ($q) => $q->orderBy('sort_order')]);
 
         return view('admin.induction.clauses.show', compact('policy', 'section'));
     }
@@ -307,6 +319,7 @@ class InductionPolicyAdminController extends Controller
 
         DB::transaction(function () use ($section, $version, $ctx): void {
             $section->forceFill(['archived_at' => now()])->save();
+            $section->subClauses()->whereNull('archived_at')->update(['archived_at' => now()]);
 
             $this->adminChangeService->record(
                 actor: auth()->user(),
@@ -327,9 +340,171 @@ class InductionPolicyAdminController extends Controller
             ->with('success', 'Clause archived.');
     }
 
+    public function createSubClause(InductionPolicy $policy, InductionSection $section): View
+    {
+        $this->authorizeCreateInductionPolicies();
+        $section = $this->resolveSection($policy, $section);
+
+        return view('admin.induction.sub-clauses.create', compact('policy', 'section'));
+    }
+
+    public function storeSubClause(Request $request, InductionPolicy $policy, InductionSection $section): RedirectResponse
+    {
+        $this->authorizeCreateInductionPolicies();
+        $section = $this->resolveSection($policy, $section);
+
+        $data = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+        ]);
+        $body = $this->validatedSubClauseBody($request);
+
+        $version = $policy->ensureEditableVersion();
+        $ctx = $this->auditRequestContext($request);
+        $subClause = null;
+
+        DB::transaction(function () use (&$subClause, $section, $version, $data, $body, $ctx): void {
+            $subClause = InductionSubClause::query()->create([
+                'induction_section_id' => $section->id,
+                'sort_order' => $this->nextSubClauseSortOrder($section),
+                'title' => $data['title'],
+                'body' => $body,
+            ]);
+
+            $this->adminChangeService->record(
+                actor: auth()->user(),
+                action: 'induction_sub_clause.created',
+                subjectType: InductionSubClause::class,
+                subjectId: $subClause->id,
+                policyId: $version->induction_policy_id,
+                versionId: $version->id,
+                metadata: [
+                    'induction_section_id' => $section->id,
+                    'after' => $subClause->only(['title', 'sort_order']),
+                ],
+                staffRepeatRequested: false,
+                versionForRepeat: $version,
+                complianceContext: $ctx,
+            );
+        });
+
+        return redirect()
+            ->route('admin.induction.policies.clauses.show', [$policy, $section])
+            ->with('success', 'Sub-clause created.');
+    }
+
+    public function showSubClause(InductionPolicy $policy, InductionSection $section, InductionSubClause $sub_clause): View
+    {
+        $this->authorizeReadInductionPolicies();
+        $subClause = $this->resolveSubClause($policy, $section, $sub_clause);
+
+        return view('admin.induction.sub-clauses.show', [
+            'policy' => $policy,
+            'section' => $section,
+            'subClause' => $subClause,
+        ]);
+    }
+
+    public function editSubClause(InductionPolicy $policy, InductionSection $section, InductionSubClause $sub_clause): View
+    {
+        $this->authorizeUpdateInductionPolicies();
+        $subClause = $this->resolveSubClause($policy, $section, $sub_clause);
+
+        return view('admin.induction.sub-clauses.edit', [
+            'policy' => $policy,
+            'section' => $section,
+            'subClause' => $subClause,
+        ]);
+    }
+
+    public function updateSubClause(Request $request, InductionPolicy $policy, InductionSection $section, InductionSubClause $sub_clause): RedirectResponse
+    {
+        $this->authorizeUpdateInductionPolicies();
+        $subClause = $this->resolveSubClause($policy, $section, $sub_clause);
+
+        $data = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+        ]);
+        $body = $this->validatedSubClauseBody($request);
+        $repeat = $this->staffRepeatFromRequest($request, required: true);
+
+        $version = $policy->ensureEditableVersion();
+        $before = $subClause->only(['title', 'body', 'sort_order', 'archived_at']);
+        $ctx = $this->auditRequestContext($request);
+
+        DB::transaction(function () use ($subClause, $section, $version, $data, $body, $repeat, $before, $ctx): void {
+            $subClause->update([
+                'title' => $data['title'],
+                'body' => $body,
+            ]);
+
+            $this->adminChangeService->record(
+                actor: auth()->user(),
+                action: 'induction_sub_clause.updated',
+                subjectType: InductionSubClause::class,
+                subjectId: $subClause->id,
+                policyId: $version->induction_policy_id,
+                versionId: $version->id,
+                metadata: [
+                    'induction_section_id' => $section->id,
+                    'before' => $before,
+                    'after' => $subClause->fresh()->only(['title', 'body', 'sort_order', 'archived_at']),
+                ],
+                staffRepeatRequested: $repeat,
+                versionForRepeat: $version,
+                complianceContext: $ctx,
+            );
+        });
+
+        return redirect()
+            ->route('admin.induction.policies.clauses.sub-clauses.show', [$policy, $section, $subClause])
+            ->with('success', 'Sub-clause saved.');
+    }
+
+    public function archiveSubClause(Request $request, InductionPolicy $policy, InductionSection $section, InductionSubClause $sub_clause): RedirectResponse
+    {
+        $this->authorizeArchiveInductionPolicies();
+        $subClause = $this->resolveSubClause($policy, $section, $sub_clause);
+
+        $version = $policy->ensureEditableVersion();
+        $ctx = $this->auditRequestContext($request);
+
+        DB::transaction(function () use ($subClause, $section, $version, $ctx): void {
+            $subClause->forceFill(['archived_at' => now()])->save();
+
+            $this->adminChangeService->record(
+                actor: auth()->user(),
+                action: 'induction_sub_clause.archived',
+                subjectType: InductionSubClause::class,
+                subjectId: $subClause->id,
+                policyId: $version->induction_policy_id,
+                versionId: $version->id,
+                metadata: [
+                    'induction_section_id' => $section->id,
+                    'archived_at' => $subClause->archived_at?->toIso8601String(),
+                ],
+                staffRepeatRequested: false,
+                versionForRepeat: $version,
+                complianceContext: $ctx,
+            );
+        });
+
+        return redirect()
+            ->route('admin.induction.policies.clauses.show', [$policy, $section])
+            ->with('success', 'Sub-clause archived.');
+    }
+
     private function validatedSectionBody(Request $request): string
     {
-        $maxWords = InductionSection::BODY_MAX_WORDS;
+        return $this->validatedRichBody($request, InductionSection::BODY_MAX_WORDS);
+    }
+
+    private function validatedSubClauseBody(Request $request): string
+    {
+        return $this->validatedRichBody($request, InductionSubClause::BODY_MAX_WORDS);
+    }
+
+    private function validatedRichBody(Request $request, int $maxWords): string
+    {
         $maxChars = RichTextLimits::maxStoredCharsForWords($maxWords);
 
         $data = $request->validate([
@@ -364,6 +539,11 @@ class InductionPolicyAdminController extends Controller
     private function nextSectionSortOrder(InductionPolicyVersion $version): int
     {
         return (int) $version->sections()->max('sort_order') + 1;
+    }
+
+    private function nextSubClauseSortOrder(InductionSection $section): int
+    {
+        return (int) $section->subClauses()->max('sort_order') + 1;
     }
 
     /**

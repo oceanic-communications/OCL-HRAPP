@@ -59,4 +59,20 @@ class InductionSection extends Model
     {
         return $this->hasMany(InductionSectionCompletion::class);
     }
+
+    /**
+     * @return HasMany<InductionSubClause, $this>
+     */
+    public function subClauses(): HasMany
+    {
+        return $this->hasMany(InductionSubClause::class)->orderBy('sort_order');
+    }
+
+    /**
+     * @return HasMany<InductionSubClause, $this>
+     */
+    public function activeSubClauses(): HasMany
+    {
+        return $this->subClauses()->whereNull('archived_at');
+    }
 }

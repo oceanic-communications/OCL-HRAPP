@@ -18,7 +18,7 @@ final class InductionPdfService
         $enrollment->load([
             'user',
             'version.policy',
-            'sectionCompletions.section',
+            'sectionCompletions.section.activeSubClauses',
         ]);
 
         $orderedCompletions = $enrollment->sectionCompletions
