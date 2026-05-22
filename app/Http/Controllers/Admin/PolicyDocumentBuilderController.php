@@ -72,7 +72,7 @@ class PolicyDocumentBuilderController extends Controller
             : InductionPolicy::query()->where('is_active', true)->orderBy('name')->first();
         $scheme = $policy ? $this->numbering->schemeForPolicy($policy) : $this->numbering->defaultScheme();
 
-        return view('admin.induction.builder.numbering-settings', [
+        return view('admin.settings.numbering', [
             'policy' => $policy,
             'scheme' => $scheme,
             'policies' => InductionPolicy::query()->orderBy('name')->get(['id', 'name', 'abbreviation']),
@@ -105,20 +105,20 @@ class PolicyDocumentBuilderController extends Controller
             InductionPolicy::query()->update(['numbering_scheme' => $scheme]);
 
             return redirect()
-                ->route('admin.induction.settings.numbering')
+                ->route('admin.settings.numbering')
                 ->with('success', 'Numbering scheme applied to all policies.');
         }
 
         if ($policy === null) {
             return redirect()
-                ->route('admin.induction.settings.numbering')
+                ->route('admin.settings.numbering')
                 ->withErrors(['policy' => 'Select a policy to save numbering settings.']);
         }
 
         $policy->forceFill(['numbering_scheme' => $scheme])->save();
 
         return redirect()
-            ->route('admin.induction.settings.numbering', $policy)
+            ->route('admin.settings.numbering', ['policy' => $policy->id])
             ->with('success', 'Numbering scheme saved for '.$policy->name.'.');
     }
 

@@ -1,5 +1,4 @@
 @props([
-    'variant' => 'portal',
     'policy' => null,
 ])
 
@@ -10,18 +9,14 @@
     }
 
     $sectionActive = request()->routeIs('admin.induction.index')
-        || request()->routeIs('admin.induction.policies.*')
-        || request()->routeIs('admin.induction.settings.numbering*');
-
-    $linkBase = $variant === 'builder' ? 'policy-builder-nav-link' : 'portal-sidebar-link';
-    $subBase = $variant === 'builder' ? 'policy-builder-nav-sublink' : 'portal-sidebar-sublink';
+        || request()->routeIs('admin.induction.policies.*');
 @endphp
 
 <div class="portal-sidebar-group {{ $sectionActive ? 'is-open' : '' }}" data-portal-nav-group>
     <div class="flex items-center gap-1">
         <a
             href="{{ route('admin.induction.index') }}"
-            class="{{ $linkBase }} {{ $sectionActive ? 'is-parent-active' : '' }} flex min-h-10 min-w-0 flex-1 items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium"
+            class="portal-sidebar-link {{ $sectionActive ? 'is-parent-active' : '' }} flex min-h-10 min-w-0 flex-1 items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium"
         >
             @include('components.portal-sidebar-icon', ['icon' => 'document-plus'])
             <span class="truncate">Policies</span>
@@ -46,7 +41,7 @@
     >
         <a
             href="{{ route('admin.induction.index') }}"
-            class="{{ $subBase }} {{ request()->routeIs('admin.induction.index') ? 'is-active' : '' }}"
+            class="portal-sidebar-sublink {{ request()->routeIs('admin.induction.index') ? 'is-active' : '' }}"
         >
             All policies
         </a>
@@ -54,25 +49,18 @@
         @if ($currentPolicy)
             <a
                 href="{{ route('admin.induction.policies.builder', $currentPolicy) }}"
-                class="{{ $subBase }} {{ request()->routeIs('admin.induction.policies.builder') ? 'is-active' : '' }}"
+                class="portal-sidebar-sublink {{ request()->routeIs('admin.induction.policies.builder') ? 'is-active' : '' }}"
             >
                 <span class="font-semibold text-inherit">{{ $currentPolicy->abbreviation }}</span>
                 <span class="text-inherit/80">· Document builder</span>
             </a>
             <a
                 href="{{ route('admin.induction.policies.show', $currentPolicy) }}"
-                class="{{ $subBase }} {{ request()->routeIs('admin.induction.policies.show') || request()->routeIs('admin.induction.policies.clauses.*') ? 'is-active' : '' }}"
+                class="portal-sidebar-sublink {{ request()->routeIs('admin.induction.policies.show') || request()->routeIs('admin.induction.policies.clauses.*') ? 'is-active' : '' }}"
             >
                 <span class="font-semibold text-inherit">{{ $currentPolicy->abbreviation }}</span>
                 <span class="text-inherit/80">· Manage clauses</span>
             </a>
         @endif
-
-        <a
-            href="{{ route('admin.induction.settings.numbering', $currentPolicy ? ['policy' => $currentPolicy->id] : []) }}"
-            class="{{ $subBase }} {{ request()->routeIs('admin.induction.settings.numbering*') ? 'is-active' : '' }}"
-        >
-            Numbering settings
-        </a>
     </div>
 </div>

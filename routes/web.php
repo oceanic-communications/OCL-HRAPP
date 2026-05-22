@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\InductionEmployeeProgressController;
 use App\Http\Controllers\Admin\InductionPolicyAdminController;
 use App\Http\Controllers\Admin\PolicyDocumentBuilderController;
 use App\Http\Controllers\Admin\RoleAdminController;
+use App\Http\Controllers\Admin\SettingsAdminController;
 use App\Http\Controllers\Admin\RoleTemplatePermissionController;
 use App\Http\Controllers\Admin\UserAdminController;
 use App\Http\Controllers\AuthController;
@@ -119,6 +120,20 @@ Route::middleware('auth')->group(function () {
             Route::get('/roles/{role}', [RoleAdminController::class, 'show'])->name('roles.show');
         });
 
+        Route::prefix('settings')->name('settings.')->group(function () {
+            Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_READ])->group(function () {
+                Route::get('/', [SettingsAdminController::class, 'index'])->name('index');
+                Route::get('/numbering', [PolicyDocumentBuilderController::class, 'numberingSettings'])->name('numbering');
+            });
+
+            Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_UPDATE])->group(function () {
+                Route::put('/numbering/{policy}', [PolicyDocumentBuilderController::class, 'updateNumberingScheme'])
+                    ->whereNumber('policy')
+                    ->name('numbering.update');
+                Route::put('/numbering', [PolicyDocumentBuilderController::class, 'updateNumberingScheme'])->name('numbering.update.global');
+            });
+        });
+
         Route::prefix('induction')->name('induction.')->group(function () {
             Route::middleware(['permission:'.implode('|', [
                 PortalPermissions::INDUCTION_POLICY_MANAGE,
@@ -143,8 +158,6 @@ Route::middleware('auth')->group(function () {
                 Route::get('/policies/{policy}/builder', [PolicyDocumentBuilderController::class, 'editor'])
                     ->whereNumber('policy')
                     ->name('policies.builder');
-                Route::get('/settings/numbering', [PolicyDocumentBuilderController::class, 'numberingSettings'])->name('settings.numbering');
-
                 // Literal paths must be registered before {section} / {sub_clause} wildcards.
                 Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_CREATE])->group(function () {
                     Route::get('/policies/{policy}/clauses/create', [InductionPolicyAdminController::class, 'createSection'])
@@ -183,8 +196,6 @@ Route::middleware('auth')->group(function () {
                 Route::put('/policies/{policy}/clauses/{section}', [InductionPolicyAdminController::class, 'updateSection'])->name('policies.clauses.update');
                 Route::put('/policies/{policy}/clauses/{section}/sub-clauses/{sub_clause}', [InductionPolicyAdminController::class, 'updateSubClause'])->name('policies.clauses.sub-clauses.update');
                 Route::put('/policies/{policy}/clauses/{section}/sub-clauses/{sub_clause}/numbering', [PolicyDocumentBuilderController::class, 'updateSubClauseNumbering'])->name('policies.clauses.sub-clauses.numbering');
-                Route::put('/settings/numbering/{policy}', [PolicyDocumentBuilderController::class, 'updateNumberingScheme'])->name('settings.numbering.update');
-                Route::put('/settings/numbering', [PolicyDocumentBuilderController::class, 'updateNumberingScheme'])->name('settings.numbering.update.global');
             });
 
             Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_ARCHIVE])->group(function () {
