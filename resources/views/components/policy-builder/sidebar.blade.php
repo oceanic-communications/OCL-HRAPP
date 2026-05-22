@@ -2,8 +2,6 @@
 
 @php
     $u = auth()->user();
-    $isEditor = request()->routeIs('admin.induction.policies.builder') || request()->routeIs('admin.induction.index');
-    $isSettings = request()->routeIs('admin.induction.settings.numbering*');
 @endphp
 
 <aside class="flex w-[240px] shrink-0 flex-col border-r border-[#E2E8F0] bg-white" aria-label="Policy builder navigation">
@@ -29,14 +27,7 @@
             </a>
         @endif
         @if ($portalCap?->inductionAdminAccess ?? false)
-            <a href="{{ route('admin.induction.index') }}" class="policy-builder-nav-link {{ $isEditor ? 'is-active' : '' }}">
-                @include('components.portal-sidebar-icon', ['icon' => 'document-plus'])
-                <span>Policies</span>
-            </a>
-            <a href="{{ route('admin.induction.settings.numbering', $policy ? ['policy' => $policy->id] : []) }}" class="policy-builder-nav-link {{ $isSettings ? 'is-active' : '' }}">
-                @include('components.portal-sidebar-icon', ['icon' => 'cog'])
-                <span>Settings</span>
-            </a>
+            <x-portal-policies-nav variant="builder" :policy="$policy" />
         @endif
     </nav>
 

@@ -14,6 +14,8 @@ import { initPortalDatepickers } from './portal-datepicker';
 import { initInductionSignature } from './induction-signature';
 import { initRoleSetupForm } from './role-setup-form';
 import './induction-section-save';
+import './portal-sidebar-nav-group';
+import './policy-document-builder';
 
 const focusableSelector =
     'a[href], button:not([disabled]), textarea, input:not([type="hidden"]), select, [tabindex]:not([tabindex="-1"])';

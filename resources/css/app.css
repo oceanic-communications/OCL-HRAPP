@@ -2,6 +2,7 @@
 
 /* Policy document builder */
 @source "../js/policy-document-builder.js";
+@source "../js/portal-sidebar-nav-group.js";
 
 /* Tailwind v4: scan Blade so non-utility classnames (e.g. .prog-bar) are not dropped from the CSS output */
 @source "../views/**/*.blade.php";
@@ -536,6 +537,83 @@ html {
     padding-left: 1rem;
     border-left: 3px solid var(--border);
     color: var(--muted-foreground);
+}
+
+/* Sidebar policy sub-navigation */
+.portal-sidebar-group {
+    margin-bottom: 0.125rem;
+}
+
+.portal-sidebar-group-items {
+    margin: 0.125rem 0 0.5rem;
+    padding-left: 0.25rem;
+    border-left: 2px solid var(--sidebar-border);
+    margin-left: 1.25rem;
+}
+
+.portal-sidebar-sublink {
+    display: block;
+    border-radius: 0.375rem;
+    padding: 0.4375rem 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.35;
+    color: var(--sidebar-foreground);
+    opacity: 0.85;
+    text-decoration: none;
+    transition: background-color 0.15s, color 0.15s, opacity 0.15s;
+}
+
+.portal-sidebar-sublink:hover {
+    background: var(--sidebar-accent);
+    color: var(--sidebar-accent-foreground);
+    opacity: 1;
+}
+
+.portal-sidebar-sublink.is-active {
+    background: var(--sidebar-primary);
+    color: var(--sidebar-primary-foreground);
+    opacity: 1;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.06);
+}
+
+.portal-sidebar-link.is-parent-active {
+    background: color-mix(in srgb, var(--sidebar-primary) 18%, transparent);
+    color: var(--sidebar-primary);
+}
+
+.portal-sidebar-group-toggle {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.policy-builder-nav-sublink {
+    display: block;
+    border-radius: 0.375rem;
+    padding: 0.4375rem 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.35;
+    color: #475569;
+    text-decoration: none;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.policy-builder-nav-sublink:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+.policy-builder-nav-sublink.is-active {
+    background: #eef2ff;
+    color: #4f46e5;
+}
+
+.policy-builder .portal-sidebar-link.is-parent-active,
+.policy-builder .policy-builder-nav-link.is-parent-active {
+    background: #eef2ff;
+    color: #4f46e5;
 }
 
 /* —— Policy document builder —— */

@@ -39,7 +39,7 @@
                     <x-portal-nav-link :href="route('admin.induction.progress.index')" :active="request()->routeIs('admin.induction.progress*')" icon="chart" label="Employee progress" />
                 @endif
                 @if ($portalCap?->inductionAdminAccess ?? false)
-                    <x-portal-nav-link :href="route('admin.induction.index')" :active="request()->routeIs('admin.induction.index') || request()->routeIs('admin.induction.policies.*')" icon="document-plus" label="Policies" />
+                    <x-portal-policies-nav variant="portal" />
                 @endif
             </nav>
         @endif

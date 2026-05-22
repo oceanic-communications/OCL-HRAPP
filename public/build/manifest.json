@@ -4,7 +4,7 @@
     "name": "wff-form-loading"
   },
   "resources/css/app.css": {
-    "file": "assets/app-B6-KGenX.css",
+    "file": "assets/app-xeCW1I0m.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",
@@ -13,12 +13,14 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-C2dRHHKD.js",
+    "file": "assets/app-CREqCL1I.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "imports": [
-      "_wff-form-loading-C1VJEScX.js"
+      "_wff-form-loading-C1VJEScX.js",
+      "resources/js/portal-sidebar-nav-group.js",
+      "resources/js/policy-document-builder.js"
     ],
     "dynamicImports": [
       "resources/js/applicant-wizard-repeatable-text.js",
@@ -26,23 +28,27 @@
     ]
   },
   "resources/js/applicant-wizard-repeatable-group.js": {
-    "file": "assets/applicant-wizard-repeatable-group-D6w5crnG.js",
+    "file": "assets/applicant-wizard-repeatable-group-BsAdwkzm.js",
     "name": "applicant-wizard-repeatable-group",
     "src": "resources/js/applicant-wizard-repeatable-group.js",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.js",
-      "_wff-form-loading-C1VJEScX.js"
+      "_wff-form-loading-C1VJEScX.js",
+      "resources/js/portal-sidebar-nav-group.js",
+      "resources/js/policy-document-builder.js"
     ]
   },
   "resources/js/applicant-wizard-repeatable-text.js": {
-    "file": "assets/applicant-wizard-repeatable-text-Cg25djI6.js",
+    "file": "assets/applicant-wizard-repeatable-text-BbuhnFtr.js",
     "name": "applicant-wizard-repeatable-text",
     "src": "resources/js/applicant-wizard-repeatable-text.js",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.js",
-      "_wff-form-loading-C1VJEScX.js"
+      "_wff-form-loading-C1VJEScX.js",
+      "resources/js/portal-sidebar-nav-group.js",
+      "resources/js/policy-document-builder.js"
     ]
   },
   "resources/js/guest.js": {
@@ -53,5 +59,23 @@
     "imports": [
       "_wff-form-loading-C1VJEScX.js"
     ]
+  },
+  "resources/js/policy-document-builder.js": {
+    "file": "assets/policy-document-builder-DFTmQ9ut.js",
+    "name": "policy-document-builder",
+    "src": "resources/js/policy-document-builder.js",
+    "isEntry": true
+  },
+  "resources/js/portal-sidebar-nav-group.js": {
+    "file": "assets/portal-sidebar-nav-group-CCWDz577.js",
+    "name": "portal-sidebar-nav-group",
+    "src": "resources/js/portal-sidebar-nav-group.js",
+    "isEntry": true
+  },
+  "resources/js/rich-editor.js": {
+    "file": "assets/rich-editor-qiA8fp0L.js",
+    "name": "rich-editor",
+    "src": "resources/js/rich-editor.js",
+    "isEntry": true
   }
 }
