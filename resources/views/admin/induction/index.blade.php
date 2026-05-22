@@ -1,11 +1,11 @@
 @extends('layouts.portal')
 
-@section('title', 'Induction policies · '.config('app.name'))
+@section('title', 'Policies · '.config('app.name'))
 
 @section('content')
 <div class="space-y-8">
     <div>
-        <h1 class="font-heading text-2xl font-bold text-foreground">Induction policies</h1>
+        <h1 class="font-heading text-2xl font-bold text-foreground">Policies</h1>
         <p class="text-sm text-muted-foreground">Manage policy sections staff complete during induction.</p>
     </div>
 
