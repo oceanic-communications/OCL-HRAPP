@@ -149,7 +149,10 @@ final class InductionFlowService
         $signatureDisk = null;
         $signaturePath = null;
 
-        if ($section->requires_signature) {
+        $section->loadMissing('activeSubClauses');
+        $requiresSignature = $section->requiresSignatureForCompletion();
+
+        if ($requiresSignature) {
             $sig = $input['signature_data'] ?? null;
             if (! is_string($sig) || ! str_starts_with($sig, 'data:image/png;base64,')) {
                 throw ValidationException::withMessages([
@@ -160,8 +163,8 @@ final class InductionFlowService
 
         $shouldFinalize = false;
 
-        DB::transaction(function () use ($user, $section, $enrollment, $input, $ip, $userAgent, &$shouldFinalize, &$signatureDisk, &$signaturePath): void {
-            if ($section->requires_signature) {
+        DB::transaction(function () use ($user, $section, $enrollment, $input, $ip, $userAgent, &$shouldFinalize, &$signatureDisk, &$signaturePath, $requiresSignature): void {
+            if ($requiresSignature) {
                 $raw = $input['signature_data'];
                 $b64 = preg_replace('#^data:image/png;base64,#', '', (string) $raw);
                 $binary = base64_decode((string) $b64, true);

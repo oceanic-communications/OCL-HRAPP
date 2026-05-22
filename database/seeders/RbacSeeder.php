@@ -112,6 +112,14 @@ class RbacSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'slug' => PortalPermissions::INDUCTION_CHANGE_LOG_READ,
+                'module_code' => 'induction',
+                'resource_code' => 'change_log',
+                'action' => 'read',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
                 'slug' => PortalPermissions::STAFF_ROLE_READ,
                 'module_code' => 'staff_role_management',
                 'resource_code' => 'staff_role',

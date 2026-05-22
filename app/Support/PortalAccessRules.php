@@ -88,6 +88,11 @@ final class PortalAccessRules
         return self::allows($user, PortalPermissions::INDUCTION_ENROLLMENT_READ);
     }
 
+    public static function canReadInductionChangeLogs(?User $user): bool
+    {
+        return self::allows($user, PortalPermissions::INDUCTION_CHANGE_LOG_READ);
+    }
+
     /**
      * May open the induction admin area (dashboard link and index route).
      */

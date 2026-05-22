@@ -51,6 +51,14 @@ final class PortalAccessLevels
                     ['slug' => PortalPermissions::INDUCTION_ENROLLMENT_READ, 'label' => 'Read'],
                 ],
             ],
+            [
+                'key' => 'policy_change_log',
+                'label' => 'Policy change log',
+                'subtitle' => 'Read only',
+                'capabilities' => [
+                    ['slug' => PortalPermissions::INDUCTION_CHANGE_LOG_READ, 'label' => 'Read'],
+                ],
+            ],
         ];
     }
 

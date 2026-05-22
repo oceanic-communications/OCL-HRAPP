@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\InductionAcknowledgementMode;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -20,6 +21,7 @@ class InductionSection extends Model
         'number_separator',
         'body',
         'requires_signature',
+        'acknowledgement_mode',
         'acknowledgement_hint',
         'archived_at',
     ];
@@ -36,6 +38,17 @@ class InductionSection extends Model
     public function isArchived(): bool
     {
         return $this->archived_at !== null;
+    }
+
+    public function requiresSignatureForCompletion(): bool
+    {
+        if (InductionAcknowledgementMode::requiresSignature($this->acknowledgement_mode)) {
+            return true;
+        }
+
+        return $this->activeSubClauses()
+            ->where('acknowledgement_mode', InductionAcknowledgementMode::READ_AND_SIGN)
+            ->exists();
     }
 
     /**

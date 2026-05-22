@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Concerns\AuthorizesPortalAccess;
 use App\Http\Controllers\Controller;
+use App\Mail\PortalAccessGrantedMail;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -76,7 +78,9 @@ class UserAdminController extends Controller
         $user->roles()->sync([$role->id]);
         $user->flushResolvedPermissionSlugs();
 
-        return redirect()->route('admin.users.index')->with('success', 'User created.');
+        Mail::to($user->email)->queue(new PortalAccessGrantedMail($user));
+
+        return redirect()->route('admin.users.index')->with('success', 'Employee created.');
     }
 
     public function edit(User $user): View
@@ -126,7 +130,7 @@ class UserAdminController extends Controller
             $user->flushResolvedPermissionSlugs();
             $user->save();
 
-            return redirect()->route('admin.users.index')->with('success', 'User updated.');
+            return redirect()->route('admin.users.index')->with('success', 'Employee updated.');
         }
 
         $role = Role::query()->with('roleTemplate')->findOrFail((int) $validated['role_id']);
@@ -134,7 +138,7 @@ class UserAdminController extends Controller
         $user->flushResolvedPermissionSlugs();
         $user->save();
 
-        return redirect()->route('admin.users.index')->with('success', 'User updated.');
+        return redirect()->route('admin.users.index')->with('success', 'Employee updated.');
     }
 
     public function archive(Request $request, User $user): RedirectResponse
@@ -146,11 +150,11 @@ class UserAdminController extends Controller
         }
 
         if ($user->isArchived()) {
-            return redirect()->route('admin.users.index')->with('success', 'User is already archived.');
+            return redirect()->route('admin.users.index')->with('success', 'Employee is already archived.');
         }
 
         $user->forceFill(['archived_at' => now()])->save();
 
-        return redirect()->route('admin.users.index')->with('success', 'User archived.');
+        return redirect()->route('admin.users.index')->with('success', 'Employee archived.');
     }
 }

@@ -29,7 +29,7 @@ class InductionEmployeeController extends Controller
             return view('portal.induction.unavailable');
         }
 
-        $version->load(['activeSections', 'policy']);
+        $version->load(['activeSections.activeSubClauses', 'policy']);
         $enrollment = $this->inductionFlow->enrollmentFor(auth()->user(), $request->ip(), $request->userAgent());
         if ($enrollment === null) {
             return view('portal.induction.unavailable');

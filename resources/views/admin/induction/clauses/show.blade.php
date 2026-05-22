@@ -28,12 +28,8 @@
 
     <div class="portal-card space-y-3 p-5">
         <p class="text-sm text-muted-foreground">
-            Digital signature:
-            @if ($section->requires_signature)
-                <span class="font-medium text-foreground">Required</span>
-            @else
-                <span class="font-medium text-foreground">Not required</span>
-            @endif
+            Acknowledgement:
+            <span class="font-medium text-foreground">{{ \App\Support\InductionAcknowledgementMode::label($section->acknowledgement_mode) }}</span>
         </p>
         <h2 class="text-sm font-semibold text-foreground">Clause content</h2>
         <div class="rich-html-content mt-3 text-sm leading-relaxed text-foreground">{!! \App\Support\RichHtmlPurifier::purify($section->body) !!}</div>
@@ -74,6 +70,9 @@
                             required
                             placeholder="Content for this sub-clause within the parent clause."
                         />
+                        @include('admin.induction.partials.acknowledgement-options', [
+                            'acknowledgementMode' => old('acknowledgement_mode', $section->acknowledgement_mode ?? \App\Support\InductionAcknowledgementMode::READ_ONLY),
+                        ])
                         <button type="submit" class="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90">Create sub-clause</button>
                     </form>
                 </details>

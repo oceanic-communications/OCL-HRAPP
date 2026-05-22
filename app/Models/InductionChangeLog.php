@@ -15,6 +15,7 @@ class InductionChangeLog extends Model
         'induction_policy_id',
         'induction_policy_version_id',
         'metadata',
+        'changes',
         'staff_repeat_requested',
         'staff_repeat_applied',
         'ip_address',
@@ -26,6 +27,7 @@ class InductionChangeLog extends Model
     {
         return [
             'metadata' => 'array',
+            'changes' => 'array',
             'staff_repeat_requested' => 'boolean',
             'staff_repeat_applied' => 'boolean',
             'correlation_id' => 'string',

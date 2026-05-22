@@ -61,4 +61,9 @@ trait AuthorizesPortalAccess
     {
         PortalAccessRules::authorize($this->portalUser(), PortalPermissions::INDUCTION_ENROLLMENT_READ);
     }
+
+    protected function authorizeReadInductionChangeLogs(): void
+    {
+        PortalAccessRules::authorize($this->portalUser(), PortalPermissions::INDUCTION_CHANGE_LOG_READ);
+    }
 }

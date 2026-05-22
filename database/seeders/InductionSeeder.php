@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\InductionPolicy;
 use App\Models\InductionPolicyVersion;
 use App\Models\InductionSection;
+use App\Support\InductionAcknowledgementMode;
 use Illuminate\Database\Seeder;
 
 class InductionSeeder extends Seeder
@@ -20,6 +21,7 @@ class InductionSeeder extends Seeder
             'abbreviation' => 'PP',
             'slug' => 'productivity-policies',
             'is_active' => true,
+            'acknowledgement_mode' => InductionAcknowledgementMode::READ_ONLY,
         ]);
 
         $version = InductionPolicyVersion::query()->create([
@@ -66,12 +68,17 @@ class InductionSeeder extends Seeder
         ];
 
         foreach ($sections as $row) {
+            $mode = $row['requires_signature']
+                ? InductionAcknowledgementMode::READ_AND_SIGN
+                : InductionAcknowledgementMode::READ_ONLY;
+
             InductionSection::query()->create([
                 'induction_policy_version_id' => $version->id,
                 'sort_order' => $row['sort_order'],
                 'title' => $row['title'],
                 'body' => $row['body'],
                 'requires_signature' => $row['requires_signature'],
+                'acknowledgement_mode' => $mode,
                 'acknowledgement_hint' => $row['acknowledgement_hint'] ?? null,
             ]);
         }

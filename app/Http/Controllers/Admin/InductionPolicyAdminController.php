@@ -9,6 +9,9 @@ use App\Models\InductionPolicyVersion;
 use App\Models\InductionSection;
 use App\Models\InductionSubClause;
 use App\Services\Induction\InductionPolicyAdminChangeService;
+use App\Support\InductionAcknowledgementMode;
+use App\Support\InductionChangeLogDiff;
+use App\Support\InductionPolicyChangeNotification;
 use App\Support\PortalAccessRules;
 use App\Support\RichHtmlPurifier;
 use App\Support\RichTextHelper;
@@ -119,6 +122,8 @@ class InductionPolicyAdminController extends Controller
         $data = $request->validate([
             'create_name' => ['required', 'string', 'max:255'],
             'create_abbreviation' => $this->policyAbbreviationRules(),
+            'acknowledgement_mode' => InductionAcknowledgementMode::validationRules(),
+            'notify_employees' => ['sometimes', 'boolean'],
         ]);
 
         $slug = $this->uniqueSlugFromName($data['create_name']);
@@ -126,12 +131,16 @@ class InductionPolicyAdminController extends Controller
         $ctx = $this->auditRequestContext($request);
         $policy = null;
 
-        DB::transaction(function () use ($data, $slug, $abbreviation, $ctx, &$policy): void {
+        $notify = $this->shouldNotifyEmployees($request);
+        $ackMode = $data['acknowledgement_mode'];
+
+        DB::transaction(function () use ($data, $slug, $abbreviation, $ctx, $notify, $ackMode, &$policy): void {
             $policy = InductionPolicy::query()->create([
                 'name' => $data['create_name'],
                 'abbreviation' => $abbreviation,
                 'slug' => $slug,
                 'is_active' => true,
+                'acknowledgement_mode' => $ackMode,
             ]);
 
             $version = $policy->versions()->create([
@@ -147,10 +156,16 @@ class InductionPolicyAdminController extends Controller
                 subjectId: $policy->id,
                 policyId: $policy->id,
                 versionId: $version->id,
-                metadata: ['after' => $policy->only(['name', 'abbreviation', 'slug', 'is_active'])],
+                metadata: ['subject_label' => $policy->name],
+                changes: InductionChangeLogDiff::created(
+                    $policy->only(['name', 'abbreviation', 'is_active', 'acknowledgement_mode']),
+                    InductionChangeLogDiff::POLICY_FIELDS,
+                ),
                 staffRepeatRequested: false,
                 versionForRepeat: $version,
                 complianceContext: $ctx,
+                notifyEmployeesRequested: $notify,
+                changeNotification: InductionPolicyChangeNotification::policyNew($policy),
             );
         });
 
@@ -167,18 +182,22 @@ class InductionPolicyAdminController extends Controller
             "policy.{$policy->id}.name" => ['required', 'string', 'max:255'],
             "policy.{$policy->id}.abbreviation" => $this->policyAbbreviationRules($policy),
             "policy.{$policy->id}.is_active" => ['required', 'in:0,1'],
+            'acknowledgement_mode' => InductionAcknowledgementMode::validationRules(),
+            'notify_employees' => ['sometimes', 'boolean'],
         ]);
 
-        $before = $policy->only(['name', 'abbreviation', 'slug', 'is_active']);
+        $before = $policy->only(['name', 'abbreviation', 'slug', 'is_active', 'acknowledgement_mode']);
         $version = $policy->ensureEditableVersion();
         $ctx = $this->auditRequestContext($request);
         $abbreviation = $data['policy'][$policy->id]['abbreviation'];
+        $notify = $this->shouldNotifyEmployees($request);
 
-        DB::transaction(function () use ($policy, $data, $abbreviation, $before, $version, $ctx): void {
+        DB::transaction(function () use ($policy, $data, $abbreviation, $before, $version, $ctx, $notify): void {
             $policy->forceFill([
                 'name' => $data['policy'][$policy->id]['name'],
                 'abbreviation' => $abbreviation,
                 'is_active' => $data['policy'][$policy->id]['is_active'] === '1',
+                'acknowledgement_mode' => $data['acknowledgement_mode'],
             ])->save();
 
             $this->adminChangeService->record(
@@ -188,10 +207,17 @@ class InductionPolicyAdminController extends Controller
                 subjectId: $policy->id,
                 policyId: $policy->id,
                 versionId: $version->id,
-                metadata: ['before' => $before, 'after' => $policy->only(['name', 'abbreviation', 'slug', 'is_active'])],
+                metadata: ['subject_label' => $policy->name],
+                changes: InductionChangeLogDiff::between(
+                    $before,
+                    $policy->only(['name', 'abbreviation', 'is_active', 'acknowledgement_mode']),
+                    InductionChangeLogDiff::POLICY_FIELDS,
+                ),
                 staffRepeatRequested: false,
                 versionForRepeat: $version,
                 complianceContext: $ctx,
+                notifyEmployeesRequested: $notify,
+                changeNotification: InductionPolicyChangeNotification::policyAmendment($policy),
             );
         });
 
@@ -213,21 +239,25 @@ class InductionPolicyAdminController extends Controller
         $this->authorizeCreateInductionPolicies();
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'requires_signature' => ['sometimes', 'boolean'],
+            'acknowledgement_mode' => InductionAcknowledgementMode::validationRules(),
+            'notify_employees' => ['sometimes', 'boolean'],
         ]);
         $body = $this->validatedSectionBody($request);
+        $ack = $this->acknowledgementAttributesFromMode($data['acknowledgement_mode']);
 
         $version = $policy->ensureEditableVersion();
         $ctx = $this->auditRequestContext($request);
+        $notify = $this->shouldNotifyEmployees($request);
         $section = null;
 
-        DB::transaction(function () use (&$section, $version, $data, $body, $request, $ctx): void {
+        DB::transaction(function () use (&$section, $version, $data, $body, $ack, $ctx, $notify, $policy): void {
             $section = InductionSection::query()->create([
                 'induction_policy_version_id' => $version->id,
                 'sort_order' => $this->nextSectionSortOrder($version),
                 'title' => $data['title'],
                 'body' => $body,
-                'requires_signature' => $request->boolean('requires_signature'),
+                'requires_signature' => $ack['requires_signature'],
+                'acknowledgement_mode' => $ack['acknowledgement_mode'],
                 'acknowledgement_hint' => null,
             ]);
 
@@ -238,10 +268,19 @@ class InductionPolicyAdminController extends Controller
                 subjectId: $section->id,
                 policyId: $version->induction_policy_id,
                 versionId: $version->id,
-                metadata: ['after' => $section->only(['title', 'sort_order', 'requires_signature'])],
+                metadata: ['subject_label' => 'Clause: '.$section->title],
+                changes: InductionChangeLogDiff::created(
+                    array_merge(
+                        $section->only(['title', 'requires_signature', 'acknowledgement_mode']),
+                        ['body' => $section->body],
+                    ),
+                    InductionChangeLogDiff::SECTION_FIELDS,
+                ),
                 staffRepeatRequested: false,
                 versionForRepeat: $version,
                 complianceContext: $ctx,
+                notifyEmployeesRequested: $notify,
+                changeNotification: InductionPolicyChangeNotification::clauseNew($policy, $section->title),
             );
         });
 
@@ -274,21 +313,27 @@ class InductionPolicyAdminController extends Controller
 
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'requires_signature' => ['sometimes', 'boolean'],
+            'acknowledgement_mode' => InductionAcknowledgementMode::validationRules(),
+            'notify_employees' => ['sometimes', 'boolean'],
         ]);
         $body = $this->validatedSectionBody($request);
         $repeat = $this->staffRepeatFromRequest($request, required: true);
+        $ack = $this->acknowledgementAttributesFromMode($data['acknowledgement_mode']);
+        $notify = $this->shouldNotifyEmployees($request);
 
         $version = $policy->ensureEditableVersion();
-        $before = $section->only(['title', 'body', 'sort_order', 'archived_at', 'requires_signature']);
+        $before = $section->only(['title', 'body', 'sort_order', 'archived_at', 'requires_signature', 'acknowledgement_mode']);
         $ctx = $this->auditRequestContext($request);
 
-        DB::transaction(function () use ($section, $version, $data, $body, $repeat, $before, $request, $ctx): void {
+        DB::transaction(function () use ($section, $version, $data, $body, $repeat, $before, $ack, $ctx, $notify, $policy): void {
             $section->update([
                 'title' => $data['title'],
                 'body' => $body,
-                'requires_signature' => $request->boolean('requires_signature'),
+                'requires_signature' => $ack['requires_signature'],
+                'acknowledgement_mode' => $ack['acknowledgement_mode'],
             ]);
+
+            $after = $section->fresh()->only(['title', 'body', 'requires_signature', 'acknowledgement_mode', 'archived_at']);
 
             $this->adminChangeService->record(
                 actor: auth()->user(),
@@ -297,10 +342,13 @@ class InductionPolicyAdminController extends Controller
                 subjectId: $section->id,
                 policyId: $version->induction_policy_id,
                 versionId: $version->id,
-                metadata: ['before' => $before, 'after' => $section->fresh()->only(['title', 'body', 'sort_order', 'archived_at', 'requires_signature'])],
+                metadata: ['subject_label' => 'Clause: '.$section->title],
+                changes: InductionChangeLogDiff::between($before, $after, InductionChangeLogDiff::SECTION_FIELDS),
                 staffRepeatRequested: $repeat,
                 versionForRepeat: $version,
                 complianceContext: $ctx,
+                notifyEmployeesRequested: $notify,
+                changeNotification: InductionPolicyChangeNotification::clauseAmendment($policy, $section->title),
             );
         });
 
@@ -328,7 +376,15 @@ class InductionPolicyAdminController extends Controller
                 subjectId: $section->id,
                 policyId: $version->induction_policy_id,
                 versionId: $version->id,
-                metadata: ['archived_at' => $section->archived_at?->toIso8601String()],
+                metadata: ['subject_label' => 'Clause: '.$section->title],
+                changes: [
+                    [
+                        'field' => 'status',
+                        'label' => 'Status',
+                        'from' => 'Active',
+                        'to' => 'Archived',
+                    ],
+                ],
                 staffRepeatRequested: false,
                 versionForRepeat: $version,
                 complianceContext: $ctx,
@@ -347,19 +403,24 @@ class InductionPolicyAdminController extends Controller
 
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'acknowledgement_mode' => InductionAcknowledgementMode::validationRules(),
+            'notify_employees' => ['sometimes', 'boolean'],
         ]);
         $body = $this->validatedSubClauseBody($request);
+        $ack = $this->acknowledgementAttributesFromMode($data['acknowledgement_mode']);
 
         $version = $policy->ensureEditableVersion();
         $ctx = $this->auditRequestContext($request);
+        $notify = $this->shouldNotifyEmployees($request);
         $subClause = null;
 
-        DB::transaction(function () use (&$subClause, $section, $version, $data, $body, $ctx): void {
+        DB::transaction(function () use (&$subClause, $section, $version, $data, $body, $ack, $ctx, $notify, $policy): void {
             $subClause = InductionSubClause::query()->create([
                 'induction_section_id' => $section->id,
                 'sort_order' => $this->nextSubClauseSortOrder($section),
                 'title' => $data['title'],
                 'body' => $body,
+                'acknowledgement_mode' => $ack['acknowledgement_mode'],
             ]);
 
             $this->adminChangeService->record(
@@ -371,11 +432,20 @@ class InductionPolicyAdminController extends Controller
                 versionId: $version->id,
                 metadata: [
                     'induction_section_id' => $section->id,
-                    'after' => $subClause->only(['title', 'sort_order']),
+                    'subject_label' => 'Sub-clause: '.$subClause->title.' (clause: '.$section->title.')',
                 ],
+                changes: InductionChangeLogDiff::created(
+                    array_merge(
+                        $subClause->only(['title', 'acknowledgement_mode']),
+                        ['body' => $subClause->body],
+                    ),
+                    InductionChangeLogDiff::SUB_CLAUSE_FIELDS,
+                ),
                 staffRepeatRequested: false,
                 versionForRepeat: $version,
                 complianceContext: $ctx,
+                notifyEmployeesRequested: $notify,
+                changeNotification: InductionPolicyChangeNotification::subClauseNew($policy, $section, $subClause->title),
             );
         });
 
@@ -415,19 +485,26 @@ class InductionPolicyAdminController extends Controller
 
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'acknowledgement_mode' => InductionAcknowledgementMode::validationRules(),
+            'notify_employees' => ['sometimes', 'boolean'],
         ]);
         $body = $this->validatedSubClauseBody($request);
         $repeat = $this->staffRepeatFromRequest($request, required: true);
+        $ack = $this->acknowledgementAttributesFromMode($data['acknowledgement_mode']);
+        $notify = $this->shouldNotifyEmployees($request);
 
         $version = $policy->ensureEditableVersion();
-        $before = $subClause->only(['title', 'body', 'sort_order', 'archived_at']);
+        $before = $subClause->only(['title', 'body', 'sort_order', 'archived_at', 'acknowledgement_mode']);
         $ctx = $this->auditRequestContext($request);
 
-        DB::transaction(function () use ($subClause, $section, $version, $data, $body, $repeat, $before, $ctx): void {
+        DB::transaction(function () use ($subClause, $section, $version, $data, $body, $repeat, $before, $ack, $ctx, $notify, $policy): void {
             $subClause->update([
                 'title' => $data['title'],
                 'body' => $body,
+                'acknowledgement_mode' => $ack['acknowledgement_mode'],
             ]);
+
+            $after = $subClause->fresh()->only(['title', 'body', 'acknowledgement_mode', 'archived_at']);
 
             $this->adminChangeService->record(
                 actor: auth()->user(),
@@ -438,12 +515,14 @@ class InductionPolicyAdminController extends Controller
                 versionId: $version->id,
                 metadata: [
                     'induction_section_id' => $section->id,
-                    'before' => $before,
-                    'after' => $subClause->fresh()->only(['title', 'body', 'sort_order', 'archived_at']),
+                    'subject_label' => 'Sub-clause: '.$subClause->title.' (clause: '.$section->title.')',
                 ],
+                changes: InductionChangeLogDiff::between($before, $after, InductionChangeLogDiff::SUB_CLAUSE_FIELDS),
                 staffRepeatRequested: $repeat,
                 versionForRepeat: $version,
                 complianceContext: $ctx,
+                notifyEmployeesRequested: $notify,
+                changeNotification: InductionPolicyChangeNotification::subClauseAmendment($policy, $section, $subClause->title),
             );
         });
 
@@ -472,7 +551,15 @@ class InductionPolicyAdminController extends Controller
                 versionId: $version->id,
                 metadata: [
                     'induction_section_id' => $section->id,
-                    'archived_at' => $subClause->archived_at?->toIso8601String(),
+                    'subject_label' => 'Sub-clause: '.$subClause->title.' (clause: '.$section->title.')',
+                ],
+                changes: [
+                    [
+                        'field' => 'status',
+                        'label' => 'Status',
+                        'from' => 'Active',
+                        'to' => 'Archived',
+                    ],
                 ],
                 staffRepeatRequested: false,
                 versionForRepeat: $version,
@@ -578,5 +665,21 @@ class InductionPolicyAdminController extends Controller
         }
 
         return Str::limit($slug, 64, '');
+    }
+
+    private function shouldNotifyEmployees(Request $request): bool
+    {
+        return $request->boolean('notify_employees');
+    }
+
+    /**
+     * @return array{acknowledgement_mode: string, requires_signature: bool}
+     */
+    private function acknowledgementAttributesFromMode(string $mode): array
+    {
+        return [
+            'acknowledgement_mode' => $mode,
+            'requires_signature' => InductionAcknowledgementMode::requiresSignature($mode),
+        ];
     }
 }

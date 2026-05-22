@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\Admin\EmployeeAcknowledgementHistoryController;
+use App\Http\Controllers\Admin\EmployeeAcknowledgementHistoryController as AdminEmployeeAcknowledgementHistoryController;
 use App\Http\Controllers\Admin\InductionEmployeeProgressController;
+use App\Http\Controllers\Admin\InductionChangeLogController;
 use App\Http\Controllers\Admin\InductionPolicyAdminController;
 use App\Http\Controllers\Admin\PolicyDocumentBuilderController;
 use App\Http\Controllers\Admin\RoleAdminController;
@@ -10,7 +11,7 @@ use App\Http\Controllers\Admin\RoleTemplatePermissionController;
 use App\Http\Controllers\Admin\UserAdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Portal\EmployeeAcknowledgementHistoryController;
+use App\Http\Controllers\Portal\EmployeeAcknowledgementHistoryController as PortalEmployeeAcknowledgementHistoryController;
 use App\Http\Controllers\Portal\EmployeePortalController;
 use App\Http\Controllers\Portal\InductionEmployeeController;
 use App\Http\Controllers\Portal\PortalNotificationController;
@@ -47,7 +48,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/induction/certificate', [InductionEmployeeController::class, 'certificate'])->name('portal.induction.certificate');
     Route::get('/induction/master-policy/{induction_policy_version}', [InductionEmployeeController::class, 'masterPolicy'])->name('portal.induction.master-pdf');
-    Route::get('/my/acknowledgements', [EmployeeAcknowledgementHistoryController::class, 'index'])->name('portal.acknowledgements');
+    Route::get('/my/acknowledgements', [PortalEmployeeAcknowledgementHistoryController::class, 'index'])->name('portal.acknowledgements');
 
     Route::get('/induction', [InductionEmployeeController::class, 'index'])->name('portal.induction');
     Route::get('/induction/sections/{induction_section}', [InductionEmployeeController::class, 'show'])->name('portal.induction.section');
@@ -90,7 +91,7 @@ Route::middleware('auth')->group(function () {
 
         Route::middleware(['permission:'.PortalPermissions::STAFF_USER_READ])->group(function () {
             Route::get('/users', [UserAdminController::class, 'index'])->name('users.index');
-            Route::get('/users/{user}/acknowledgements', [EmployeeAcknowledgementHistoryController::class, 'show'])->name('users.acknowledgements');
+            Route::get('/users/{user}/acknowledgements', [AdminEmployeeAcknowledgementHistoryController::class, 'show'])->name('users.acknowledgements');
         });
 
         Route::get('/users/create', [UserAdminController::class, 'create'])
@@ -154,6 +155,13 @@ Route::middleware('auth')->group(function () {
             Route::middleware(['permission:'.PortalPermissions::INDUCTION_ENROLLMENT_READ])->group(function () {
                 Route::get('/progress', [InductionEmployeeProgressController::class, 'index'])->name('progress.index');
                 Route::get('/progress/{user}', [InductionEmployeeProgressController::class, 'show'])->name('progress.show');
+            });
+
+            Route::middleware(['permission:'.PortalPermissions::INDUCTION_CHANGE_LOG_READ])->group(function () {
+                Route::get('/change-logs', [InductionChangeLogController::class, 'index'])->name('change-logs.index');
+                Route::get('/change-logs/{change_log}', [InductionChangeLogController::class, 'show'])
+                    ->whereNumber('change_log')
+                    ->name('change-logs.show');
             });
 
             Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_READ])->group(function () {

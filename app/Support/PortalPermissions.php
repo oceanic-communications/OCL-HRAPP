@@ -34,6 +34,8 @@ final class PortalPermissions
 
     public const INDUCTION_ENROLLMENT_READ = 'induction.enrollment.read';
 
+    public const INDUCTION_CHANGE_LOG_READ = 'induction.change_log.read';
+
     /**
      * Slugs that satisfy a required permission (including legacy umbrella grants).
      *

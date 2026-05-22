@@ -22,6 +22,7 @@ final readonly class PortalCapability
         public bool $inductionPolicyUpdate,
         public bool $inductionPolicyArchive,
         public bool $inductionEnrollmentRead,
+        public bool $inductionChangeLogRead,
     ) {}
 
     public static function forUser(?User $user): ?self
@@ -43,6 +44,7 @@ final readonly class PortalCapability
             inductionPolicyUpdate: PortalAccessRules::canUpdateInductionPolicies($user),
             inductionPolicyArchive: PortalAccessRules::canArchiveInductionPolicies($user),
             inductionEnrollmentRead: PortalAccessRules::canReadInductionEnrollment($user),
+            inductionChangeLogRead: PortalAccessRules::canReadInductionChangeLogs($user),
         );
     }
 }

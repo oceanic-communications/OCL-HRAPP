@@ -29,7 +29,6 @@ class EmployeeAcknowledgementHistoryController extends Controller
         return view('admin.users.acknowledgements', [
             'user' => $user,
             'completions' => $this->historyService->forUser($user),
-            'viewingSelf' => $actor->id === $user->id,
         ]);
     }
 }

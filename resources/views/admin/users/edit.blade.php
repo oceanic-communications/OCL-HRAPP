@@ -1,6 +1,6 @@
 @extends('layouts.portal')
 
-@section('title', 'Edit user · '.config('app.name'))
+@section('title', 'Edit employee · '.config('app.name'))
 
 @section('content')
 @php
@@ -8,7 +8,7 @@
 @endphp
 <div class="mx-auto max-w-xl space-y-6">
     <div>
-        <h1 class="text-3xl font-bold text-foreground">Edit user</h1>
+        <h1 class="text-3xl font-bold text-foreground">Edit employee</h1>
         <p class="mt-2 text-muted-foreground">{{ $user->name }} · {{ $user->email }}</p>
     </div>
 

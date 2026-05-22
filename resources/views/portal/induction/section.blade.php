@@ -52,8 +52,10 @@
                                     <span class="font-medium text-accent">Completed</span>
                                 @else
                                     <span class="font-medium text-secondary">In progress</span>
-                                    @if ($section->requires_signature)
-                                        · Includes digital signature
+                                    @if ($section->requiresSignatureForCompletion())
+                                        · {{ \App\Support\InductionAcknowledgementMode::label(\App\Support\InductionAcknowledgementMode::READ_AND_SIGN) }}
+                                    @else
+                                        · {{ \App\Support\InductionAcknowledgementMode::label(\App\Support\InductionAcknowledgementMode::READ_ONLY) }}
                                     @endif
                                 @endif
                             </p>
@@ -110,7 +112,7 @@
                         <p class="text-sm text-destructive">{{ $message }}</p>
                     @enderror
 
-                    @if ($section->requires_signature)
+                    @if ($section->requiresSignatureForCompletion())
                         <div data-induction-signature class="space-y-4">
                             <div class="grid gap-4 sm:grid-cols-2">
                                 <div class="space-y-2 sm:col-span-2">

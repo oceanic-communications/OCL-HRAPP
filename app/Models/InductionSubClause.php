@@ -18,6 +18,7 @@ class InductionSubClause extends Model
         'numbering_style',
         'number_separator',
         'body',
+        'acknowledgement_mode',
         'archived_at',
     ];
 

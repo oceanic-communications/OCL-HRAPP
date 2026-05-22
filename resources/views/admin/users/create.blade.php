@@ -1,12 +1,12 @@
 @extends('layouts.portal')
 
-@section('title', 'Create user · '.config('app.name'))
+@section('title', 'Add employee · '.config('app.name'))
 
 @section('content')
 <div class="mx-auto max-w-xl space-y-6">
     <div>
-        <h1 class="text-3xl font-bold text-foreground">Create user</h1>
-        <p class="mt-2 text-muted-foreground">The user signs in with a one-time code sent to their email.</p>
+        <h1 class="text-3xl font-bold text-foreground">Add employee</h1>
+        <p class="mt-2 text-muted-foreground">The employee signs in with a one-time code sent to their email.</p>
     </div>
 
     @if (! ($portalCap?->staffUserCreate ?? false))

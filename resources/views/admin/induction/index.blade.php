@@ -9,6 +9,11 @@
             <h1 class="font-heading text-2xl font-bold text-foreground">Policies</h1>
             <p class="text-sm text-muted-foreground">Manage induction policies and their clauses (e.g. HR, IT, OHS).</p>
         </div>
+        @if ($portalCap?->inductionChangeLogRead ?? false)
+            <a href="{{ route('admin.induction.change-logs.index') }}" class="inline-flex shrink-0 items-center rounded-lg border border-border px-4 py-2 text-sm font-semibold text-foreground hover:bg-muted">
+                Policy change log
+            </a>
+        @endif
         @if ($portalCap?->inductionPolicyCreate ?? false)
             <details class="group w-full md:w-auto" @if ($errors->has('create_name') || $errors->has('create_abbreviation')) open @endif>
                 <summary class="inline-flex w-full cursor-pointer list-none items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 md:w-auto [&::-webkit-details-marker]:hidden">
@@ -30,6 +35,9 @@
                             <p class="mt-1 text-sm text-destructive">{{ $message }}</p>
                         @enderror
                     </div>
+                    @include('admin.induction.partials.acknowledgement-options', [
+                        'acknowledgementMode' => old('acknowledgement_mode', \App\Support\InductionAcknowledgementMode::READ_ONLY),
+                    ])
                     <button type="submit" class="w-full rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90">Create policy</button>
                 </form>
             </details>

@@ -16,6 +16,11 @@
             {{ $policy->name }}
         </h1>
         <p class="text-sm text-muted-foreground">Manage clauses staff complete for this policy during induction.</p>
+        @if ($portalCap?->inductionChangeLogRead ?? false)
+            <p class="mt-2">
+                <a href="{{ route('admin.induction.change-logs.index', ['policy' => $policy->id]) }}" class="text-sm font-medium text-primary hover:underline">View change log for this policy</a>
+            </p>
+        @endif
     </div>
 
     @if (session('success'))
@@ -53,6 +58,11 @@
                         </div>
                     </div>
                     <button type="submit" class="shrink-0 rounded-lg bg-secondary px-4 py-2 text-sm font-semibold text-secondary-foreground hover:bg-secondary/90 lg:mb-0.5">Save policy</button>
+                </div>
+                <div class="mt-4 border-t border-border pt-4">
+                    @include('admin.induction.partials.acknowledgement-options', [
+                        'acknowledgementMode' => old('acknowledgement_mode', $policy->acknowledgement_mode ?? \App\Support\InductionAcknowledgementMode::READ_ONLY),
+                    ])
                 </div>
             </form>
         @else

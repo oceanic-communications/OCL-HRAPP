@@ -14,6 +14,7 @@ class InductionPolicy extends Model
         'abbreviation',
         'slug',
         'is_active',
+        'acknowledgement_mode',
         'numbering_scheme',
     ];
 

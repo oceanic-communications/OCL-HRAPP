@@ -1,13 +1,13 @@
 @extends('layouts.portal')
 
-@section('title', 'Users · '.config('app.name'))
+@section('title', 'Employees · '.config('app.name'))
 
 @section('content')
 <div class="space-y-6">
     <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <div>
-            <h1 class="text-3xl font-bold text-foreground">Users</h1>
-            <p class="mt-2 text-muted-foreground">Manage accounts and role assignments.</p>
+            <h1 class="text-3xl font-bold text-foreground">Employees</h1>
+            <p class="mt-2 text-muted-foreground">Manage employee accounts, role assignments, and acknowledgement history.</p>
             @if (($stats['archived'] ?? 0) > 0)
                 <p class="mt-2 text-sm text-muted-foreground">
                     <span class="font-medium text-foreground">{{ $stats['archived'] }}</span> archived account{{ $stats['archived'] === 1 ? '' : 's' }}.
@@ -16,7 +16,7 @@
         </div>
         @if ($portalCap?->staffUserCreate ?? false)
             <a href="{{ route('admin.users.create') }}" class="inline-flex w-fit shrink-0 items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover hover:text-primary">
-                New user
+                New employee
             </a>
         @endif
     </div>
@@ -34,7 +34,7 @@
     </div>
 
     @if ($users->isEmpty())
-        <div class="portal-card p-12 text-center text-muted-foreground">No users yet.</div>
+        <div class="portal-card p-12 text-center text-muted-foreground">No employees yet.</div>
     @else
         <div class="portal-card overflow-hidden">
             <table class="min-w-full divide-y divide-border text-sm">
@@ -75,6 +75,7 @@
                                     $canArchiveThis = $canArchive && ! $u->is_staff_super_user && ! $u->isArchived();
                                 @endphp
                                 <div class="flex flex-wrap justify-end gap-2">
+                                    <a href="{{ route('admin.users.acknowledgements', $u) }}" class="text-primary hover:underline">History</a>
                                     @if ($canEditThis)
                                         <a href="{{ route('admin.users.edit', $u) }}" class="text-primary hover:underline">Edit</a>
                                     @endif

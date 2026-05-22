@@ -69,11 +69,11 @@
                     <div class="min-w-0">
                         <p class="font-medium text-foreground">{{ $section->title }}</p>
                         <p class="text-xs text-muted-foreground">
-                            @if ($section->requires_signature)
-                                Includes digital signature
-                            @else
-                                Acknowledgement only
-                            @endif
+                            {{ \App\Support\InductionAcknowledgementMode::label(
+                                $section->requiresSignatureForCompletion()
+                                    ? \App\Support\InductionAcknowledgementMode::READ_AND_SIGN
+                                    : \App\Support\InductionAcknowledgementMode::READ_ONLY
+                            ) }}
                         </p>
                     </div>
                 </div>

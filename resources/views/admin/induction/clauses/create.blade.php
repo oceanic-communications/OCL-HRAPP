@@ -30,24 +30,9 @@
             required
             placeholder="Policy text employees will read for this clause."
         />
-        <div class="rounded-lg border border-border bg-muted/20 p-4">
-            <label class="flex cursor-pointer items-start gap-3">
-                <input
-                    type="checkbox"
-                    name="requires_signature"
-                    value="1"
-                    class="mt-1 h-4 w-4 rounded border-border text-primary"
-                    @checked(old('requires_signature'))
-                >
-                <span>
-                    <span class="text-sm font-medium text-foreground">Require digital signature</span>
-                    <span class="mt-1 block text-xs text-muted-foreground">When enabled, employees must draw a signature on the canvas before they can submit this clause.</span>
-                </span>
-            </label>
-            @error('requires_signature')
-                <p class="mt-2 text-sm text-destructive">{{ $message }}</p>
-            @enderror
-        </div>
+        @include('admin.induction.partials.acknowledgement-options', [
+            'acknowledgementMode' => old('acknowledgement_mode', $policy->acknowledgement_mode ?? \App\Support\InductionAcknowledgementMode::READ_ONLY),
+        ])
         <div class="flex flex-wrap gap-3 pt-2">
             <button type="submit" class="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">Create clause</button>
             <a href="{{ route('admin.induction.policies.show', $policy) }}" class="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted">Cancel</a>

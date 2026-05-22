@@ -111,8 +111,8 @@
             <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 @if ($portalCap?->staffUserRead ?? false)
                     <a href="{{ route('admin.users.index') }}" class="block rounded-lg border border-border p-4 transition-shadow hover:shadow-md">
-                        <p class="font-semibold text-foreground">User management</p>
-                        <p class="mt-1 text-xs text-muted-foreground">View and edit portal users, roles, and access.</p>
+                        <p class="font-semibold text-foreground">Employees</p>
+                        <p class="mt-1 text-xs text-muted-foreground">View and edit employee accounts, roles, and acknowledgement history.</p>
                     </a>
                 @endif
                 @if ($portalCap?->staffRoleRead ?? false)

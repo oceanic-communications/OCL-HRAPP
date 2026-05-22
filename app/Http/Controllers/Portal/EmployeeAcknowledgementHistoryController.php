@@ -21,7 +21,6 @@ class EmployeeAcknowledgementHistoryController extends Controller
         return view('portal.acknowledgements.index', [
             'user' => $user,
             'completions' => $this->historyService->forUser($user),
-            'viewingSelf' => true,
         ]);
     }
 }

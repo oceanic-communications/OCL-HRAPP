@@ -9,6 +9,8 @@ class PortalUserNotification extends Model
 {
     public const TYPE_INDUCTION_REPEAT = 'induction_repeat_required';
 
+    public const TYPE_INDUCTION_POLICY_CHANGED = 'induction_policy_changed';
+
     protected $fillable = [
         'user_id',
         'type',

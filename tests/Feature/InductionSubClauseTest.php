@@ -69,6 +69,7 @@ class InductionSubClauseTest extends TestCase
             ->post(route('admin.induction.policies.clauses.sub-clauses.store', [$policy, $section]), [
                 'title' => 'First sub-clause',
                 'body' => '<p>Content</p>',
+                'acknowledgement_mode' => \App\Support\InductionAcknowledgementMode::READ_ONLY,
             ])
             ->assertRedirect(route('admin.induction.policies.clauses.show', [$policy, $section]));
 
@@ -102,6 +103,7 @@ class InductionSubClauseTest extends TestCase
             ->post(route('admin.induction.policies.clauses.sub-clauses.store', [$policy, $section]), [
                 'title' => 'Annual leave',
                 'body' => '<p>Annual leave rules.</p>',
+                'acknowledgement_mode' => \App\Support\InductionAcknowledgementMode::READ_ONLY,
             ])
             ->assertRedirect(route('admin.induction.policies.clauses.show', [$policy, $section]));
 
@@ -113,6 +115,7 @@ class InductionSubClauseTest extends TestCase
             ->post(route('admin.induction.policies.clauses.sub-clauses.store', [$policy, $section]), [
                 'title' => 'Sick leave',
                 'body' => '<p>Sick leave rules.</p>',
+                'acknowledgement_mode' => \App\Support\InductionAcknowledgementMode::READ_ONLY,
             ])
             ->assertRedirect(route('admin.induction.policies.clauses.show', [$policy, $section]));
 

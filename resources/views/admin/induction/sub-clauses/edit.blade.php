@@ -39,6 +39,9 @@
             :rows="14"
             required
         />
+        @include('admin.induction.partials.acknowledgement-options', [
+            'acknowledgementMode' => old('acknowledgement_mode', $subClause->acknowledgement_mode ?? \App\Support\InductionAcknowledgementMode::READ_ONLY),
+        ])
         <div class="flex flex-wrap gap-3 border-t border-border pt-4">
             <button type="button" data-induction-save-open class="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
                 Save changes

@@ -34,6 +34,7 @@ class InductionSectionBodyTest extends TestCase
             ->post(route('admin.induction.policies.clauses.store', $policy), [
                 'title' => 'Section title',
                 'body' => '<p>'.$tooManyWords.'</p>',
+                'acknowledgement_mode' => \App\Support\InductionAcknowledgementMode::READ_ONLY,
             ])
             ->assertSessionHasErrors('body');
 
@@ -41,6 +42,7 @@ class InductionSectionBodyTest extends TestCase
             ->post(route('admin.induction.policies.clauses.store', $policy), [
                 'title' => 'Section title',
                 'body' => '<p>Hello <strong>team</strong></p><script>alert(1)</script>',
+                'acknowledgement_mode' => \App\Support\InductionAcknowledgementMode::READ_ONLY,
             ])
             ->assertRedirect(route('admin.induction.policies.show', $policy));
 
@@ -58,12 +60,13 @@ class InductionSectionBodyTest extends TestCase
             ->post(route('admin.induction.policies.clauses.store', $policy), [
                 'title' => 'Signed section',
                 'body' => '<p>Sign here</p>',
-                'requires_signature' => '1',
+                'acknowledgement_mode' => \App\Support\InductionAcknowledgementMode::READ_AND_SIGN,
             ])
             ->assertRedirect(route('admin.induction.policies.show', $policy));
 
         $signed = InductionSection::query()->where('title', 'Signed section')->first();
         $this->assertNotNull($signed);
         $this->assertTrue($signed->requires_signature);
+        $this->assertSame(\App\Support\InductionAcknowledgementMode::READ_AND_SIGN, $signed->acknowledgement_mode);
     }
 }
