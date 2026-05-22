@@ -39,4 +39,14 @@ class RichTextHelperTest extends TestCase
         $this->assertStringContainsString('<p>Safe</p>', $clean);
         $this->assertStringNotContainsString('script', $clean);
     }
+
+    #[Test]
+    public function purifier_accepts_border_radius_without_error(): void
+    {
+        $dirty = '<span style="border-radius:8px">Hello</span>';
+        $clean = RichHtmlPurifier::purify($dirty);
+
+        $this->assertStringContainsString('Hello', $clean);
+        $this->assertStringContainsString('border-radius', $clean);
+    }
 }

@@ -19,6 +19,8 @@ final class RichHtmlPurifier
             'img[src|alt|width|height|style|class],span[style|class],hr,'.
             'iframe[src|width|height|frameborder|title]'
         );
+        // border-radius is only registered when CSS.Proprietary is enabled.
+        $config->set('CSS.Proprietary', true);
         $config->set('CSS.AllowedProperties', 'max-width,width,height,text-align,float,margin,margin-left,margin-right,border,border-radius');
         $config->set('HTML.SafeIframe', true);
         $config->set(
