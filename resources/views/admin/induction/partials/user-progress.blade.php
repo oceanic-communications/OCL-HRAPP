@@ -30,7 +30,7 @@
                     <tr>
                         <th scope="col" class="px-4 py-3 text-left font-semibold text-foreground">User</th>
                         <th scope="col" class="px-4 py-3 text-left font-semibold text-foreground">Email</th>
-                        <th scope="col" class="px-4 py-3 text-left font-semibold text-foreground">Sections</th>
+                        <th scope="col" class="px-4 py-3 text-left font-semibold text-foreground">Clauses</th>
                         <th scope="col" class="px-4 py-3 text-left font-semibold text-foreground">Progress</th>
                         <th scope="col" class="px-4 py-3 text-left font-semibold text-foreground">Status</th>
                         <th scope="col" class="px-4 py-3 text-left font-semibold text-foreground">Last activity</th>
@@ -81,7 +81,7 @@
                                         <span class="w-10 shrink-0 text-xs font-medium text-muted-foreground">{{ $row['progress_percent'] }}%</span>
                                     </div>
                                 @else
-                                    <span class="text-xs text-muted-foreground">No sections</span>
+                                    <span class="text-xs text-muted-foreground">No clauses</span>
                                 @endif
                             </td>
                             <td class="whitespace-nowrap px-4 py-3">

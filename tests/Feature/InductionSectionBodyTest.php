@@ -30,18 +30,18 @@ class InductionSectionBodyTest extends TestCase
         $tooManyWords = implode(' ', array_fill(0, InductionSection::BODY_MAX_WORDS + 1, 'word'));
 
         $this->actingAs($admin)
-            ->post(route('admin.induction.policies.sections.store', $policy), [
+            ->post(route('admin.induction.policies.clauses.store', $policy), [
                 'title' => 'Section title',
                 'body' => '<p>'.$tooManyWords.'</p>',
             ])
             ->assertSessionHasErrors('body');
 
         $this->actingAs($admin)
-            ->post(route('admin.induction.policies.sections.store', $policy), [
+            ->post(route('admin.induction.policies.clauses.store', $policy), [
                 'title' => 'Section title',
                 'body' => '<p>Hello <strong>team</strong></p><script>alert(1)</script>',
             ])
-            ->assertRedirect(route('admin.induction.index'));
+            ->assertRedirect(route('admin.induction.policies.show', $policy));
 
         $section = InductionSection::query()->where('title', 'Section title')->first();
         $this->assertNotNull($section);
@@ -54,12 +54,12 @@ class InductionSectionBodyTest extends TestCase
         );
 
         $this->actingAs($admin)
-            ->post(route('admin.induction.policies.sections.store', $policy), [
+            ->post(route('admin.induction.policies.clauses.store', $policy), [
                 'title' => 'Signed section',
                 'body' => '<p>Sign here</p>',
                 'requires_signature' => '1',
             ])
-            ->assertRedirect(route('admin.induction.index'));
+            ->assertRedirect(route('admin.induction.policies.show', $policy));
 
         $signed = InductionSection::query()->where('title', 'Signed section')->first();
         $this->assertNotNull($signed);

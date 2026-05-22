@@ -71,14 +71,32 @@ class InductionPolicyAdminController extends Controller
         $policies = $canReadPolicies
             ? InductionPolicy::query()
                 ->with([
-                    'versions' => fn ($q) => $q->whereNotNull('published_at')->orderByDesc('published_at')->limit(1),
-                    'versions.sections' => fn ($q) => $q->orderBy('sort_order'),
+                    'versions' => fn ($q) => $q
+                        ->whereNotNull('published_at')
+                        ->orderByDesc('published_at')
+                        ->limit(1)
+                        ->withCount('sections'),
                 ])
                 ->orderBy('name')
                 ->get()
             : collect();
 
         return view('admin.induction.index', compact('policies', 'canReadPolicies'));
+    }
+
+    public function showPolicy(InductionPolicy $policy): View
+    {
+        $this->authorizeReadInductionPolicies();
+
+        $policy->load([
+            'versions' => fn ($q) => $q
+                ->whereNotNull('published_at')
+                ->orderByDesc('published_at')
+                ->limit(1),
+            'versions.sections' => fn ($q) => $q->orderBy('sort_order'),
+        ]);
+
+        return view('admin.induction.policies.show', compact('policy'));
     }
 
     public function storePolicy(Request $request): RedirectResponse
@@ -90,8 +108,9 @@ class InductionPolicyAdminController extends Controller
 
         $slug = $this->uniqueSlugFromName($data['create_name']);
         $ctx = $this->auditRequestContext($request);
+        $policy = null;
 
-        DB::transaction(function () use ($data, $slug, $ctx): void {
+        DB::transaction(function () use ($data, $slug, $ctx, &$policy): void {
             $policy = InductionPolicy::query()->create([
                 'name' => $data['create_name'],
                 'slug' => $slug,
@@ -118,7 +137,9 @@ class InductionPolicyAdminController extends Controller
             );
         });
 
-        return redirect()->route('admin.induction.index')->with('success', 'Policy created.');
+        return redirect()
+            ->route('admin.induction.policies.show', $policy)
+            ->with('success', 'Policy created.');
     }
 
     public function updatePolicy(Request $request, InductionPolicy $policy): RedirectResponse
@@ -153,7 +174,9 @@ class InductionPolicyAdminController extends Controller
             );
         });
 
-        return redirect()->route('admin.induction.index')->with('success', 'Policy saved.');
+        return redirect()
+            ->route('admin.induction.policies.show', $policy)
+            ->with('success', 'Policy saved.');
     }
 
     public function createSection(InductionPolicy $policy): View
@@ -161,7 +184,7 @@ class InductionPolicyAdminController extends Controller
         $this->authorizeCreateInductionPolicies();
         $policy->ensureEditableVersion();
 
-        return view('admin.induction.sections.create', compact('policy'));
+        return view('admin.induction.clauses.create', compact('policy'));
     }
 
     public function storeSection(Request $request, InductionPolicy $policy): RedirectResponse
@@ -204,8 +227,8 @@ class InductionPolicyAdminController extends Controller
         });
 
         return redirect()
-            ->route('admin.induction.index')
-            ->with('success', 'Section created.');
+            ->route('admin.induction.policies.show', $policy)
+            ->with('success', 'Clause created.');
     }
 
     public function showSection(InductionPolicy $policy, InductionSection $section): View
@@ -213,7 +236,7 @@ class InductionPolicyAdminController extends Controller
         $this->authorizeReadInductionPolicies();
         $section = $this->resolveSection($policy, $section);
 
-        return view('admin.induction.sections.show', compact('policy', 'section'));
+        return view('admin.induction.clauses.show', compact('policy', 'section'));
     }
 
     public function editSection(InductionPolicy $policy, InductionSection $section): View
@@ -221,7 +244,7 @@ class InductionPolicyAdminController extends Controller
         $this->authorizeUpdateInductionPolicies();
         $section = $this->resolveSection($policy, $section);
 
-        return view('admin.induction.sections.edit', compact('policy', 'section'));
+        return view('admin.induction.clauses.edit', compact('policy', 'section'));
     }
 
     public function updateSection(Request $request, InductionPolicy $policy, InductionSection $section): RedirectResponse
@@ -264,8 +287,8 @@ class InductionPolicyAdminController extends Controller
         });
 
         return redirect()
-            ->route('admin.induction.policies.sections.show', [$policy, $section])
-            ->with('success', 'Section saved.');
+            ->route('admin.induction.policies.clauses.show', [$policy, $section])
+            ->with('success', 'Clause saved.');
     }
 
     public function archiveSection(Request $request, InductionPolicy $policy, InductionSection $section): RedirectResponse
@@ -293,7 +316,9 @@ class InductionPolicyAdminController extends Controller
             );
         });
 
-        return redirect()->route('admin.induction.index')->with('success', 'Section archived.');
+        return redirect()
+            ->route('admin.induction.policies.show', $policy)
+            ->with('success', 'Clause archived.');
     }
 
     private function validatedSectionBody(Request $request): string

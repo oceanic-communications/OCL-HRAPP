@@ -3,10 +3,30 @@
 @section('title', 'Policies · '.config('app.name'))
 
 @section('content')
-<div class="space-y-8">
-    <div>
-        <h1 class="font-heading text-2xl font-bold text-foreground">Policies</h1>
-        <p class="text-sm text-muted-foreground">Manage policy sections staff complete during induction.</p>
+<div class="space-y-6">
+    <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+        <div>
+            <h1 class="font-heading text-2xl font-bold text-foreground">Policies</h1>
+            <p class="text-sm text-muted-foreground">Manage induction policies and their clauses (e.g. HR, IT, OHS).</p>
+        </div>
+        @if ($portalCap?->inductionPolicyCreate ?? false)
+            <details class="group w-full md:w-auto" @if ($errors->has('create_name')) open @endif>
+                <summary class="inline-flex w-full cursor-pointer list-none items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 md:w-auto [&::-webkit-details-marker]:hidden">
+                    Add policy
+                </summary>
+                <form action="{{ route('admin.induction.policies.store') }}" method="POST" class="portal-card mt-3 space-y-3 p-4 md:min-w-[20rem]">
+                    @csrf
+                    <div>
+                        <label class="portal-label" for="create_name">Policy name</label>
+                        <input id="create_name" name="create_name" type="text" class="portal-input mt-1" required maxlength="255" placeholder="e.g. HR, IT, OHS" value="{{ old('create_name') }}">
+                        @error('create_name')
+                            <p class="mt-1 text-sm text-destructive">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <button type="submit" class="w-full rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90">Create policy</button>
+                </form>
+            </details>
+        @endif
     </div>
 
     @if (session('success'))
@@ -14,104 +34,51 @@
     @endif
 
     @if ($canReadPolicies ?? false)
-        @forelse ($policies as $policy)
-            @php
-                $version = $policy->publishedVersion() ?? $policy->versions->first();
-                $sections = $version?->sections ?? collect();
-            @endphp
-            <div class="portal-card overflow-hidden">
-                @if ($portalCap?->inductionPolicyUpdate ?? false)
-                    <form action="{{ route('admin.induction.policies.update', $policy) }}" method="POST" class="border-b border-border bg-muted/30 px-5 py-4">
-                        @csrf
-                        @method('PUT')
-                        <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:gap-6">
-                            <div class="min-w-0 flex-1">
-                                <label class="portal-label" for="policy_name_{{ $policy->id }}">Policy name</label>
-                                <input id="policy_name_{{ $policy->id }}" name="policy[{{ $policy->id }}][name]" type="text" class="portal-input mt-1" required value="{{ old('policy.'.$policy->id.'.name', $policy->name) }}" maxlength="255">
-                            </div>
-                            <div class="shrink-0">
-                                <span class="portal-label">Status</span>
-                                <div class="mt-2 flex flex-wrap gap-4 text-sm text-foreground">
-                                    <label class="flex cursor-pointer items-center gap-2">
-                                        <input type="radio" name="policy[{{ $policy->id }}][is_active]" value="1" class="h-4 w-4 border-border" @checked(old('policy.'.$policy->id.'.is_active', $policy->is_active ? '1' : '0') === '1') required>
-                                        Active
-                                    </label>
-                                    <label class="flex cursor-pointer items-center gap-2">
-                                        <input type="radio" name="policy[{{ $policy->id }}][is_active]" value="0" class="h-4 w-4 border-border" @checked(old('policy.'.$policy->id.'.is_active', $policy->is_active ? '1' : '0') === '0') required>
-                                        Inactive
-                                    </label>
-                                </div>
-                            </div>
-                            <button type="submit" class="shrink-0 rounded-lg bg-secondary px-4 py-2 text-sm font-semibold text-secondary-foreground hover:bg-secondary/90 lg:mb-0.5">Save</button>
-                        </div>
-                    </form>
-                @else
-                    <div class="border-b border-border bg-muted/30 px-5 py-4">
-                        <h2 class="font-heading text-lg font-semibold text-foreground">{{ $policy->name }}</h2>
-                        <p class="mt-1 text-sm text-muted-foreground">{{ $policy->is_active ? 'Active' : 'Inactive' }}</p>
-                    </div>
+        @if ($policies->isEmpty())
+            <div class="portal-card p-8 text-center text-sm text-muted-foreground">
+                No policies configured yet.
+                @if ($portalCap?->inductionPolicyCreate ?? false)
+                    Use <span class="font-medium text-foreground">Add policy</span> to create one (e.g. HR, IT, OHS).
                 @endif
-
-                <div class="space-y-4 p-5">
-                    <div class="flex flex-wrap items-center justify-between gap-3">
-                        <h2 class="text-sm font-semibold text-foreground">Sections</h2>
-                        @if ($portalCap?->inductionPolicyCreate ?? false)
-                            <a href="{{ route('admin.induction.policies.sections.create', $policy) }}" class="inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
-                                Add section
-                            </a>
-                        @endif
-                    </div>
-
-                    @if ($sections->isEmpty())
-                        <p class="text-sm text-muted-foreground">No sections yet.@if ($portalCap?->inductionPolicyCreate ?? false) Add the first section to get started.@endif</p>
-                    @else
-                        <div class="overflow-x-auto rounded-lg border border-border">
-                            <table class="min-w-full divide-y divide-border text-sm">
-                                <thead class="bg-muted/40">
-                                    <tr>
-                                        <th scope="col" class="px-4 py-3 text-left font-semibold text-foreground">Order</th>
-                                        <th scope="col" class="px-4 py-3 text-left font-semibold text-foreground">Title</th>
-                                        <th scope="col" class="px-4 py-3 text-left font-semibold text-foreground">Status</th>
-                                        <th scope="col" class="px-4 py-3 text-right font-semibold text-foreground">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-border bg-card">
-                                    @foreach ($sections as $section)
-                                        <tr class="{{ $section->isArchived() ? 'bg-muted/20 text-muted-foreground' : '' }}">
-                                            <td class="whitespace-nowrap px-4 py-3">{{ $section->sort_order }}</td>
-                                            <td class="px-4 py-3 font-medium">{{ $section->title }}</td>
-                                            <td class="whitespace-nowrap px-4 py-3">
-                                                @if ($section->isArchived())
-                                                    <span class="rounded-full bg-muted px-2 py-0.5 text-xs font-medium">Archived</span>
-                                                @else
-                                                    <span class="rounded-full bg-accent/15 px-2 py-0.5 text-xs font-medium text-accent">Active</span>
-                                                @endif
-                                            </td>
-                                            <td class="whitespace-nowrap px-4 py-3 text-right">
-                                                <div class="flex flex-wrap justify-end gap-2">
-                                                    <a href="{{ route('admin.induction.policies.sections.show', [$policy, $section]) }}" class="font-medium text-primary hover:underline">View</a>
-                                                    @if (! $section->isArchived() && ($portalCap?->inductionPolicyUpdate ?? false))
-                                                        <a href="{{ route('admin.induction.policies.sections.edit', [$policy, $section]) }}" class="font-medium text-primary hover:underline">Edit</a>
-                                                    @endif
-                                                    @if (! $section->isArchived() && ($portalCap?->inductionPolicyArchive ?? false))
-                                                        <form action="{{ route('admin.induction.policies.sections.archive', [$policy, $section]) }}" method="POST" class="inline" onsubmit="return confirm('Archive this section? Staff will no longer see it during induction.');">
-                                                            @csrf
-                                                            <button type="submit" class="font-medium text-destructive hover:underline">Archive</button>
-                                                        </form>
-                                                    @endif
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    @endif
+            </div>
+        @else
+            <div class="portal-card overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-border text-sm">
+                        <thead class="bg-muted/40">
+                            <tr>
+                                <th scope="col" class="px-4 py-3 text-left font-semibold text-foreground">Policy</th>
+                                <th scope="col" class="px-4 py-3 text-left font-semibold text-foreground">Status</th>
+                                <th scope="col" class="px-4 py-3 text-left font-semibold text-foreground">Clauses</th>
+                                <th scope="col" class="px-4 py-3 text-right font-semibold text-foreground">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-border bg-card">
+                            @foreach ($policies as $policy)
+                                @php
+                                    $version = $policy->versions->first();
+                                    $clauseCount = (int) ($version?->sections_count ?? 0);
+                                @endphp
+                                <tr>
+                                    <td class="px-4 py-3 font-medium text-foreground">{{ $policy->name }}</td>
+                                    <td class="whitespace-nowrap px-4 py-3">
+                                        @if ($policy->is_active)
+                                            <span class="rounded-full bg-accent/15 px-2 py-0.5 text-xs font-medium text-accent">Active</span>
+                                        @else
+                                            <span class="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">Inactive</span>
+                                        @endif
+                                    </td>
+                                    <td class="whitespace-nowrap px-4 py-3 text-muted-foreground">{{ $clauseCount }}</td>
+                                    <td class="whitespace-nowrap px-4 py-3 text-right">
+                                        <a href="{{ route('admin.induction.policies.show', $policy) }}" class="font-medium text-primary hover:underline">Manage</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        @empty
-            <p class="text-sm text-muted-foreground">No policies configured.</p>
-        @endforelse
+        @endif
     @else
         <div class="portal-card p-8 text-center text-sm text-muted-foreground">You do not have permission to view this area.</div>
     @endif

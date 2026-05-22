@@ -107,7 +107,7 @@
     @if (($portalCap?->staffUserRead ?? false) || ($portalCap?->staffRoleRead ?? false) || ($portalCap?->inductionAdminAccess ?? false) || $u->isStaffSuperUser())
         <div class="portal-card space-y-4 p-4 sm:p-5">
             <h2 class="font-heading text-lg font-semibold text-foreground">Administration</h2>
-            <p class="text-sm text-muted-foreground">Manage staff accounts and induction policy content (sections, acknowledgements, publishing).</p>
+            <p class="text-sm text-muted-foreground">Manage staff accounts and induction policy content (clauses, acknowledgements, publishing).</p>
             <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 @if ($portalCap?->staffUserRead ?? false)
                     <a href="{{ route('admin.users.index') }}" class="block rounded-lg border border-border p-4 transition-shadow hover:shadow-md">
@@ -123,8 +123,8 @@
                 @endif
                 @if ($portalCap?->inductionAdminAccess ?? false)
                     <a href="{{ route('admin.induction.index') }}" class="block rounded-lg border border-border p-4 transition-shadow hover:shadow-md">
-                        <p class="font-semibold text-foreground">Induction</p>
-                        <p class="mt-1 text-xs text-muted-foreground">Manage policies and sections, or view staff induction progress.</p>
+                        <p class="font-semibold text-foreground">Policies</p>
+                        <p class="mt-1 text-xs text-muted-foreground">Manage policies and clauses, or view staff induction progress.</p>
                     </a>
                 @endif
             </div>

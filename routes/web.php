@@ -136,23 +136,24 @@ Route::middleware('auth')->group(function () {
             });
 
             Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_READ])->group(function () {
-                Route::get('/policies/{policy}/sections/{section}', [InductionPolicyAdminController::class, 'showSection'])->name('policies.sections.show');
+                Route::get('/policies/{policy}', [InductionPolicyAdminController::class, 'showPolicy'])->name('policies.show');
+                Route::get('/policies/{policy}/clauses/{section}', [InductionPolicyAdminController::class, 'showSection'])->name('policies.clauses.show');
             });
 
             Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_CREATE])->group(function () {
                 Route::post('/policies', [InductionPolicyAdminController::class, 'storePolicy'])->name('policies.store');
-                Route::get('/policies/{policy}/sections/create', [InductionPolicyAdminController::class, 'createSection'])->name('policies.sections.create');
-                Route::post('/policies/{policy}/sections', [InductionPolicyAdminController::class, 'storeSection'])->name('policies.sections.store');
+                Route::get('/policies/{policy}/clauses/create', [InductionPolicyAdminController::class, 'createSection'])->name('policies.clauses.create');
+                Route::post('/policies/{policy}/clauses', [InductionPolicyAdminController::class, 'storeSection'])->name('policies.clauses.store');
             });
 
             Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_UPDATE])->group(function () {
                 Route::put('/policies/{policy}', [InductionPolicyAdminController::class, 'updatePolicy'])->name('policies.update');
-                Route::get('/policies/{policy}/sections/{section}/edit', [InductionPolicyAdminController::class, 'editSection'])->name('policies.sections.edit');
-                Route::put('/policies/{policy}/sections/{section}', [InductionPolicyAdminController::class, 'updateSection'])->name('policies.sections.update');
+                Route::get('/policies/{policy}/clauses/{section}/edit', [InductionPolicyAdminController::class, 'editSection'])->name('policies.clauses.edit');
+                Route::put('/policies/{policy}/clauses/{section}', [InductionPolicyAdminController::class, 'updateSection'])->name('policies.clauses.update');
             });
 
             Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_ARCHIVE])->group(function () {
-                Route::post('/policies/{policy}/sections/{section}/archive', [InductionPolicyAdminController::class, 'archiveSection'])->name('policies.sections.archive');
+                Route::post('/policies/{policy}/clauses/{section}/archive', [InductionPolicyAdminController::class, 'archiveSection'])->name('policies.clauses.archive');
             });
         });
     });

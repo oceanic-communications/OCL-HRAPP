@@ -48,12 +48,12 @@
                     </dd>
                 </div>
                 <div>
-                    <dt class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Sections completed</dt>
+                    <dt class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Clauses completed</dt>
                     <dd class="mt-1 text-sm text-foreground">
                         @if ($summary['sections_total'] > 0)
                             {{ $summary['sections_completed'] }} / {{ $summary['sections_total'] }} ({{ $summary['progress_percent'] }}%)
                         @else
-                            No sections in policy
+                            No clauses in policy
                         @endif
                     </dd>
                 </div>
@@ -94,7 +94,7 @@
         @if ($completions->isEmpty())
             <p class="text-sm text-muted-foreground">
                 @if ($enrollment)
-                    No sections have been acknowledged yet.
+                    No clauses have been acknowledged yet.
                 @else
                     This employee has not started induction for the current policy.
                 @endif
