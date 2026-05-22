@@ -137,23 +137,39 @@ Route::middleware('auth')->group(function () {
             });
 
             Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_READ])->group(function () {
-                Route::get('/policies/{policy}', [InductionPolicyAdminController::class, 'showPolicy'])->name('policies.show');
-                Route::get('/policies/{policy}/builder', [PolicyDocumentBuilderController::class, 'editor'])->name('policies.builder');
+                Route::get('/policies/{policy}', [InductionPolicyAdminController::class, 'showPolicy'])
+                    ->whereNumber('policy')
+                    ->name('policies.show');
+                Route::get('/policies/{policy}/builder', [PolicyDocumentBuilderController::class, 'editor'])
+                    ->whereNumber('policy')
+                    ->name('policies.builder');
                 Route::get('/settings/numbering', [PolicyDocumentBuilderController::class, 'numberingSettings'])->name('settings.numbering');
 
                 // Literal paths must be registered before {section} / {sub_clause} wildcards.
                 Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_CREATE])->group(function () {
-                    Route::get('/policies/{policy}/clauses/create', [InductionPolicyAdminController::class, 'createSection'])->name('policies.clauses.create');
-                    Route::get('/policies/{policy}/clauses/{section}/sub-clauses/create', [InductionPolicyAdminController::class, 'createSubClause'])->name('policies.clauses.sub-clauses.create');
+                    Route::get('/policies/{policy}/clauses/create', [InductionPolicyAdminController::class, 'createSection'])
+                        ->whereNumber('policy')
+                        ->name('policies.clauses.create');
+                    Route::get('/policies/{policy}/clauses/{section}/sub-clauses/create', [InductionPolicyAdminController::class, 'createSubClause'])
+                        ->whereNumber(['policy', 'section'])
+                        ->name('policies.clauses.sub-clauses.create');
                 });
 
                 Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_UPDATE])->group(function () {
-                    Route::get('/policies/{policy}/clauses/{section}/edit', [InductionPolicyAdminController::class, 'editSection'])->name('policies.clauses.edit');
-                    Route::get('/policies/{policy}/clauses/{section}/sub-clauses/{sub_clause}/edit', [InductionPolicyAdminController::class, 'editSubClause'])->name('policies.clauses.sub-clauses.edit');
+                    Route::get('/policies/{policy}/clauses/{section}/edit', [InductionPolicyAdminController::class, 'editSection'])
+                        ->whereNumber(['policy', 'section'])
+                        ->name('policies.clauses.edit');
+                    Route::get('/policies/{policy}/clauses/{section}/sub-clauses/{sub_clause}/edit', [InductionPolicyAdminController::class, 'editSubClause'])
+                        ->whereNumber(['policy', 'section', 'sub_clause'])
+                        ->name('policies.clauses.sub-clauses.edit');
                 });
 
-                Route::get('/policies/{policy}/clauses/{section}', [InductionPolicyAdminController::class, 'showSection'])->name('policies.clauses.show');
-                Route::get('/policies/{policy}/clauses/{section}/sub-clauses/{sub_clause}', [InductionPolicyAdminController::class, 'showSubClause'])->name('policies.clauses.sub-clauses.show');
+                Route::get('/policies/{policy}/clauses/{section}', [InductionPolicyAdminController::class, 'showSection'])
+                    ->whereNumber(['policy', 'section'])
+                    ->name('policies.clauses.show');
+                Route::get('/policies/{policy}/clauses/{section}/sub-clauses/{sub_clause}', [InductionPolicyAdminController::class, 'showSubClause'])
+                    ->whereNumber(['policy', 'section', 'sub_clause'])
+                    ->name('policies.clauses.sub-clauses.show');
             });
 
             Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_CREATE])->group(function () {

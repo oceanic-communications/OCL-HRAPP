@@ -13,6 +13,65 @@ use Tests\TestCase;
 class InductionSubClauseTest extends TestCase
 {
     #[Test]
+    public function admin_can_open_sub_clause_create_form(): void
+    {
+        $admin = User::factory()->create(['is_staff_super_user' => true]);
+        $policy = InductionPolicy::query()->create([
+            'name' => 'HR policy',
+            'abbreviation' => 'HR',
+            'slug' => 'hr-policy-create-form',
+            'is_active' => true,
+        ]);
+        $version = InductionPolicyVersion::query()->create([
+            'induction_policy_id' => $policy->id,
+            'version_label' => 'v1',
+            'published_at' => now(),
+        ]);
+        $section = InductionSection::query()->create([
+            'induction_policy_version_id' => $version->id,
+            'sort_order' => 1,
+            'title' => 'Leave',
+            'body' => '<p>Intro</p>',
+            'requires_signature' => false,
+        ]);
+
+        $this->actingAs($admin)
+            ->get(route('admin.induction.policies.clauses.sub-clauses.create', [$policy, $section]))
+            ->assertOk()
+            ->assertSee('Add sub-clause', false);
+    }
+
+    #[Test]
+    public function admin_can_open_sub_clause_create_when_version_is_not_yet_published(): void
+    {
+        $admin = User::factory()->create(['is_staff_super_user' => true]);
+        $policy = InductionPolicy::query()->create([
+            'name' => 'Draft policy',
+            'abbreviation' => 'DRF',
+            'slug' => 'draft-policy-sub-clause',
+            'is_active' => true,
+        ]);
+        $version = InductionPolicyVersion::query()->create([
+            'induction_policy_id' => $policy->id,
+            'version_label' => 'Draft',
+            'published_at' => null,
+        ]);
+        $section = InductionSection::query()->create([
+            'induction_policy_version_id' => $version->id,
+            'sort_order' => 1,
+            'title' => 'Intro',
+            'body' => '<p>Intro</p>',
+            'requires_signature' => false,
+        ]);
+
+        $this->actingAs($admin)
+            ->get(route('admin.induction.policies.clauses.sub-clauses.create', [$policy, $section]))
+            ->assertOk();
+
+        $this->assertNotNull($version->fresh()->published_at);
+    }
+
+    #[Test]
     public function admin_can_create_sub_clause_with_auto_sort_order(): void
     {
         $admin = User::factory()->create(['is_staff_super_user' => true]);

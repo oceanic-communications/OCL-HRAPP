@@ -48,6 +48,18 @@ class InductionPolicy extends Model
             return $published;
         }
 
+        $latest = $this->versions()->orderByDesc('id')->first();
+        if ($latest !== null) {
+            if ($latest->published_at === null) {
+                $latest->forceFill([
+                    'published_at' => now(),
+                    'created_by' => $latest->created_by ?? auth()->id(),
+                ])->save();
+            }
+
+            return $latest;
+        }
+
         return $this->versions()->create([
             'version_label' => 'Current',
             'published_at' => now(),

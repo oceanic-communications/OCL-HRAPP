@@ -36,3 +36,4 @@ QUICKSTART.bat
 .env.testing
 .env.staging
 .env.development
+/error_log
