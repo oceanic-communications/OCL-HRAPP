@@ -139,24 +139,32 @@ Route::middleware('auth')->group(function () {
             Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_READ])->group(function () {
                 Route::get('/policies/{policy}', [InductionPolicyAdminController::class, 'showPolicy'])->name('policies.show');
                 Route::get('/policies/{policy}/builder', [PolicyDocumentBuilderController::class, 'editor'])->name('policies.builder');
+                Route::get('/settings/numbering', [PolicyDocumentBuilderController::class, 'numberingSettings'])->name('settings.numbering');
+
+                // Literal paths must be registered before {section} / {sub_clause} wildcards.
+                Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_CREATE])->group(function () {
+                    Route::get('/policies/{policy}/clauses/create', [InductionPolicyAdminController::class, 'createSection'])->name('policies.clauses.create');
+                    Route::get('/policies/{policy}/clauses/{section}/sub-clauses/create', [InductionPolicyAdminController::class, 'createSubClause'])->name('policies.clauses.sub-clauses.create');
+                });
+
+                Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_UPDATE])->group(function () {
+                    Route::get('/policies/{policy}/clauses/{section}/edit', [InductionPolicyAdminController::class, 'editSection'])->name('policies.clauses.edit');
+                    Route::get('/policies/{policy}/clauses/{section}/sub-clauses/{sub_clause}/edit', [InductionPolicyAdminController::class, 'editSubClause'])->name('policies.clauses.sub-clauses.edit');
+                });
+
                 Route::get('/policies/{policy}/clauses/{section}', [InductionPolicyAdminController::class, 'showSection'])->name('policies.clauses.show');
                 Route::get('/policies/{policy}/clauses/{section}/sub-clauses/{sub_clause}', [InductionPolicyAdminController::class, 'showSubClause'])->name('policies.clauses.sub-clauses.show');
-                Route::get('/settings/numbering', [PolicyDocumentBuilderController::class, 'numberingSettings'])->name('settings.numbering');
             });
 
             Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_CREATE])->group(function () {
                 Route::post('/policies', [InductionPolicyAdminController::class, 'storePolicy'])->name('policies.store');
-                Route::get('/policies/{policy}/clauses/create', [InductionPolicyAdminController::class, 'createSection'])->name('policies.clauses.create');
                 Route::post('/policies/{policy}/clauses', [InductionPolicyAdminController::class, 'storeSection'])->name('policies.clauses.store');
-                Route::get('/policies/{policy}/clauses/{section}/sub-clauses/create', [InductionPolicyAdminController::class, 'createSubClause'])->name('policies.clauses.sub-clauses.create');
                 Route::post('/policies/{policy}/clauses/{section}/sub-clauses', [InductionPolicyAdminController::class, 'storeSubClause'])->name('policies.clauses.sub-clauses.store');
             });
 
             Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_UPDATE])->group(function () {
                 Route::put('/policies/{policy}', [InductionPolicyAdminController::class, 'updatePolicy'])->name('policies.update');
-                Route::get('/policies/{policy}/clauses/{section}/edit', [InductionPolicyAdminController::class, 'editSection'])->name('policies.clauses.edit');
                 Route::put('/policies/{policy}/clauses/{section}', [InductionPolicyAdminController::class, 'updateSection'])->name('policies.clauses.update');
-                Route::get('/policies/{policy}/clauses/{section}/sub-clauses/{sub_clause}/edit', [InductionPolicyAdminController::class, 'editSubClause'])->name('policies.clauses.sub-clauses.edit');
                 Route::put('/policies/{policy}/clauses/{section}/sub-clauses/{sub_clause}', [InductionPolicyAdminController::class, 'updateSubClause'])->name('policies.clauses.sub-clauses.update');
                 Route::put('/policies/{policy}/clauses/{section}/sub-clauses/{sub_clause}/numbering', [PolicyDocumentBuilderController::class, 'updateSubClauseNumbering'])->name('policies.clauses.sub-clauses.numbering');
                 Route::put('/settings/numbering/{policy}', [PolicyDocumentBuilderController::class, 'updateNumberingScheme'])->name('settings.numbering.update');
