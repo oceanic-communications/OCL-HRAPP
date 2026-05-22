@@ -41,17 +41,43 @@
 
     <div class="portal-card overflow-hidden">
         <div class="space-y-4 p-5">
-            <div class="flex flex-wrap items-center justify-between gap-3">
-                <div>
-                    <h2 class="text-sm font-semibold text-foreground">Sub-clauses</h2>
-                    <p class="mt-1 text-xs text-muted-foreground">Nested content shown within this clause during staff induction.</p>
-                </div>
-                @if (! $section->isArchived() && ($portalCap?->inductionPolicyCreate ?? false))
-                    <a href="{{ route('admin.induction.policies.clauses.sub-clauses.create', [$policy, $section]) }}" class="inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
-                        Add sub-clause
-                    </a>
-                @endif
+            <div>
+                <h2 class="text-sm font-semibold text-foreground">Sub-clauses</h2>
+                <p class="mt-1 text-xs text-muted-foreground">Nested content shown within this clause during staff induction.</p>
             </div>
+
+            @if (! $section->isArchived() && ($portalCap?->inductionPolicyCreate ?? false))
+                <details class="rounded-lg border border-border bg-muted/20" @if ($errors->has('title') || $errors->has('body')) open @endif>
+                    <summary class="cursor-pointer list-none px-4 py-3 text-sm font-semibold text-foreground [&::-webkit-details-marker]:hidden">
+                        + Add sub-clause
+                    </summary>
+                    <form
+                        action="{{ route('admin.induction.policies.clauses.sub-clauses.store', [$policy, $section]) }}"
+                        method="POST"
+                        class="space-y-4 border-t border-border px-4 py-4"
+                        onsubmit="if (window.tinymce) { window.tinymce.triggerSave(); }"
+                    >
+                        @csrf
+                        <div>
+                            <label class="portal-label" for="sub_clause_title">Title</label>
+                            <input id="sub_clause_title" name="title" type="text" class="portal-input mt-1" required value="{{ old('title') }}" maxlength="255">
+                            @error('title')
+                                <p class="mt-1 text-sm text-destructive">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <x-rich-editor
+                            name="body"
+                            :value="old('body', '')"
+                            :max-words="\App\Models\InductionSubClause::BODY_MAX_WORDS"
+                            label="Content"
+                            :rows="10"
+                            required
+                            placeholder="Content for this sub-clause within the parent clause."
+                        />
+                        <button type="submit" class="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90">Create sub-clause</button>
+                    </form>
+                </details>
+            @endif
 
             @if ($subClauses->isEmpty())
                 <p class="text-sm text-muted-foreground">No sub-clauses yet.@if (! $section->isArchived() && ($portalCap?->inductionPolicyCreate ?? false)) Add sub-clauses to break this clause into smaller parts.@endif</p>

@@ -1,11 +1,7 @@
-@props([
-    'policy' => null,
-])
-
 @php
-    $currentPolicy = $policy;
-    if ($currentPolicy === null && request()->route('policy') instanceof \App\Models\InductionPolicy) {
-        $currentPolicy = request()->route('policy');
+    $currentPolicy = request()->route('policy');
+    if (! $currentPolicy instanceof \App\Models\InductionPolicy) {
+        $currentPolicy = null;
     }
 
     $sectionActive = request()->routeIs('admin.induction.index')
@@ -39,28 +35,22 @@
         class="portal-sidebar-group-items {{ $sectionActive ? '' : 'hidden' }}"
         data-portal-nav-group-items
     >
-        <a
-            href="{{ route('admin.induction.index') }}"
-            class="portal-sidebar-sublink {{ request()->routeIs('admin.induction.index') ? 'is-active' : '' }}"
-        >
-            All policies
-        </a>
-
-        @if ($currentPolicy)
+        @forelse ($sidebarPolicies ?? [] as $navPolicy)
+            @php
+                $isActive = $currentPolicy?->id === $navPolicy->id
+                    && (request()->routeIs('admin.induction.policies.show')
+                        || request()->routeIs('admin.induction.policies.clauses.*'));
+            @endphp
             <a
-                href="{{ route('admin.induction.policies.builder', $currentPolicy) }}"
-                class="portal-sidebar-sublink {{ request()->routeIs('admin.induction.policies.builder') ? 'is-active' : '' }}"
+                href="{{ route('admin.induction.policies.show', $navPolicy) }}"
+                class="portal-sidebar-sublink {{ $isActive ? 'is-active' : '' }}"
+                title="{{ $navPolicy->name }}"
             >
-                <span class="font-semibold text-inherit">{{ $currentPolicy->abbreviation }}</span>
-                <span class="text-inherit/80">· Document builder</span>
+                <span class="font-semibold text-inherit">{{ $navPolicy->abbreviation }}</span>
+                <span class="truncate text-inherit/80">· {{ $navPolicy->name }}</span>
             </a>
-            <a
-                href="{{ route('admin.induction.policies.show', $currentPolicy) }}"
-                class="portal-sidebar-sublink {{ request()->routeIs('admin.induction.policies.show') || request()->routeIs('admin.induction.policies.clauses.*') ? 'is-active' : '' }}"
-            >
-                <span class="font-semibold text-inherit">{{ $currentPolicy->abbreviation }}</span>
-                <span class="text-inherit/80">· Manage clauses</span>
-            </a>
-        @endif
+        @empty
+            <p class="px-3 py-2 text-xs text-sidebar-foreground/60">No policies yet</p>
+        @endforelse
     </div>
 </div>

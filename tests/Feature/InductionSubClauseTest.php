@@ -13,7 +13,7 @@ use Tests\TestCase;
 class InductionSubClauseTest extends TestCase
 {
     #[Test]
-    public function admin_can_open_sub_clause_create_form(): void
+    public function admin_can_open_sub_clause_create_form_on_clause_page(): void
     {
         $admin = User::factory()->create(['is_staff_super_user' => true]);
         $policy = InductionPolicy::query()->create([
@@ -36,13 +36,14 @@ class InductionSubClauseTest extends TestCase
         ]);
 
         $this->actingAs($admin)
-            ->get(route('admin.induction.policies.clauses.sub-clauses.create', [$policy, $section]))
+            ->get(route('admin.induction.policies.clauses.show', [$policy, $section]))
             ->assertOk()
-            ->assertSee('Add sub-clause', false);
+            ->assertSee('Add sub-clause', false)
+            ->assertSee('Create sub-clause', false);
     }
 
     #[Test]
-    public function admin_can_open_sub_clause_create_when_version_is_not_yet_published(): void
+    public function admin_can_create_sub_clause_when_version_is_not_yet_published(): void
     {
         $admin = User::factory()->create(['is_staff_super_user' => true]);
         $policy = InductionPolicy::query()->create([
@@ -65,8 +66,11 @@ class InductionSubClauseTest extends TestCase
         ]);
 
         $this->actingAs($admin)
-            ->get(route('admin.induction.policies.clauses.sub-clauses.create', [$policy, $section]))
-            ->assertOk();
+            ->post(route('admin.induction.policies.clauses.sub-clauses.store', [$policy, $section]), [
+                'title' => 'First sub-clause',
+                'body' => '<p>Content</p>',
+            ])
+            ->assertRedirect(route('admin.induction.policies.clauses.show', [$policy, $section]));
 
         $this->assertNotNull($version->fresh()->published_at);
     }

@@ -340,14 +340,6 @@ class InductionPolicyAdminController extends Controller
             ->with('success', 'Clause archived.');
     }
 
-    public function createSubClause(InductionPolicy $policy, InductionSection $section): View
-    {
-        $this->authorizeCreateInductionPolicies();
-        $section = $this->resolveSection($policy, $section);
-
-        return view('admin.induction.sub-clauses.create', compact('policy', 'section'));
-    }
-
     public function storeSubClause(Request $request, InductionPolicy $policy, InductionSection $section): RedirectResponse
     {
         $this->authorizeCreateInductionPolicies();

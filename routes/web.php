@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\EmployeeAcknowledgementHistoryController;
 use App\Http\Controllers\Admin\InductionEmployeeProgressController;
 use App\Http\Controllers\Admin\InductionPolicyAdminController;
 use App\Http\Controllers\Admin\PolicyDocumentBuilderController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\Admin\RoleTemplatePermissionController;
 use App\Http\Controllers\Admin\UserAdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Portal\EmployeeAcknowledgementHistoryController;
 use App\Http\Controllers\Portal\EmployeePortalController;
 use App\Http\Controllers\Portal\InductionEmployeeController;
 use App\Http\Controllers\Portal\PortalNotificationController;
@@ -45,6 +47,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/induction/certificate', [InductionEmployeeController::class, 'certificate'])->name('portal.induction.certificate');
     Route::get('/induction/master-policy/{induction_policy_version}', [InductionEmployeeController::class, 'masterPolicy'])->name('portal.induction.master-pdf');
+    Route::get('/my/acknowledgements', [EmployeeAcknowledgementHistoryController::class, 'index'])->name('portal.acknowledgements');
+
     Route::get('/induction', [InductionEmployeeController::class, 'index'])->name('portal.induction');
     Route::get('/induction/sections/{induction_section}', [InductionEmployeeController::class, 'show'])->name('portal.induction.section');
     Route::post('/induction/sections/{induction_section}/complete', [InductionEmployeeController::class, 'complete'])->name('portal.induction.section.complete');
@@ -86,6 +90,7 @@ Route::middleware('auth')->group(function () {
 
         Route::middleware(['permission:'.PortalPermissions::STAFF_USER_READ])->group(function () {
             Route::get('/users', [UserAdminController::class, 'index'])->name('users.index');
+            Route::get('/users/{user}/acknowledgements', [EmployeeAcknowledgementHistoryController::class, 'show'])->name('users.acknowledgements');
         });
 
         Route::get('/users/create', [UserAdminController::class, 'create'])
@@ -155,17 +160,11 @@ Route::middleware('auth')->group(function () {
                 Route::get('/policies/{policy}', [InductionPolicyAdminController::class, 'showPolicy'])
                     ->whereNumber('policy')
                     ->name('policies.show');
-                Route::get('/policies/{policy}/builder', [PolicyDocumentBuilderController::class, 'editor'])
-                    ->whereNumber('policy')
-                    ->name('policies.builder');
                 // Literal paths must be registered before {section} / {sub_clause} wildcards.
                 Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_CREATE])->group(function () {
                     Route::get('/policies/{policy}/clauses/create', [InductionPolicyAdminController::class, 'createSection'])
                         ->whereNumber('policy')
                         ->name('policies.clauses.create');
-                    Route::get('/policies/{policy}/clauses/{section}/sub-clauses/create', [InductionPolicyAdminController::class, 'createSubClause'])
-                        ->whereNumber(['policy', 'section'])
-                        ->name('policies.clauses.sub-clauses.create');
                 });
 
                 Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_UPDATE])->group(function () {
@@ -195,7 +194,6 @@ Route::middleware('auth')->group(function () {
                 Route::put('/policies/{policy}', [InductionPolicyAdminController::class, 'updatePolicy'])->name('policies.update');
                 Route::put('/policies/{policy}/clauses/{section}', [InductionPolicyAdminController::class, 'updateSection'])->name('policies.clauses.update');
                 Route::put('/policies/{policy}/clauses/{section}/sub-clauses/{sub_clause}', [InductionPolicyAdminController::class, 'updateSubClause'])->name('policies.clauses.sub-clauses.update');
-                Route::put('/policies/{policy}/clauses/{section}/sub-clauses/{sub_clause}/numbering', [PolicyDocumentBuilderController::class, 'updateSubClauseNumbering'])->name('policies.clauses.sub-clauses.numbering');
             });
 
             Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_ARCHIVE])->group(function () {

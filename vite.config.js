@@ -17,7 +17,6 @@ export default defineConfig(({ mode }) => {
                     'resources/js/app.js',
                     'resources/js/guest.js',
                     'resources/js/rich-editor.js',
-                    'resources/js/policy-document-builder.js',
                     'resources/js/portal-sidebar-nav-group.js',
                 ],
                 refresh: true,

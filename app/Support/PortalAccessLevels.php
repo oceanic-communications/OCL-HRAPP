@@ -22,8 +22,8 @@ final class PortalAccessLevels
     {
         return [
             [
-                'key' => 'user_management',
-                'label' => 'User Management',
+                'key' => 'employees',
+                'label' => 'Employees',
                 'subtitle' => 'CRU & Archive',
                 'capabilities' => [
                     ['slug' => PortalPermissions::STAFF_USER_READ, 'label' => 'Read'],

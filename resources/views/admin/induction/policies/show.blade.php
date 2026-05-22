@@ -16,7 +16,6 @@
             {{ $policy->name }}
         </h1>
         <p class="text-sm text-muted-foreground">Manage clauses staff complete for this policy during induction.</p>
-        <a href="{{ route('admin.induction.policies.builder', $policy) }}" class="mt-3 inline-flex text-sm font-semibold text-primary hover:underline">Open document builder →</a>
     </div>
 
     @if (session('success'))

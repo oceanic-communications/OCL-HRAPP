@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-/* Policy document builder */
-@source "../js/policy-document-builder.js";
 @source "../js/portal-sidebar-nav-group.js";
 
 /* Tailwind v4: scan Blade so non-utility classnames (e.g. .prog-bar) are not dropped from the CSS output */
@@ -586,110 +584,6 @@ html {
     border: none;
     background: transparent;
     cursor: pointer;
-}
-
-/* —— Induction document builder (portal layout) —— */
-.induction-builder-split {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-@media (min-width: 1024px) {
-    .induction-builder-split {
-        flex-direction: row;
-        align-items: flex-start;
-    }
-
-    .induction-builder-tree {
-        flex: 1 1 58%;
-        min-width: 0;
-    }
-
-    .induction-builder-panel {
-        flex: 0 0 42%;
-        max-width: 42%;
-        position: sticky;
-        top: 1rem;
-    }
-}
-
-.induction-builder-node {
-    text-decoration: none;
-    color: inherit;
-    transition: border-color 0.15s, box-shadow 0.15s;
-}
-
-.induction-builder-node.is-active,
-.induction-builder-sub.is-active {
-    border-color: color-mix(in srgb, var(--primary) 35%, var(--border));
-    background: color-mix(in srgb, var(--primary) 8%, var(--card));
-    box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary) 20%, transparent);
-}
-
-.induction-builder-branch + .induction-builder-branch {
-    margin-top: 0.5rem;
-}
-
-.induction-builder-children {
-    margin: 0.5rem 0 0 1rem;
-    padding-left: 0.75rem;
-    border-left: 2px solid var(--border);
-}
-
-.induction-builder-sub {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.375rem;
-    border: 1px solid transparent;
-    border-radius: 0.5rem;
-    padding: 0.5rem 0.75rem;
-    text-decoration: none;
-    font-size: 0.875rem;
-    transition: background-color 0.15s, border-color 0.15s;
-}
-
-.induction-builder-sub:hover {
-    background: color-mix(in srgb, var(--muted) 50%, transparent);
-}
-
-.induction-builder-pill {
-    flex-shrink: 0;
-    border-radius: 9999px;
-    background: var(--muted);
-    padding: 0.125rem 0.5rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--muted-foreground);
-}
-
-.induction-builder-sub.is-active .induction-builder-pill {
-    background: color-mix(in srgb, var(--primary) 15%, var(--muted));
-    color: var(--primary);
-}
-
-.induction-builder-add-clause {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    margin-top: 0.5rem;
-    border: 2px dashed var(--border);
-    border-radius: 0.75rem;
-    background: transparent;
-    padding: 1rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--muted-foreground);
-    text-decoration: none;
-    transition: border-color 0.15s, background-color 0.15s, color 0.15s;
-}
-
-.induction-builder-add-clause:hover {
-    border-color: color-mix(in srgb, var(--primary) 40%, var(--border));
-    background: var(--card);
-    color: var(--foreground);
 }
 
 /* Guest layout footer — social icon hit targets (ported from site theme) */

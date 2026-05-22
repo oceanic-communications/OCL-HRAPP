@@ -23,6 +23,7 @@
         <nav class="space-y-1" aria-label="Primary">
             <x-portal-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" icon="layout" label="Dashboard" />
             <x-portal-nav-link :href="route('portal.induction')" :active="request()->routeIs('portal.induction*')" icon="book" label="My induction" />
+            <x-portal-nav-link :href="route('portal.acknowledgements')" :active="request()->routeIs('portal.acknowledgements')" icon="clipboard" label="Acknowledgement history" />
             {{-- Settings hidden for now --}}
         </nav>
 
@@ -30,7 +31,7 @@
             <p class="mb-2 mt-6 px-3 text-[10px] font-semibold uppercase tracking-wider text-sidebar-foreground/40">Administration</p>
             <nav class="space-y-1" aria-label="Administration">
                 @if ($portalCap?->staffUserRead ?? false)
-                    <x-portal-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users*')" icon="users" label="User management" />
+                    <x-portal-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users*')" icon="users" label="Employees" />
                 @endif
                 @if ($portalCap?->staffRoleRead ?? false)
                     <x-portal-nav-link :href="route('admin.roles.index')" :active="request()->routeIs('admin.roles*')" icon="shield" label="Roles" />

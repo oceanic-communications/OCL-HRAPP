@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\InductionPolicy;
 use App\Models\PortalUserNotification;
 use App\Services\OceanicSmtpCredentialsService;
 use App\Support\PortalCapability;
@@ -77,6 +78,20 @@ class AppServiceProvider extends ServiceProvider
                 $request->attributes->set('portal_cap', PortalCapability::forUser(Auth::user()));
             }
             $view->with('portalCap', $request->attributes->get('portal_cap'));
+        });
+
+        View::composer('components.portal-policies-nav', function ($view): void {
+            $cap = PortalCapability::forUser(Auth::user());
+            if (! ($cap->inductionAdminAccess ?? false)) {
+                $view->with('sidebarPolicies', collect());
+
+                return;
+            }
+
+            $view->with(
+                'sidebarPolicies',
+                InductionPolicy::query()->orderBy('name')->get(['id', 'name', 'abbreviation']),
+            );
         });
 
         View::composer('layouts.portal', function ($view): void {
