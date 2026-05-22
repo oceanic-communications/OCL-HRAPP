@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\InductionEmployeeProgressController;
 use App\Http\Controllers\Admin\InductionPolicyAdminController;
+use App\Http\Controllers\Admin\PolicyDocumentBuilderController;
 use App\Http\Controllers\Admin\RoleAdminController;
 use App\Http\Controllers\Admin\RoleTemplatePermissionController;
 use App\Http\Controllers\Admin\UserAdminController;
@@ -137,8 +138,10 @@ Route::middleware('auth')->group(function () {
 
             Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_READ])->group(function () {
                 Route::get('/policies/{policy}', [InductionPolicyAdminController::class, 'showPolicy'])->name('policies.show');
+                Route::get('/policies/{policy}/builder', [PolicyDocumentBuilderController::class, 'editor'])->name('policies.builder');
                 Route::get('/policies/{policy}/clauses/{section}', [InductionPolicyAdminController::class, 'showSection'])->name('policies.clauses.show');
                 Route::get('/policies/{policy}/clauses/{section}/sub-clauses/{sub_clause}', [InductionPolicyAdminController::class, 'showSubClause'])->name('policies.clauses.sub-clauses.show');
+                Route::get('/settings/numbering', [PolicyDocumentBuilderController::class, 'numberingSettings'])->name('settings.numbering');
             });
 
             Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_CREATE])->group(function () {
@@ -155,6 +158,9 @@ Route::middleware('auth')->group(function () {
                 Route::put('/policies/{policy}/clauses/{section}', [InductionPolicyAdminController::class, 'updateSection'])->name('policies.clauses.update');
                 Route::get('/policies/{policy}/clauses/{section}/sub-clauses/{sub_clause}/edit', [InductionPolicyAdminController::class, 'editSubClause'])->name('policies.clauses.sub-clauses.edit');
                 Route::put('/policies/{policy}/clauses/{section}/sub-clauses/{sub_clause}', [InductionPolicyAdminController::class, 'updateSubClause'])->name('policies.clauses.sub-clauses.update');
+                Route::put('/policies/{policy}/clauses/{section}/sub-clauses/{sub_clause}/numbering', [PolicyDocumentBuilderController::class, 'updateSubClauseNumbering'])->name('policies.clauses.sub-clauses.numbering');
+                Route::put('/settings/numbering/{policy}', [PolicyDocumentBuilderController::class, 'updateNumberingScheme'])->name('settings.numbering.update');
+                Route::put('/settings/numbering', [PolicyDocumentBuilderController::class, 'updateNumberingScheme'])->name('settings.numbering.update.global');
             });
 
             Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_ARCHIVE])->group(function () {

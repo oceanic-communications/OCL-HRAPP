@@ -14,12 +14,14 @@ class InductionPolicy extends Model
         'abbreviation',
         'slug',
         'is_active',
+        'numbering_scheme',
     ];
 
     protected function casts(): array
     {
         return [
             'is_active' => 'boolean',
+            'numbering_scheme' => 'array',
         ];
     }
 

@@ -79,7 +79,10 @@
                                     </td>
                                     <td class="whitespace-nowrap px-4 py-3 text-muted-foreground">{{ $clauseCount }}</td>
                                     <td class="whitespace-nowrap px-4 py-3 text-right">
-                                        <a href="{{ route('admin.induction.policies.show', $policy) }}" class="font-medium text-primary hover:underline">Manage</a>
+                                        <div class="flex flex-wrap justify-end gap-2">
+                                            <a href="{{ route('admin.induction.policies.builder', $policy) }}" class="font-medium text-primary hover:underline">Builder</a>
+                                            <a href="{{ route('admin.induction.policies.show', $policy) }}" class="font-medium text-primary hover:underline">Manage</a>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach

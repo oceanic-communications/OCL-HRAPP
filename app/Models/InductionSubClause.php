@@ -14,6 +14,9 @@ class InductionSubClause extends Model
         'induction_section_id',
         'sort_order',
         'title',
+        'number_prefix',
+        'numbering_style',
+        'number_separator',
         'body',
         'archived_at',
     ];

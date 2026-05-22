@@ -14,4 +14,24 @@ return [
     */
     'hr_notification_email' => env('INDUCTION_HR_EMAIL'),
 
+    'numbering_scheme_defaults' => [
+        'section' => [
+            'style' => 'roman',
+            'separator' => '.',
+            'start' => 'I',
+        ],
+        'clause' => [
+            'style' => 'alpha_upper',
+            'separator' => '.',
+            'start' => 'A',
+            'inherit_preview' => 'II.A',
+        ],
+        'sub_clause' => [
+            'style' => 'decimal',
+            'separator' => '.',
+            'prefix' => '',
+            'start' => '1',
+        ],
+    ],
+
 ];
