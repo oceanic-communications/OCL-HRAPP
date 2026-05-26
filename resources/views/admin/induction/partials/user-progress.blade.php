@@ -3,15 +3,16 @@
     $totalSections = (int) ($inductionProgress['total_sections'] ?? 0);
     $rows = $inductionProgress['rows'] ?? collect();
     $showDetailLinks = $showDetailLinks ?? false;
+    $heading = $heading ?? null;
 @endphp
 
 <div class="portal-card space-y-4 p-5">
     <div>
-        <h2 class="font-heading text-lg font-semibold text-foreground">{{ $showDetailLinks ? 'All employees' : 'User induction progress' }}</h2>
+        <h2 class="font-heading text-lg font-semibold text-foreground">{{ $heading ?? ($showDetailLinks ? 'All employees' : 'User induction progress') }}</h2>
         @unless ($showDetailLinks)
             <p class="mt-1 text-sm text-muted-foreground">
                 @if ($version)
-                    Progress against the current published policy
+                    Progress against
                     <span class="font-medium text-foreground">{{ $version->policy->name }}</span>
                     ({{ $version->version_label }}).
                 @else

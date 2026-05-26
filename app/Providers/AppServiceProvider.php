@@ -90,7 +90,7 @@ class AppServiceProvider extends ServiceProvider
 
             $view->with(
                 'sidebarPolicies',
-                InductionPolicy::query()->orderBy('name')->get(['id', 'name', 'abbreviation']),
+                InductionPolicy::query()->ordered()->get(['id', 'name', 'abbreviation']),
             );
         });
 

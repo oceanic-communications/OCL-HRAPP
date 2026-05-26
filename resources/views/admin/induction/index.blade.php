@@ -7,7 +7,7 @@
     <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <div>
             <h1 class="font-heading text-2xl font-bold text-foreground">Policies</h1>
-            <p class="text-sm text-muted-foreground">Manage induction policies and their clauses (e.g. HR, IT, OHS).</p>
+            <p class="text-sm text-muted-foreground">Manage induction policies and their clauses. Display order on My induction follows the order shown below.</p>
         </div>
         @if ($portalCap?->inductionChangeLogRead ?? false)
             <a href="{{ route('admin.induction.change-logs.index') }}" class="inline-flex shrink-0 items-center rounded-lg border border-border px-4 py-2 text-sm font-semibold text-foreground hover:bg-muted">
@@ -62,6 +62,9 @@
                     <table class="min-w-full divide-y divide-border text-sm">
                         <thead class="bg-muted/40">
                             <tr>
+                                @if ($portalCap?->inductionPolicyUpdate ?? false)
+                                    <th scope="col" class="px-4 py-3 text-left font-semibold text-foreground">Order</th>
+                                @endif
                                 <th scope="col" class="px-4 py-3 text-left font-semibold text-foreground">Abbreviation</th>
                                 <th scope="col" class="px-4 py-3 text-left font-semibold text-foreground">Policy</th>
                                 <th scope="col" class="px-4 py-3 text-left font-semibold text-foreground">Status</th>
@@ -70,12 +73,32 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-border bg-card">
-                            @foreach ($policies as $policy)
+                            @foreach ($policies as $policyIndex => $policy)
                                 @php
                                     $version = $policy->versions->first();
                                     $clauseCount = (int) ($version?->sections_count ?? 0);
                                 @endphp
                                 <tr>
+                                    @if ($portalCap?->inductionPolicyUpdate ?? false)
+                                        <td class="whitespace-nowrap px-4 py-3">
+                                            <div class="flex items-center gap-1">
+                                                @if ($policyIndex > 0)
+                                                    <form action="{{ route('admin.induction.policies.reorder', $policy) }}" method="POST">
+                                                        @csrf
+                                                        <input type="hidden" name="direction" value="up">
+                                                        <button type="submit" class="rounded border border-border px-2 py-1 text-xs font-medium text-foreground hover:bg-muted" title="Move up" aria-label="Move {{ $policy->abbreviation }} up">↑</button>
+                                                    </form>
+                                                @endif
+                                                @if ($policyIndex < $policies->count() - 1)
+                                                    <form action="{{ route('admin.induction.policies.reorder', $policy) }}" method="POST">
+                                                        @csrf
+                                                        <input type="hidden" name="direction" value="down">
+                                                        <button type="submit" class="rounded border border-border px-2 py-1 text-xs font-medium text-foreground hover:bg-muted" title="Move down" aria-label="Move {{ $policy->abbreviation }} down">↓</button>
+                                                    </form>
+                                                @endif
+                                            </div>
+                                        </td>
+                                    @endif
                                     <td class="whitespace-nowrap px-4 py-3 font-semibold text-foreground">{{ $policy->abbreviation }}</td>
                                     <td class="px-4 py-3 font-medium text-foreground">{{ $policy->name }}</td>
                                     <td class="whitespace-nowrap px-4 py-3">

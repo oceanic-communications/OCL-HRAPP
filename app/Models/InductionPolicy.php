@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -14,6 +15,7 @@ class InductionPolicy extends Model
         'abbreviation',
         'slug',
         'is_active',
+        'sort_order',
         'acknowledgement_mode',
         'numbering_scheme',
     ];
@@ -24,6 +26,15 @@ class InductionPolicy extends Model
             'is_active' => 'boolean',
             'numbering_scheme' => 'array',
         ];
+    }
+
+    /**
+     * @param  Builder<InductionPolicy>  $query
+     * @return Builder<InductionPolicy>
+     */
+    public function scopeOrdered(Builder $query): Builder
+    {
+        return $query->orderBy('sort_order')->orderBy('id');
     }
 
     /**

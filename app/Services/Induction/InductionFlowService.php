@@ -4,11 +4,13 @@ namespace App\Services\Induction;
 
 use App\Mail\InductionCompletedMail;
 use App\Models\InductionEnrollment;
+use App\Models\InductionPolicy;
 use App\Models\InductionPolicyVersion;
 use App\Models\InductionSection;
 use App\Models\InductionSectionCompletion;
 use App\Models\User;
 use App\Support\InductionApplicationAuditEventCode;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -21,20 +23,32 @@ final class InductionFlowService
         private InductionApplicationAuditService $applicationAudit,
     ) {}
 
-    public function currentPublishedVersion(): ?InductionPolicyVersion
+    /**
+     * @return Collection<int, InductionPolicyVersion>
+     */
+    public function activePublishedVersions(): Collection
     {
-        return InductionPolicyVersion::query()
-            ->whereHas('policy', fn ($q) => $q->where('is_active', true))
-            ->published()
-            ->with('policy')
-            ->orderByDesc('published_at')
-            ->first();
+        return InductionPolicy::query()
+            ->where('is_active', true)
+            ->ordered()
+            ->get()
+            ->map(fn (InductionPolicy $policy): ?InductionPolicyVersion => $policy->publishedVersion())
+            ->filter()
+            ->values();
     }
 
-    public function enrollmentFor(User $user, ?string $auditIp = null, ?string $auditUserAgent = null): ?InductionEnrollment
+    public function currentPublishedVersion(): ?InductionPolicyVersion
     {
-        $version = $this->currentPublishedVersion();
-        if ($version === null) {
+        return $this->activePublishedVersions()->first();
+    }
+
+    public function enrollmentFor(
+        User $user,
+        InductionPolicyVersion $version,
+        ?string $auditIp = null,
+        ?string $auditUserAgent = null,
+    ): ?InductionEnrollment {
+        if ($version->published_at === null || ! $version->policy?->is_active) {
             return null;
         }
 
@@ -62,9 +76,41 @@ final class InductionFlowService
         return $enrollment;
     }
 
+    public function canAccessPolicy(
+        User $user,
+        InductionPolicyVersion $version,
+        ?string $auditIp = null,
+        ?string $auditUserAgent = null,
+    ): bool {
+        $versions = $this->activePublishedVersions();
+        $idx = $versions->search(fn (InductionPolicyVersion $v): bool => $v->id === $version->id);
+        if ($idx === false) {
+            return false;
+        }
+        if ($idx === 0) {
+            return true;
+        }
+
+        $previousVersion = $versions->get($idx - 1);
+        if ($previousVersion === null) {
+            return true;
+        }
+
+        $previousEnrollment = $this->enrollmentFor($user, $previousVersion, $auditIp, $auditUserAgent);
+
+        return $previousEnrollment?->isCompleted() ?? false;
+    }
+
     public function canAccessSection(User $user, InductionSection $section, ?string $auditIp = null, ?string $auditUserAgent = null): bool
     {
-        $enrollment = $this->enrollmentFor($user, $auditIp, $auditUserAgent);
+        $section->loadMissing('version.policy');
+        $version = $section->version;
+
+        if (! $this->canAccessPolicy($user, $version, $auditIp, $auditUserAgent)) {
+            return false;
+        }
+
+        $enrollment = $this->enrollmentFor($user, $version, $auditIp, $auditUserAgent);
         if ($enrollment === null || $enrollment->isCompleted()) {
             return false;
         }
@@ -100,7 +146,14 @@ final class InductionFlowService
 
     public function canViewSection(User $user, InductionSection $section, ?string $auditIp = null, ?string $auditUserAgent = null): bool
     {
-        $enrollment = $this->enrollmentFor($user, $auditIp, $auditUserAgent);
+        $section->loadMissing('version.policy');
+        $version = $section->version;
+
+        if (! $this->canAccessPolicy($user, $version, $auditIp, $auditUserAgent)) {
+            return false;
+        }
+
+        $enrollment = $this->enrollmentFor($user, $version, $auditIp, $auditUserAgent);
         if ($enrollment === null) {
             return false;
         }
@@ -127,7 +180,10 @@ final class InductionFlowService
             ]);
         }
 
-        $enrollment = $this->enrollmentFor($user, $ip, $userAgent);
+        $section->loadMissing('version.policy');
+        $version = $section->version;
+
+        $enrollment = $this->enrollmentFor($user, $version, $ip, $userAgent);
         if ($enrollment === null || $enrollment->isCompleted()) {
             throw ValidationException::withMessages([
                 'section' => 'Induction is not available or is already completed.',

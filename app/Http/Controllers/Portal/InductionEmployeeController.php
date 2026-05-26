@@ -24,32 +24,61 @@ class InductionEmployeeController extends Controller
 
     public function index(Request $request): View
     {
-        $version = $this->inductionFlow->currentPublishedVersion();
-        if ($version === null) {
+        $versions = $this->inductionFlow->activePublishedVersions();
+        if ($versions->isEmpty()) {
             return view('portal.induction.unavailable');
         }
 
-        $version->load(['activeSections.activeSubClauses', 'policy']);
-        $enrollment = $this->inductionFlow->enrollmentFor(auth()->user(), $request->ip(), $request->userAgent());
-        if ($enrollment === null) {
+        $user = auth()->user();
+        $programmes = [];
+        $totalSectionsAll = 0;
+        $completedSectionsAll = 0;
+
+        foreach ($versions as $version) {
+            $version->load(['activeSections.activeSubClauses', 'policy']);
+            $enrollment = $this->inductionFlow->enrollmentFor($user, $version, $request->ip(), $request->userAgent());
+            if ($enrollment === null) {
+                continue;
+            }
+
+            $enrollment->loadCount('sectionCompletions');
+            $completedIds = $enrollment->sectionCompletions()->pluck('induction_section_id')->all();
+            $sectionCount = $version->activeSections->count();
+            $doneCount = count($completedIds);
+
+            $totalSectionsAll += $sectionCount;
+            $completedSectionsAll += $doneCount;
+
+            $programmes[] = [
+                'version' => $version,
+                'enrollment' => $enrollment,
+                'completedSectionIds' => $completedIds,
+                'policyLocked' => ! $this->inductionFlow->canAccessPolicy($user, $version, $request->ip(), $request->userAgent()),
+            ];
+        }
+
+        if ($programmes === []) {
             return view('portal.induction.unavailable');
         }
 
-        $this->applicationAudit->record(auth()->user(), InductionApplicationAuditEventCode::WIZARD_SUMMARY_VIEWED, [
-            'induction_policy_id' => $version->induction_policy_id,
-            'induction_policy_version_id' => $version->id,
-            'induction_enrollment_id' => $enrollment->id,
+        $firstEnrollment = $programmes[0]['enrollment'];
+        $this->applicationAudit->record($user, InductionApplicationAuditEventCode::WIZARD_SUMMARY_VIEWED, [
+            'induction_policy_id' => $programmes[0]['version']->induction_policy_id,
+            'induction_policy_version_id' => $programmes[0]['version']->id,
+            'induction_enrollment_id' => $firstEnrollment->id,
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent(),
         ]);
 
-        $enrollment->loadCount('sectionCompletions');
-        $completedIds = $enrollment->sectionCompletions()->pluck('induction_section_id')->all();
+        $overallPct = $totalSectionsAll > 0
+            ? (int) round(($completedSectionsAll / $totalSectionsAll) * 100)
+            : 0;
 
         return view('portal.induction.index', [
-            'version' => $version,
-            'enrollment' => $enrollment,
-            'completedSectionIds' => $completedIds,
+            'programmes' => $programmes,
+            'overallPct' => $overallPct,
+            'overallDone' => $completedSectionsAll,
+            'overallTotal' => $totalSectionsAll,
         ]);
     }
 
@@ -60,8 +89,9 @@ class InductionEmployeeController extends Controller
             return redirect()->route('portal.induction')->withErrors(['section' => 'This section is no longer available.']);
         }
         $user = auth()->user();
+        $version = $section->version;
 
-        $enrollment = $this->inductionFlow->enrollmentFor($user, $request->ip(), $request->userAgent());
+        $enrollment = $this->inductionFlow->enrollmentFor($user, $version, $request->ip(), $request->userAgent());
         if ($enrollment === null) {
             return redirect()->route('portal.induction');
         }
@@ -83,7 +113,6 @@ class InductionEmployeeController extends Controller
             'user_agent' => $request->userAgent(),
         ]);
 
-        $version = $section->version;
         $sectionsOrdered = $version->activeSections;
         $completedSectionIds = $enrollment->sectionCompletions()->pluck('induction_section_id')->all();
         $progressTotal = $sectionsOrdered->count();
@@ -128,10 +157,20 @@ class InductionEmployeeController extends Controller
                 ->withInput();
         }
 
-        $enrollment = $this->inductionFlow->enrollmentFor(auth()->user(), $request->ip(), $request->userAgent());
+        $enrollment = $this->inductionFlow->enrollmentFor(
+            auth()->user(),
+            $section->version,
+            $request->ip(),
+            $request->userAgent(),
+        );
 
         if ($enrollment?->isCompleted()) {
-            return redirect()->route('portal.induction')->with('success', 'Induction complete. A PDF acknowledgement has been generated and emailed to you'.(config('induction.hr_notification_email') ? ' and HR.' : '.'));
+            $policyName = $section->version->policy->abbreviation ?? $section->version->policy->name;
+
+            return redirect()->route('portal.induction')->with(
+                'success',
+                "{$policyName} induction complete. A PDF acknowledgement has been generated and emailed to you".(config('induction.hr_notification_email') ? ' and HR.' : '.'),
+            );
         }
 
         $completedIds = $enrollment?->sectionCompletions()->pluck('induction_section_id')->all() ?? [];
@@ -171,11 +210,19 @@ class InductionEmployeeController extends Controller
         return Storage::disk($disk)->download($path, 'policy-'.$version->version_label.'.pdf');
     }
 
-    public function certificate(Request $request): StreamedResponse|RedirectResponse
+    public function certificate(Request $request, InductionPolicyVersion $induction_policy_version): StreamedResponse|RedirectResponse
     {
-        $enrollment = $this->inductionFlow->enrollmentFor(auth()->user(), $request->ip(), $request->userAgent());
+        $version = $induction_policy_version;
+        abort_unless($version->published_at !== null && $version->policy?->is_active, 404);
+
+        $enrollment = $this->inductionFlow->enrollmentFor(
+            auth()->user(),
+            $version,
+            $request->ip(),
+            $request->userAgent(),
+        );
         if ($enrollment === null || ! $enrollment->isCompleted()) {
-            return redirect()->route('portal.induction')->withErrors(['certificate' => 'Certificate is available after you complete all sections.']);
+            return redirect()->route('portal.induction')->withErrors(['certificate' => 'Certificate is available after you complete all sections for this policy.']);
         }
 
         $disk = $enrollment->completion_pdf_disk;
@@ -184,7 +231,7 @@ class InductionEmployeeController extends Controller
             return redirect()->route('portal.induction')->withErrors(['certificate' => 'The PDF record is not available yet. Please contact HR.']);
         }
 
-        $enrollment->loadMissing('version');
+        $enrollment->loadMissing('version.policy');
         $this->applicationAudit->record(auth()->user(), InductionApplicationAuditEventCode::COMPLETION_CERTIFICATE_DOWNLOADED, [
             'induction_policy_id' => $enrollment->version?->induction_policy_id,
             'induction_policy_version_id' => $enrollment->induction_policy_version_id,
@@ -196,6 +243,8 @@ class InductionEmployeeController extends Controller
             ],
         ]);
 
-        return Storage::disk($disk)->download($path, 'induction-acknowledgement.pdf');
+        $filename = 'induction-'.($enrollment->version?->policy?->abbreviation ?? 'acknowledgement').'.pdf';
+
+        return Storage::disk($disk)->download($path, $filename);
     }
 }

@@ -91,11 +91,40 @@ class InductionPolicyAdminController extends Controller
                         ->limit(1)
                         ->withCount('sections'),
                 ])
-                ->orderBy('name')
+                ->ordered()
                 ->get()
             : collect();
 
         return view('admin.induction.index', compact('policies', 'canReadPolicies'));
+    }
+
+    public function reorderPolicy(Request $request, InductionPolicy $policy): RedirectResponse
+    {
+        $this->authorizeUpdateInductionPolicies();
+
+        $data = $request->validate([
+            'direction' => ['required', 'in:up,down'],
+        ]);
+
+        $policies = InductionPolicy::query()->ordered()->get();
+        $index = $policies->search(fn (InductionPolicy $p): bool => $p->id === $policy->id);
+        if ($index === false) {
+            return back()->withErrors(['policy' => 'Policy not found.']);
+        }
+
+        $swapIndex = $data['direction'] === 'up' ? $index - 1 : $index + 1;
+        $other = $policies->get($swapIndex);
+        if ($other === null) {
+            return back();
+        }
+
+        DB::transaction(function () use ($policy, $other): void {
+            $policyOrder = $policy->sort_order;
+            $policy->update(['sort_order' => $other->sort_order]);
+            $other->update(['sort_order' => $policyOrder]);
+        });
+
+        return back()->with('success', 'Policy display order updated.');
     }
 
     public function showPolicy(InductionPolicy $policy): View
@@ -140,6 +169,7 @@ class InductionPolicyAdminController extends Controller
                 'abbreviation' => $abbreviation,
                 'slug' => $slug,
                 'is_active' => true,
+                'sort_order' => (int) InductionPolicy::query()->max('sort_order') + 1,
                 'acknowledgement_mode' => $ackMode,
             ]);
 

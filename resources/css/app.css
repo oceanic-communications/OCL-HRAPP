@@ -537,6 +537,38 @@ html {
     color: var(--muted-foreground);
 }
 
+.rich-html-content table,
+.story-html-content table {
+    width: 100%;
+    margin: 0.75rem 0;
+    border-collapse: collapse;
+    font-size: inherit;
+}
+
+.rich-html-content th,
+.rich-html-content td,
+.story-html-content th,
+.story-html-content td {
+    border: 1px solid var(--border);
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    vertical-align: top;
+}
+
+.rich-html-content th,
+.story-html-content th {
+    background-color: var(--muted);
+    font-weight: 600;
+}
+
+.rich-html-content caption,
+.story-html-content caption {
+    margin-bottom: 0.5rem;
+    font-size: 0.875em;
+    color: var(--muted-foreground);
+    text-align: left;
+}
+
 /* Sidebar policy sub-navigation */
 .portal-sidebar-group {
     margin-bottom: 0.125rem;

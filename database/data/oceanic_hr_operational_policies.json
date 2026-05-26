@@ -1,0 +1,791 @@
+{
+  "policy": {
+    "name": "Oceanic Additional HR Operational Policies",
+    "abbreviation": "AHOP",
+    "slug": "hr-operational-policies",
+    "version_label": "May 2026",
+    "effective_date": null,
+    "seed_marker_section_title": "1. PROBATION POLICY",
+    "numbering_scheme": {
+      "section": {
+        "style": "decimal",
+        "separator": ".",
+        "start": "1"
+      },
+      "clause": {
+        "style": "decimal",
+        "separator": ".",
+        "start": "1",
+        "inherit_preview": "1.1"
+      },
+      "sub_clause": {
+        "style": "decimal",
+        "separator": ".",
+        "prefix": "",
+        "start": "1"
+      }
+    }
+  },
+  "sections": [
+    {
+      "sort_order": 1,
+      "number_prefix": "1",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "Additional Company Policies & Operational Framework",
+      "body": "",
+      "sub_clauses": [
+        {
+          "sort_order": 1,
+          "number_prefix": "1",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Oceanic Communications",
+          "body": ""
+        }
+      ]
+    },
+    {
+      "sort_order": 2,
+      "number_prefix": "2",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "1. PROBATION POLICY",
+      "body": "",
+      "sub_clauses": [
+        {
+          "sort_order": 1,
+          "number_prefix": "1",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Purpose",
+          "body": "<p>The purpose of the Probation Policy is to provide a structured framework for assessing the suitability, capability, performance, conduct, and overall fit of new employees during the initial period of employment.</p><p>Probation allows both the Company and the employee to evaluate whether the employment relationship is appropriate and sustainable.</p><p>The probation period is intended to:</p><ul><li>Assess performance, competency, reliability, and professionalism.</li><li>Evaluate alignment with Oceanic’s culture, pace, standards, and operational expectations.</li><li>Identify training, support, or improvement needs.</li><li>Confirm the employee’s ability to perform the requirements of the role.</li></ul>"
+        },
+        {
+          "sort_order": 2,
+          "number_prefix": "2",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Probation Period",
+          "body": "<p>Unless otherwise stated in the employment contract:</p><ul><li>All new employees are subject to a probation period of six (6) months.</li><li>The probation period commences from the employee’s first working day.</li></ul><p>The Company reserves the right to:</p><ul><li>Reduce the probation period where performance is exceptional.</li><li>Extend the probation period where further assessment is required.</li></ul>"
+        },
+        {
+          "sort_order": 3,
+          "number_prefix": "3",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Performance Expectations During Probation",
+          "body": "<p>During the probation period, employees are expected to demonstrate that they are capable of performing the role to the standard required by Oceanic.</p><p>This includes maintaining good attendance and punctuality, following instructions properly, communicating professionally, working collaboratively with the team, and showing the ability to manage responsibilities within required timelines.</p><p>Employees are also expected to show initiative, willingness to learn, adaptability, and the ability to operate within Oceanic’s fast-paced and deadline-driven environment.</p><p>The probation period is not only about technical ability. It is also an assessment of professionalism, attitude, accountability, reliability, responsiveness, and alignment with company culture and operational expectations.</p><p>Employees are encouraged to actively seek clarification where required, respond positively to feedback, and demonstrate improvement where concerns or gaps are identified.</p>"
+        },
+        {
+          "sort_order": 4,
+          "number_prefix": "4",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Probation Reviews",
+          "body": "<p>The Company may conduct probation reviews during the probation period.</p><p>Reviews may assess:</p><ul><li>Performance and productivity.</li><li>Quality of work.</li><li>Communication and professionalism.</li><li>Attendance and punctuality.</li><li>Team integration.</li><li>Compliance with company policies.</li><li>Overall suitability for the role.</li></ul><p>Review discussions may be documented and placed on the employee’s personnel file.</p>"
+        },
+        {
+          "sort_order": 5,
+          "number_prefix": "5",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Extension of Probation",
+          "body": "<p>Where additional assessment time is required, the Company may extend probation.</p><p>This may occur where:</p><ul><li>Performance is inconsistent.</li><li>Improvement is required.</li><li>Attendance or conduct concerns exist.</li><li>The Company requires additional time to assess suitability.</li></ul><p>Any extension:</p><ul><li>Will be communicated formally.</li><li>Will specify the duration of extension.</li><li>Will outline areas requiring improvement.</li></ul>"
+        },
+        {
+          "sort_order": 6,
+          "number_prefix": "6",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Confirmation of Employment",
+          "body": "<p>Successful completion of probation does not automatically occur by passage of time alone.</p><p>Employment will only be considered confirmed when:</p><ul><li>The employee has satisfactorily met required standards.</li><li>Management formally confirms successful completion of probation.</li></ul><p>The Company reserves the right not to confirm employment where expectations are not met.</p>"
+        },
+        {
+          "sort_order": 7,
+          "number_prefix": "7",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Termination During Probation",
+          "body": "<p>During probation, employment may be terminated where:</p><ul><li>Performance is unsatisfactory.</li><li>Conduct is inappropriate.</li><li>The employee is unsuitable for the role.</li><li>Company standards or expectations are not met.</li></ul><p>Termination during probation will be carried out in accordance with:</p><ul><li>Employment agreements.</li><li>Applicable employment laws.</li><li>Principles of fairness and procedural reasonableness.</li></ul>"
+        }
+      ]
+    },
+    {
+      "sort_order": 3,
+      "number_prefix": "3",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "2. REMOTE WORK / WORK FROM HOME POLICY",
+      "body": "",
+      "sub_clauses": [
+        {
+          "sort_order": 1,
+          "number_prefix": "1",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Purpose",
+          "body": "<p>The purpose of this policy is to establish guidelines for remote work arrangements while ensuring operational continuity, productivity, professionalism, confidentiality, communication, and accountability.</p><p>Remote work is intended to support operational flexibility and business continuity where appropriate.</p><p>Remote work is not an automatic entitlement.</p>"
+        },
+        {
+          "sort_order": 2,
+          "number_prefix": "2",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Approval Requirements",
+          "body": "<p>Employees may only work remotely where:</p><ul><li>Approval has been granted by Management.</li><li>Operational requirements allow it.</li><li>The employee can effectively perform their role remotely.</li></ul><p>Approval may be:</p><ul><li>Temporary.</li><li>Situation-based.</li><li>Ongoing under agreed conditions.</li></ul><p>The Company reserves the right to:</p><ul><li>Decline remote work requests.</li><li>Require employees to return to office-based work.</li><li>Modify remote work arrangements based on operational needs.</li></ul>"
+        },
+        {
+          "sort_order": 3,
+          "number_prefix": "3",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Availability & Communication Expectations",
+          "body": "<p>Employees working remotely remain fully accountable for their role, responsibilities, and communication obligations during standard working hours.</p><p>Working remotely should not reduce visibility, responsiveness, or collaboration with the team.</p><p>Employees are expected to remain contactable during working hours, respond to communication within a reasonable timeframe, attend meetings as required, and ensure that managers and team members can clearly track progress of assigned work.</p><p>As Oceanic operates in a highly collaborative and deadline-driven environment, communication while working remotely must remain proactive, professional, and consistent.</p><p>Employees must continue using approved Company communication platforms and ensure that project updates, queries, approvals, and work progress remain properly documented and visible.</p><p>All project communication must continue through approved Company systems including:</p><ul><li>Bitrix.</li><li>Company email.</li><li>Approved meeting platforms.</li></ul>"
+        },
+        {
+          "sort_order": 4,
+          "number_prefix": "4",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Work Environment",
+          "body": "<p>Employees are responsible for ensuring that their remote work environment:</p><ul><li>Supports productivity.</li><li>Is professional and suitable for work.</li><li>Maintains confidentiality.</li><li>Minimizes distractions.</li></ul><p>Employees must ensure that confidential information cannot be viewed or accessed by unauthorized persons.</p>"
+        },
+        {
+          "sort_order": 5,
+          "number_prefix": "5",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Internet, Power & Equipment",
+          "body": "<p>Employees are responsible for:</p><ul><li>Maintaining stable internet connectivity.</li><li>Ensuring access to power and required equipment where reasonably practicable.</li><li>Promptly informing management where outages or disruptions impact work delivery.</li></ul><p>Where operationally necessary, the Company may provide equipment or support at its discretion.</p>"
+        },
+        {
+          "sort_order": 6,
+          "number_prefix": "6",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Productivity & Accountability",
+          "body": "<p>Remote work does not reduce performance expectations.</p><p>Employees remain accountable for:</p><ul><li>Meeting deadlines.</li><li>Maintaining productivity.</li><li>Delivering work to required standards.</li><li>Remaining responsive.</li><li>Following company procedures.</li></ul><p>The Company reserves the right to:</p><ul><li>Monitor productivity.</li><li>Review work output.</li><li>Require reporting or updates.</li><li>Revoke remote work arrangements where concerns arise.</li></ul>"
+        }
+      ]
+    },
+    {
+      "sort_order": 4,
+      "number_prefix": "4",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "3. AI & TECHNOLOGY USAGE POLICY",
+      "body": "",
+      "sub_clauses": [
+        {
+          "sort_order": 1,
+          "number_prefix": "1",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Purpose",
+          "body": "<p>The purpose of this policy is to establish responsible and professional use of Artificial Intelligence (AI) tools and emerging technologies within Oceanic.</p><p>AI tools may support productivity, ideation, drafting, automation, research, and efficiency. However, employees remain fully accountable for all work produced and decisions made.</p>"
+        },
+        {
+          "sort_order": 2,
+          "number_prefix": "2",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Acceptable Use",
+          "body": "<p>Employees may use approved AI tools to assist with:</p><ul><li>Brainstorming and ideation.</li><li>Draft drafting and content support.</li><li>Research assistance.</li><li>Administrative productivity.</li><li>Workflow efficiency.</li><li>Coding assistance.</li><li>Internal productivity enhancement.</li></ul><p>Use of AI must:</p><ul><li>Align with company standards.</li><li>Maintain confidentiality.</li><li>Be reviewed by the employee.</li><li>Meet professional and quality expectations.</li></ul>"
+        },
+        {
+          "sort_order": 3,
+          "number_prefix": "3",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Employee Accountability",
+          "body": "<p>Artificial Intelligence tools are intended to support productivity and efficiency, but they do not replace professional skill, critical thinking, accountability, or quality review.</p><p>Employees remain fully responsible for all work submitted, shared, published, or delivered, regardless of whether AI tools assisted in the process.</p><p>This means employees are accountable for the accuracy, professionalism, legality, appropriateness, tone, and overall quality of the final output.</p><p>All AI-generated work must be properly reviewed, verified, edited, and refined before being submitted internally or externally.</p><p>Employees must exercise professional judgment at all times and ensure that AI-assisted work aligns with Oceanic’s standards, client expectations, confidentiality obligations, and operational requirements.</p><p>“AI generated it” is not an acceptable explanation for:</p><ul><li>Errors.</li><li>Poor quality.</li><li>Incorrect information.</li><li>Unprofessional communication.</li><li>Confidentiality breaches.</li></ul>"
+        },
+        {
+          "sort_order": 4,
+          "number_prefix": "4",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Confidentiality Restrictions",
+          "body": "<p>Employees must never upload or share:</p><ul><li>Client confidential information.</li><li>Internal company information.</li><li>Pricing.</li><li>Strategies.</li><li>Passwords.</li><li>Personal data.</li><li>Financial information.</li><li>Unreleased campaigns.</li><li>Sensitive documents.</li></ul><p>Into public AI platforms unless specifically approved.</p>"
+        },
+        {
+          "sort_order": 5,
+          "number_prefix": "5",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Prohibited Use",
+          "body": "<p>Employees must not:</p><ul><li>Use AI to generate misleading or false information.</li><li>Present AI-generated work as fully original without review.</li><li>Use AI in ways that breach intellectual property rights.</li><li>Use unauthorized AI tools for sensitive work.</li><li>Rely on AI in place of professional skill, analysis, or judgment.</li></ul>"
+        },
+        {
+          "sort_order": 6,
+          "number_prefix": "6",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Monitoring & Compliance",
+          "body": "<p>The Company reserves the right to:</p><ul><li>Restrict AI tool usage.</li><li>Approve or prohibit specific platforms.</li><li>Review AI-assisted work.</li><li>Investigate misuse.</li></ul><p>Failure to comply with this policy may result in:</p><ul><li>Restriction of access.</li><li>Disciplinary action.</li><li>Escalation under confidentiality or misconduct policies.</li></ul>"
+        }
+      ]
+    },
+    {
+      "sort_order": 5,
+      "number_prefix": "5",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "4. INTELLECTUAL PROPERTY POLICY",
+      "body": "",
+      "sub_clauses": [
+        {
+          "sort_order": 1,
+          "number_prefix": "1",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Purpose",
+          "body": "<p>The purpose of this policy is to protect Oceanic’s intellectual property, creative work, systems, processes, and commercial interests.</p>"
+        },
+        {
+          "sort_order": 2,
+          "number_prefix": "2",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Ownership of Work",
+          "body": "<p>All work created, developed, designed, written, produced, coded, conceptualized, or contributed to by employees during the course of their employment forms part of Oceanic’s intellectual property and belongs exclusively to the Company unless otherwise agreed in writing.</p><p>This includes creative concepts, campaigns, designs, artwork, videos, photography, websites, software, code, systems, reports, templates, databases, branding material, marketing strategies, operational tools, and all other work-related output developed as part of an employee’s role or responsibilities.</p><p>Employees should understand that work produced during employment is considered Company property regardless of whether it was created individually or collaboratively, produced remotely, developed using Company equipment, or completed outside standard office hours where it relates to Company business, clients, projects, or operations.</p><p>This policy exists to protect Oceanic’s commercial interests, creative assets, client relationships, systems, and intellectual property rights.</p>"
+        },
+        {
+          "sort_order": 3,
+          "number_prefix": "3",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Client Work",
+          "body": "<p>All client-related work remains:</p><ul><li>Property of Oceanic unless otherwise contractually agreed.</li><li>Subject to client contractual rights and licensing arrangements.</li></ul><p>Employees must not:</p><ul><li>Reuse client materials externally.</li><li>Share client work without authorization.</li><li>Claim ownership over client deliverables.</li></ul>"
+        },
+        {
+          "sort_order": 4,
+          "number_prefix": "4",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Use After Employment",
+          "body": "<p>Employees must not:</p><ul><li>Retain confidential creative assets.</li><li>Reuse Oceanic proprietary work.</li><li>Copy Company systems or templates.</li><li>Use internal methodologies for competing purposes.</li></ul><p>Following termination or resignation.</p>"
+        },
+        {
+          "sort_order": 5,
+          "number_prefix": "5",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Return of Intellectual Property",
+          "body": "<p>Upon termination of employment, employees must immediately return:</p><ul><li>Files.</li><li>Devices.</li><li>Access credentials.</li><li>Drafts.</li><li>Documents.</li><li>Creative materials.</li><li>Databases.</li><li>Storage devices.</li></ul><p>Employees must not retain copies unless expressly authorized.</p>"
+        }
+      ]
+    },
+    {
+      "sort_order": 6,
+      "number_prefix": "6",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "5. CONFLICT OF INTEREST & SECONDARY EMPLOYMENT POLICY",
+      "body": "",
+      "sub_clauses": [
+        {
+          "sort_order": 1,
+          "number_prefix": "1",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Purpose",
+          "body": "<p>The purpose of this policy is to ensure employees act in the best interests of Oceanic and avoid situations that may compromise professional judgment, confidentiality, loyalty, objectivity, or business interests.</p>"
+        },
+        {
+          "sort_order": 2,
+          "number_prefix": "2",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Conflict of Interest",
+          "body": "<p>A conflict of interest exists where personal interests interfere, or may reasonably appear to interfere, with the interests of Oceanic.</p><p>Employees must:</p><ul><li>Act honestly and professionally.</li><li>Avoid situations creating divided loyalty.</li><li>Disclose potential conflicts immediately.</li></ul>"
+        },
+        {
+          "sort_order": 3,
+          "number_prefix": "3",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Secondary Employment & Freelancing",
+          "body": "<p>Employees must not engage in:</p><ul><li>Competing business activity.</li><li>Freelance work conflicting with Oceanic’s interests.</li><li>External work affecting productivity or availability.</li></ul><p>Without prior written approval.</p>"
+        },
+        {
+          "sort_order": 4,
+          "number_prefix": "4",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Client Solicitation",
+          "body": "<p>Employees must not:</p><ul><li>Solicit Oceanic clients.</li><li>Redirect opportunities.</li><li>Use Company relationships for personal gain.</li><li>Conduct side business with Company clients.</li></ul><p>Without authorization.</p>"
+        },
+        {
+          "sort_order": 5,
+          "number_prefix": "5",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Gifts & Benefits",
+          "body": "<p>Employees must not:</p><ul><li>Accept inappropriate gifts.</li><li>Receive commissions or kickbacks.</li><li>Influence purchasing decisions improperly.</li></ul><p>Any significant gifts or benefits must be disclosed to Management.</p>"
+        }
+      ]
+    },
+    {
+      "sort_order": 7,
+      "number_prefix": "7",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "6. WORKPLACE HEALTH, SAFETY & WELLBEING POLICY",
+      "body": "",
+      "sub_clauses": [
+        {
+          "sort_order": 1,
+          "number_prefix": "1",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Purpose",
+          "body": "<p>Oceanic is committed to maintaining a safe, healthy, respectful, and supportive workplace.</p>"
+        },
+        {
+          "sort_order": 2,
+          "number_prefix": "2",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "General Safety Responsibilities",
+          "body": "<p>Employees must:</p><ul><li>Follow safety instructions.</li><li>Report hazards.</li><li>Use equipment safely.</li><li>Maintain safe work practices.</li><li>Avoid reckless behaviour.</li></ul>"
+        },
+        {
+          "sort_order": 3,
+          "number_prefix": "3",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Incident Reporting",
+          "body": "<p>All accidents, injuries, near misses, hazards, or unsafe conditions must be reported immediately.</p>"
+        },
+        {
+          "sort_order": 4,
+          "number_prefix": "4",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Emergency Procedures",
+          "body": "<p>Employees must comply with:</p><ul><li>Fire evacuation procedures.</li><li>Emergency instructions.</li><li>Safety drills.</li><li>Emergency response requirements.</li></ul>"
+        },
+        {
+          "sort_order": 5,
+          "number_prefix": "5",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Workplace Behaviour",
+          "body": "<p>Oceanic maintains a workplace free from:</p><ul><li>Bullying.</li><li>Harassment.</li><li>Violence.</li><li>Intimidation.</li><li>Unsafe conduct.</li></ul>"
+        },
+        {
+          "sort_order": 6,
+          "number_prefix": "6",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Wellbeing",
+          "body": "<p>Employees are encouraged to:</p><ul><li>Raise wellbeing concerns early.</li><li>Seek support where required.</li><li>Maintain responsible work practices.</li></ul>"
+        }
+      ]
+    },
+    {
+      "sort_order": 8,
+      "number_prefix": "8",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "7. BRING YOUR OWN DEVICE (BYOD) POLICY",
+      "body": "",
+      "sub_clauses": [
+        {
+          "sort_order": 1,
+          "number_prefix": "1",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Purpose",
+          "body": "<p>This policy establishes rules for use of personal devices for Company work.</p>"
+        },
+        {
+          "sort_order": 2,
+          "number_prefix": "2",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Approval",
+          "body": "<p>Use of personal devices for Company work must be approved.</p>"
+        },
+        {
+          "sort_order": 3,
+          "number_prefix": "3",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Security Requirements",
+          "body": "<p>Employees using personal devices must:</p><ul><li>Maintain passwords and security protections.</li><li>Prevent unauthorized access.</li><li>Keep software updated.</li><li>Avoid insecure networks where possible.</li></ul>"
+        },
+        {
+          "sort_order": 4,
+          "number_prefix": "4",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Company Data",
+          "body": "<p>Company data must:</p><ul><li>Remain confidential.</li><li>Not be stored irresponsibly.</li><li>Be deleted upon request.</li></ul><p>The Company reserves the right to require removal of Company data from personal devices.</p>"
+        }
+      ]
+    },
+    {
+      "sort_order": 9,
+      "number_prefix": "9",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "8. FILE MANAGEMENT & DATA RETENTION POLICY",
+      "body": "",
+      "sub_clauses": [
+        {
+          "sort_order": 1,
+          "number_prefix": "1",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Purpose",
+          "body": "<p>To ensure proper management, storage, organization, security, and retention of Company and client files.</p>"
+        },
+        {
+          "sort_order": 2,
+          "number_prefix": "2",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "File Storage",
+          "body": "<p>Employees must store files only within approved Company systems.</p><p>Files must not be stored solely:</p><ul><li>On personal devices.</li><li>Personal cloud storage.</li><li>USB drives.</li><li>Unauthorized platforms.</li></ul>"
+        },
+        {
+          "sort_order": 3,
+          "number_prefix": "3",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Organization Standards",
+          "body": "<p>Employees must:</p><ul><li>Use proper naming conventions.</li><li>Store files in designated folders.</li><li>Maintain organized project structures.</li></ul>"
+        },
+        {
+          "sort_order": 4,
+          "number_prefix": "4",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Data Retention",
+          "body": "<p>Employees must not:</p><ul><li>Delete files without authorization.</li><li>Remove project history.</li><li>Destroy records improperly.</li></ul>"
+        },
+        {
+          "sort_order": 5,
+          "number_prefix": "5",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Backup & Continuity",
+          "body": "<p>Critical work must be stored within systems supporting backup and operational continuity.</p>"
+        }
+      ]
+    },
+    {
+      "sort_order": 10,
+      "number_prefix": "10",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "9. CLIENT APPROVAL & PUBLISHING CONTROL POLICY",
+      "body": "",
+      "sub_clauses": [
+        {
+          "sort_order": 1,
+          "number_prefix": "1",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Purpose",
+          "body": "<p>The purpose of this policy is to ensure all client-facing material is properly reviewed, approved, documented, and authorized prior to release.</p>"
+        },
+        {
+          "sort_order": 2,
+          "number_prefix": "2",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Approval Requirements",
+          "body": "<p>No material may be:</p><ul><li>Published.</li><li>Printed.</li><li>Broadcast.</li><li>Released.</li><li>Uploaded.</li><li>Distributed.</li></ul><p>Without required approvals.</p>"
+        },
+        {
+          "sort_order": 3,
+          "number_prefix": "3",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Documentation",
+          "body": "<p>Approvals must be documented through:</p><ul><li>Email.</li><li>Bitrix.</li><li>Written confirmation.</li><li>Approved communication channels.</li></ul><p>Verbal approvals must be documented in writing.</p>"
+        },
+        {
+          "sort_order": 4,
+          "number_prefix": "4",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Unauthorized Publishing",
+          "body": "<p>Employees must not:</p><ul><li>Publish content without approval.</li><li>Alter approved material without authorization.</li><li>Release draft or incomplete work.</li></ul><p>Unauthorized publishing may result in disciplinary action.</p>"
+        }
+      ]
+    },
+    {
+      "sort_order": 11,
+      "number_prefix": "11",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "10. SOCIAL MEDIA ACCOUNT & DIGITAL ACCESS OWNERSHIP POLICY",
+      "body": "",
+      "sub_clauses": [
+        {
+          "sort_order": 1,
+          "number_prefix": "1",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Purpose",
+          "body": "<p>This policy establishes ownership, management, and control of digital assets and accounts.</p>"
+        },
+        {
+          "sort_order": 2,
+          "number_prefix": "2",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Ownership",
+          "body": "<p>All:</p><ul><li>Social media accounts.</li><li>Advertising accounts.</li><li>Websites.</li><li>Domains.</li><li>Digital assets.</li><li>Passwords.</li><li>Access credentials.</li></ul><p>Created, managed, or maintained for Company or client work are property of Oceanic and/or the respective client.</p>"
+        },
+        {
+          "sort_order": 3,
+          "number_prefix": "3",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Password Management",
+          "body": "<p>Employees must:</p><ul><li>Store credentials in approved systems.</li><li>Provide access when requested.</li><li>Not retain exclusive access.</li></ul>"
+        },
+        {
+          "sort_order": 4,
+          "number_prefix": "4",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Departure of Employees",
+          "body": "<p>Upon resignation or termination:</p><ul><li>All access credentials must be surrendered.</li><li>Employees must not retain access.</li><li>Unauthorized continued access is prohibited.</li></ul>"
+        }
+      ]
+    },
+    {
+      "sort_order": 12,
+      "number_prefix": "12",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "11. BUSINESS CONTINUITY & EMERGENCY OPERATIONS POLICY",
+      "body": "",
+      "sub_clauses": [
+        {
+          "sort_order": 1,
+          "number_prefix": "1",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Purpose",
+          "body": "<p>To ensure continuity of operations during emergencies, disruptions, disasters, or unforeseen events.</p>"
+        },
+        {
+          "sort_order": 2,
+          "number_prefix": "2",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Emergency Situations",
+          "body": "<p>This policy applies during:</p><ul><li>Cyclones.</li><li>Flooding.</li><li>Power outages.</li><li>Internet disruptions.</li><li>Public emergencies.</li><li>Health emergencies.</li><li>Civil disruptions.</li></ul>"
+        },
+        {
+          "sort_order": 3,
+          "number_prefix": "3",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Operational Continuity",
+          "body": "<p>Employees may be required to:</p><ul><li>Work remotely.</li><li>Adjust schedules.</li><li>Prioritize critical work.</li><li>Support continuity efforts.</li></ul>"
+        },
+        {
+          "sort_order": 4,
+          "number_prefix": "4",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Communication During Emergencies",
+          "body": "<p>Employees must remain reasonably reachable and follow Company communication directives.</p>"
+        },
+        {
+          "sort_order": 5,
+          "number_prefix": "5",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Safety Priority",
+          "body": "<p>Employee safety remains the highest priority.</p><p>Employees must not place themselves at unreasonable risk.</p>"
+        }
+      ]
+    },
+    {
+      "sort_order": 13,
+      "number_prefix": "13",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "12. EMPLOYEE GRIEVANCE & COMPLAINT POLICY",
+      "body": "",
+      "sub_clauses": [
+        {
+          "sort_order": 1,
+          "number_prefix": "1",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Purpose",
+          "body": "<p>The purpose of this policy is to provide employees with a fair and structured process for raising workplace concerns.</p>"
+        },
+        {
+          "sort_order": 2,
+          "number_prefix": "2",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Scope",
+          "body": "<p>Employees may raise concerns regarding:</p><ul><li>Workplace conduct.</li><li>Harassment.</li><li>Bullying.</li><li>Discrimination.</li><li>Management concerns.</li><li>Operational issues.</li><li>Policy concerns.</li></ul>"
+        },
+        {
+          "sort_order": 3,
+          "number_prefix": "3",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Reporting Process",
+          "body": "<p>Employees are encouraged to:</p><ul><li>Raise concerns professionally.</li><li>Use appropriate reporting channels.</li><li>Attempt resolution respectfully where appropriate.</li></ul><p>Concerns may be raised with:</p><ul><li>Immediate Manager.</li><li>Senior Management.</li><li>Designated Company representative.</li></ul>"
+        },
+        {
+          "sort_order": 4,
+          "number_prefix": "4",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Confidentiality",
+          "body": "<p>Complaints will be handled as confidentially as reasonably practicable.</p>"
+        },
+        {
+          "sort_order": 5,
+          "number_prefix": "5",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Protection Against Retaliation",
+          "body": "<p>Employees raising genuine concerns in good faith will not be subject to retaliation.</p><p>False, malicious, or intentionally misleading complaints may result in disciplinary action.</p>"
+        }
+      ]
+    },
+    {
+      "sort_order": 14,
+      "number_prefix": "14",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "13. DATA PROTECTION & PRIVACY POLICY",
+      "body": "",
+      "sub_clauses": [
+        {
+          "sort_order": 1,
+          "number_prefix": "1",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Purpose",
+          "body": "<p>To ensure proper handling, protection, and management of Company, employee, and client data.</p>"
+        },
+        {
+          "sort_order": 2,
+          "number_prefix": "2",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Responsibilities",
+          "body": "<p>Employees must:</p><ul><li>Handle data responsibly.</li><li>Maintain confidentiality.</li><li>Use approved systems.</li><li>Prevent unauthorized disclosure.</li></ul>"
+        },
+        {
+          "sort_order": 3,
+          "number_prefix": "3",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Personal Information",
+          "body": "<p>Employees must protect:</p><ul><li>Employee information.</li><li>Client data.</li><li>Financial records.</li><li>Contact information.</li><li>Sensitive documents.</li></ul>"
+        },
+        {
+          "sort_order": 4,
+          "number_prefix": "4",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Unauthorized Disclosure",
+          "body": "<p>Employees must not:</p><ul><li>Share data without authorization.</li><li>Transfer data insecurely.</li><li>Leave sensitive information exposed.</li></ul>"
+        },
+        {
+          "sort_order": 5,
+          "number_prefix": "5",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Breach Reporting",
+          "body": "<p>Any suspected privacy or data breach must be reported immediately.</p>"
+        }
+      ]
+    },
+    {
+      "sort_order": 15,
+      "number_prefix": "15",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "14. TRAINING & PROFESSIONAL DEVELOPMENT POLICY",
+      "body": "",
+      "sub_clauses": [
+        {
+          "sort_order": 1,
+          "number_prefix": "1",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Purpose",
+          "body": "<p>Oceanic encourages continuous learning and professional growth.</p>"
+        },
+        {
+          "sort_order": 2,
+          "number_prefix": "2",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Employee Responsibility",
+          "body": "<p>Employees are expected to:</p><ul><li>Participate in training.</li><li>Improve skills.</li><li>Remain updated in their field.</li><li>Apply learning professionally.</li></ul>"
+        },
+        {
+          "sort_order": 3,
+          "number_prefix": "3",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Company Support",
+          "body": "<p>The Company may provide:</p><ul><li>Internal training.</li><li>Workshops.</li><li>Mentoring.</li><li>Professional development opportunities.</li></ul><p>Participation may be mandatory where operationally required.</p>"
+        }
+      ]
+    },
+    {
+      "sort_order": 16,
+      "number_prefix": "16",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "15. POLICY INTERPRETATION, AMENDMENT & ACKNOWLEDGEMENT",
+      "body": "",
+      "sub_clauses": [
+        {
+          "sort_order": 1,
+          "number_prefix": "1",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Policy Interpretation",
+          "body": "<p>Oceanic reserves the right to:</p><ul><li>Interpret policies.</li><li>Clarify expectations.</li><li>Determine operational application.</li></ul>"
+        },
+        {
+          "sort_order": 2,
+          "number_prefix": "2",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Policy Amendments",
+          "body": "<p>The Company may:</p><ul><li>Amend policies.</li><li>Update procedures.</li><li>Introduce additional operational requirements.</li></ul><p>Employees will be notified of significant changes where applicable.</p>"
+        },
+        {
+          "sort_order": 3,
+          "number_prefix": "3",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Relationship With Employment Contracts",
+          "body": "<p>These policies operate alongside:</p><ul><li>Employment agreements.</li><li>Applicable laws.</li><li>Company procedures.</li></ul><p>Where inconsistencies arise, applicable law and employment agreements will prevail.</p>"
+        },
+        {
+          "sort_order": 4,
+          "number_prefix": "4",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Employee Acknowledgement",
+          "body": "<p>Employees are required to:</p><ul><li>Read Company policies.</li><li>Understand obligations.</li><li>Comply with requirements.</li></ul><p>Employees may be required to sign acknowledgment confirming:</p><ul><li>Receipt of policies.</li><li>Understanding of expectations.</li><li>Agreement to comply.</li></ul>"
+        }
+      ]
+    }
+  ]
+}

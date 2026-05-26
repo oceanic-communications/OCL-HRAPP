@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RbacSeeder::class,
             RoleTemplateUsersSeeder::class,
+            EmployeesSeeder::class,
             AdminUserSeeder::class,
             InductionSeeder::class,
         ]);

@@ -118,8 +118,10 @@ function initRichEditor(textarea) {
         menubar: false,
         branding: false,
         promotion: false,
-        plugins: 'link lists autoresize code media',
-        toolbar: 'undo redo | blocks | bold italic underline strikethrough | alignleft aligncenter alignright | bullist numlist | link media | removeformat | code',
+        plugins: 'link lists autoresize code media table',
+        toolbar:
+            'undo redo | blocks | bold italic underline strikethrough | alignleft aligncenter alignright | ' +
+            'bullist numlist | link media table | removeformat | code',
         relative_urls: false,
         convert_urls: false,
         setup(editor) {

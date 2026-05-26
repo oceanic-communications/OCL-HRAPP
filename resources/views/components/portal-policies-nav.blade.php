@@ -46,8 +46,7 @@
                 class="portal-sidebar-sublink {{ $isActive ? 'is-active' : '' }}"
                 title="{{ $navPolicy->name }}"
             >
-                <span class="font-semibold text-inherit">{{ $navPolicy->abbreviation }}</span>
-                <span class="truncate text-inherit/80">· {{ $navPolicy->name }}</span>
+                {{ $navPolicy->abbreviation }}
             </a>
         @empty
             <p class="px-3 py-2 text-xs text-sidebar-foreground/60">No policies yet</p>

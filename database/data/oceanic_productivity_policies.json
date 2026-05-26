@@ -1,0 +1,509 @@
+{
+  "policy": {
+    "name": "Oceanic Productivity Policies",
+    "abbreviation": "OPP",
+    "slug": "productivity-policies",
+    "version_label": "May 2026",
+    "effective_date": "2026-04-25",
+    "seed_marker_section_title": "INTRODUCTION TO INDUSTRY",
+    "numbering_scheme": {
+      "section": {
+        "style": "decimal",
+        "separator": ".",
+        "start": "1"
+      },
+      "clause": {
+        "style": "decimal",
+        "separator": ".",
+        "start": "1",
+        "inherit_preview": "1.1"
+      },
+      "sub_clause": {
+        "style": "decimal",
+        "separator": ".",
+        "prefix": "",
+        "start": "1"
+      }
+    }
+  },
+  "sections": [
+    {
+      "sort_order": 1,
+      "number_prefix": "1",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "INTRODUCTION TO INDUSTRY",
+      "body": "<p>Oceanic operates within the marketing and digital services industry. This is an environment that moves quickly and is heavily influenced by external timelines such as campaign launches, advertising schedules, and client business requirements.</p><p>Unlike traditional industries with fixed workflows, marketing and digital projects are:</p><ul><li>DynamicRequirements evolve based on client needs, market trends, and campaign performance.</li><li>CollaborativeWork is also highly interconnected. A project typically moves across multiple individuals and teams, with each stage dependent on the previous one being completed correctly and on time. This means that even a small delay or lack of clarity at one stage can create a larger disruption across the entire workflow.</li><li>Deadline-driven</li></ul><p>Deliverables are tied to campaign launches, media schedules, and business timelines.</p><p>Employees are expected to understand this operating environment and work with discipline, responsiveness, and accountability. The ability to manage time effectively, communicate clearly, and deliver consistently is critical to success.</p><p>Delays in delivery do not exist in isolation. They have a direct impact on:</p><ul><li>Clients – Missed campaign timelines, reduced effectiveness, and loss of confidence.</li><li>Revenue – Delayed billing, lost opportunities, and reduced project profitability</li><li>Reputation – Perception of unreliability and lack of professionalism</li></ul><p>In a competitive industry, consistency and reliability are key differentiators. Even small delays can have significant downstream consequences.</p><p>Performance is driven by how effectively individuals align with the realities of the industry. Understanding this context is essential to meeting expectations and delivering consistent results.</p>",
+      "sub_clauses": []
+    },
+    {
+      "sort_order": 2,
+      "number_prefix": "2",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "INTRODUCTION TO NATURE OF WORK – CLIENT SERVICE",
+      "body": "<p>Oceanic is a client service organisation. All work performed internally is directly linked to commitments made to clients.</p><p>Oceanic operates within the marketing and digital services industry, a space defined by constant change, high client expectations, and time-sensitive delivery. This is a service industry hence our operations and team need to align to “serve” and “deliver”.</p><p>How we work here:</p><h6>Speed and Interdependency of Work</h6><p>Work at Oceanic operates in a high-speed, interdependent environment. Each stage of a project depends on the completion of the previous stage. This means:</p><ul><li>A delay in one task directly impacts the next function.</li><li>Teams rely on each other for timely inputs and approvals.</li><li>Missed timelines create bottlenecks across the entire workflow.</li></ul><p>As a result, efficiency is not an individual outcome — it is a collective responsibility.</p><h6>Expectation of Ownership and Proactive Thinking</h6><p>Given the nature of the industry, employees are expected to operate with a strong sense of ownership and accountability.</p><p>This includes:</p><ul><li>Taking responsibility for assigned work from start to completion.</li><li>Anticipating risks, challenges, and delays before they occur</li><li>Communicating early when issues arise</li><li>Seeking clarity rather than making assumptions</li></ul><p>Employees are not expected to simply complete tasks.They are expected to manage their work, think ahead, and contribute to smooth delivery.</p><h6>Operating Mindset</h6><p>To succeed in this environment, every employee must adopt the following mindset:</p><ul><li>Deadlines are commitments, not estimates.</li><li>Work must move forward, not wait for follow-ups.</li><li>Communication must enable action, not just updates.</li><li>Responsibility lies with the owner, not the system or team.</li></ul>",
+      "sub_clauses": []
+    },
+    {
+      "sort_order": 3,
+      "number_prefix": "3",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "ATTENDANCE & TIME MANAGEMENT",
+      "body": "",
+      "sub_clauses": [
+        {
+          "sort_order": 1,
+          "number_prefix": "1",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Operating Hours",
+          "body": "<p>Oceanic operates during standard business hours that align with client and operational needs. These hours represent the core period during which work is coordinated and delivered.</p><p>Operating hours are Monday to Friday: 8:00am to 5:00pm</p><p>Employees are expected to be present before the start of the working day and ready to begin work at 8:00am. Being on time means being prepared to work, not arriving at the exact time and then preparing.</p>"
+        },
+        {
+          "sort_order": 2,
+          "number_prefix": "2",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Normal Working Hours",
+          "body": "<p>Employees are engaged to work: 45 hours per week. This requirement reflects both contractual obligations and operational demands.</p><p>This is structured as:</p><ul><li>Monday to Friday: 8 hours per day (40 hours total)</li><li>Saturday: 5 hours</li></ul><p>Saturday hours form part of the contractual requirement. However, in practice, these hours are typically offset with extra hours of work performed beyond 5:00pm during weekdays.The 5-hour difference is tracked and adjusted against additional hours worked beyond standard working hours.</p><p>The requirement for employees to complete 45 hours per week remain. If work is not scheduled for Saturday, the hours short of 45 hours need to be completed in the weeks ahead.</p><p>Working Beyond Operating Hours</p><p>If hours go beyond 7: 00 pm transportation and meal arrangements shall be facilitated as required/ requested.</p><p>In the absence of a manager or pre organize expense, the employee shall use their own funds and present receipt for reimbursement.</p><p class=\"important-note\"><strong>Working beyond operating hours doesn’t not automatically constitute to the employee’s late arrival on next working day.</strong></p>"
+        },
+        {
+          "sort_order": 3,
+          "number_prefix": "3",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Working Beyond Required Hours",
+          "body": "<p>Due to the nature of the industry, employees may be required to work beyond standard hours to meet deadlines and client commitments. This is considered a normal part of the role.</p><p>For employees on a salary-based structure, additional hours worked are not paid as overtime. Time worked in addition of 45 hours are recorded as time in lieu (TOIL)</p>"
+        },
+        {
+          "sort_order": 4,
+          "number_prefix": "4",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Working Below Required Hours",
+          "body": "<p>If an employee works fewer than the required hours in a given week, hours are tracked and may be offset against additional hours worked in future periods.</p><p class=\"policy-note\"><strong>A trend of hours worked per week that is short of contracted 45 hours is activates disciplinary procedures.Definition: Trend is defined as Working below required hours for 4 consecutive weeks.</strong></p>"
+        },
+        {
+          "sort_order": 5,
+          "number_prefix": "5",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Late Arrivals",
+          "body": "<p>Employees are to report before 8:00 am and be ready to begin work by 8:30 am.</p><p>This allows time to prepare, review tasks, and align with priorities.A limited flexibility window may be allowed under certain circumstances.</p><p>Employees may report between: 8:00am and 8:30am</p><p>Flexibility must not be used regularly. Flexible: No greater than 2 times a week.</p><p>Arrivals after 8:30 am, regardless of reason, will result in a deduction from any time in lieu earned.</p><h5>Mandatory Mondays</h5><p>At Oceanic, projects and client services are our major priority. To ensure we are on top of this, the team ensures that we have a smooth start to the week. Therefore, arriving late on Mondays is discouraged.</p><p class=\"important-note\"><strong>A trend of late arrivals on Mondays will activate disciplinary proceduresDefinition: Trend is defined as 3 consecutives Mondays.</strong></p><h5>Late Arrival Communication Requirement</h5><p>If an employee for unforeseen reasons assess that they will be late and will arrive after 8:30 am, they must.</p><p>Inform their manager before the start of the workday (8:00 am) with:</p><ul><li>Reason for delay</li><li>Expected time of arrival</li><li>Notify the team via Team chat on Bitrix.</li></ul><p class=\"policy-note\"><strong>Failure to provide advance notice is considered unprofessional and result in disciplinary action.</strong></p><p>Repeated late arrivals indicate poor time management and will activate disciplinary procedures.</p>"
+        },
+        {
+          "sort_order": 6,
+          "number_prefix": "6",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Breaks",
+          "body": "<p>Employees are provided with a standard lunch break during the workday.</p><p>Lunch: 1 Hour Lunch Breaks. Standard Lunch breaks are from 1 pm – 2 pm however this may be affected with pressing project deadline of a client being present. The next best suited time slot shall be allocated for lunch break.</p><p>Lunch breaks may be required to be cut short where reasonably required for urgent operational needs. This will be advised to you by a manager.</p><p>If you need to reschedule your break, you will need to discuss and plan with your team and manager in advance.</p><p>If you work more than 10 hours in a day, you can take a second meal break.</p><p>Other breaks must comply with the following:</p><ul><li>Can only be taken with approval from your manager.</li><li>Should not be more than 10 mins.</li><li>These breaks should not exceed 2 per day.</li><li>Breaks must be managed responsibly and must not impact work delivery.</li></ul>"
+        },
+        {
+          "sort_order": 7,
+          "number_prefix": "7",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Time Off in Lieu (TOIL)",
+          "body": "<p>Time in Lieu is used to recognise additional hours worked beyond the standard weekly requirement. It provides a structured way to balance extended work hours while ensuring that business operations and delivery timelines are not affected.</p><p>Time in Lieu refers to the additional hours worked beyond the required 45 hours per week. Time Off in Lieu (TOIL) refers to the approved paid time off granted in exchange for those additional hours.</p><p>Employees should understand that TOIL is not an automatic entitlement. It is subject to approval and must be managed in a way that ensures continuity of work.</p><h5>Calculation of Time in Lieu</h5><p>Time in Lieu is calculated based on total weekly working hours.</p><p class=\"policy-note\"><strong>For clarity:</strong></p><ul><li>Time in Lieu applies only to hours worked beyond 45 hours in each week.</li><li>Based on this Mon – Fri work hours should = 9 hours (Exclusive of lunch)</li><li>In practice this would mean working 8 am to 6pm</li><li>Only verified and approved additional hours are considered for TOIL.</li></ul><h5>Utilisation of TOIL</h5><p>The use of Time Off in Lieu must be planned and approved in advance.</p><p>Employees are responsible for ensuring that taking TOIL does not disrupt workflow or impact delivery.</p><p class=\"policy-note\"><strong>The following conditions apply:</strong></p><ul><li>TOIL must be approved by management before it is taken.</li><li>TOIL must align with operational and project requirements.</li><li>Work responsibilities must be managed or handed over before taking TOIL.</li></ul><h5>Approval and Scheduling</h5><p>TOIL must be requested through the appropriate approval process.</p><p>To ensure proper planning:</p><ul><li>Requests should be submitted at least 3 working days in advance.</li><li>Short-notice requests may only be approved under exceptional circumstances.</li></ul><p>Managers are responsible for reviewing requests based on:</p><ul><li>Team workload</li><li>Delivery timelines</li><li>Resource availability</li></ul>"
+        }
+      ]
+    },
+    {
+      "sort_order": 4,
+      "number_prefix": "4",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "LEAVE ENTITLEMENT & CONDITIONS",
+      "body": "<p>All leave entitlements, eligibility, and conditions outlined in this section are subject to the provisions of the Employment Relations Act 2007 of Fiji and any applicable regulations. Where there is any variation, the requirements of current Fijian law will prevail.</p>",
+      "sub_clauses": [
+        {
+          "sort_order": 1,
+          "number_prefix": "1",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Leave Entitlement",
+          "body": "<p>Oceanic provides different types of leave in accordance with internal policy and employment regulations. Each leave type has specific eligibility requirements and usage conditions that must be followed.</p><p>Type of Leave</p><p>Entitlement</p><p>Reflection on Calendar Year</p><p>Annual Leave</p><p>10 days per worked year</p><p>Prorated</p><p>Sick Leave</p><p>10 days per worked year</p><p>Prorated</p><p>Bereavement Leave</p><p>As per employment regulations</p><p>Prorated</p><p>Maternity Leave</p><p>As per employment regulations</p><p>-</p><p>Paternity Leave</p><p>As per employment regulations</p><p>-</p><p>Employees must ensure they understand the eligibility criteria and conditions attached to each type of leave before applying.</p><p>Leave is not only an entitlement but also a structured process. Each type of leave has specific rules to ensure fairness, compliance, and operational continuity.</p>"
+        },
+        {
+          "sort_order": 2,
+          "number_prefix": "2",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Leave Types & Conditions",
+          "body": "<h3>Sick Leave Conditions</h3><p>Sick leave is provided to support employees when they are unable to attend work due to illness. However, it must be used responsibly and supported by proper communication and documentation.</p><p>Eligibility:</p><p>Employees become eligible for sick leave only after completing three months of continuous employment with the Company.</p><p>Leave Procedure:When taking sick leave, employees are required to:</p><ul><li>Inform the Company as soon as reasonably practicable. This communication must include both the absence and the reason for it.</li><li>Where the absence exceeds one working day, the employee must provide a medical certificate from a registered medical practitioner.</li></ul><p>The employee must communicate on a daily basis of their status and return to work status.</p><h5>Sick Leave Adjacent to Public Holidays</h5><p>Sick leave taken immediately before or after a public holiday will require additional verification to ensure appropriate use of leave.</p><p>While the Employment Relations Act 2007 provides that employees are entitled to sick leave upon meeting eligibility requirements and may be required to produce a medical certificate depending on the duration and circumstances of absence, employers are also permitted to request reasonable proof of illness to prevent misuse of leave provisions.</p><p>In line with this:</p><ul><li>Any sick leave taken immediately before or after a public holiday must be supported by a valid medical certificate, regardless of the number of days taken.</li><li>This requirement applies even where the absence is for a single day.</li><li>The medical certificate must be issued by a registered medical practitioner.</li></ul><p>This condition is implemented to ensure:</p><ul><li>Fair and consistent application of sick leave</li><li>Compliance with reasonable employer verification rights under Fijian employment law</li><li>Prevention of misuse of leave around public holidays</li></ul><p>Failure to provide the required medical documentation may result in:</p><ul><li>The leave being treated as unpaid leave.</li><li>The absence being classified as unauthorised.</li><li>Further disciplinary procedures activated.</li></ul><p>Additional conditions apply to ensure fair usage:</p><ul><li>Sick leave does not accumulate, any unused balance lapses at the end of the year.</li><li>Part-time employees are entitled to sick leave on a pro-rata basis, depending on hours worked.</li></ul><p>Failure to comply with notification or documentation requirements may result in the leave being declined or treated as unauthorised.</p><h3>Maternity Leave Conditions</h3><p>Maternity leave is provided in accordance with employment law and is subject to strict eligibility and documentation requirements.</p><p>To qualify for maternity leave, the employee must have worked at least 150 days within the nine months prior to the expected date of birth.</p><p>Maternity leave may be taken either before or after the birth, based on agreement between the employee and the Company.</p><p>To initiate maternity leave, the employee must provide a medical certificate from a registered medical practitioner or nurse confirming the expected date of delivery.</p><h5>Maternity Leave Payment Conditions</h5><p>The payment structure is based on the number of births:</p><ul><li>For the first three births, maternity leave is paid at full normal remuneration.</li><li>For the fourth and subsequent births, maternity leave is paid at 50% of normal remuneration.</li></ul><p>The duration of paid maternity leave is capped at 98 days.</p><p>If the employee remains absent beyond 98 days, no additional wages will be paid unless otherwise approved.</p><h3>Bereavement Leave Conditions</h3><p>Bereavement leave is provided to support employees in the event of personal loss.</p><p>Eligibility: Employees become eligible after completing more than three months of continuous service.The standard entitlement is three working days of paid bereavement leave per year.Bereavement leave is non-accumulative. Any unused entitlement lapses at the end of the year.</p><h6>Leave Procedure:</h6><ul><li>Employees must inform the Company as soon as reasonably practicable if they are unable to attend work due to bereavement.</li><li>Approval of bereavement leave will take into consideration:</li><li>The relationship to the deceased</li><li>Operational requirements at the time</li><li>Leave Balance</li></ul><h3>Paternity Leave Conditions</h3><p>Paternity leave is provided to support employees during childbirth. A male employee is entitled to five working days of paid paternity leave, provided the following conditions are met:</p><ul><li>The employee has completed more than three months of continuous employment.</li><li>The employee is the father of the newborn child (including legally recognised circumstances)</li><li>The leave is taken at or around the time of birth, as agreed with the employer.</li></ul><p>Paternity leave is paid at the employee’s normal rate of pay.</p><p>It is typically taken as a continuous block and:</p><ul><li>Does not accumulate.</li><li>Cannot be carried forward.</li><li>Is granted per birth, not per calendar year.</li></ul><p>The employee must notify the Company as soon as practicable and may be required to provide supporting documentation such as medical confirmation or a birth record.</p><h3>Unplanned Leave (Sick / Bereavement)</h3><p>For leave that cannot be applied for in advance, employee must:</p><ul><li>Notify their immediate supervisor or manager as soon as reasonably practicable on the day of absence.</li><li>Communicate via direct phone call.</li></ul><p>Upon returning to work a completed leave application form must be submitted within six (6) working hours.</p><h4>Additional Conditions</h4><ul><li>Bereavement leave applications may be declined based on operational priorities or relationship considerations.</li><li>Employees must update the Company daily in cases of consecutive sick leave unless this has been pre-communicated.</li></ul><p>Repeated failure to follow leave procedures will be treated as a performance and compliance issue.</p><p>Being absent from work without communication is considered irresponsible behaviour and will result in performance discussion and notice.</p>"
+        },
+        {
+          "sort_order": 3,
+          "number_prefix": "3",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Leave Application & Notification Requirements",
+          "body": "<p>Leave must follow a structured application and approval process to ensure proper planning and continuity of work.</p><h6>Planned Leave Approval</h6><p>All planned leave must be formally applied for using the Company’s prescribed Leave Application Form.</p><p>Leave is not considered approved until it has been formally authorised by Management.</p><p>Any verbal approval must be regularised in writing within the required timeframe.</p><h6>Notice Period Requirements</h6><p>Different types of leave require different notice periods:</p><p>Type of Leave</p><p>Notice Period</p><p>Annual Leave</p><p>7 calendar days in advance unless otherwise approved under exceptional circumstances</p><p>Sick Leave</p><p>Bereavement Leave</p><p>Maternity Leave</p><p>as soon as pregnancy is medically confirmed and no later than one month prior to commencement, unless impracticable</p><p>Paternity Leave</p><p>At least seven (7) calendar days in advance, or as soon as reasonably practicable</p>"
+        },
+        {
+          "sort_order": 4,
+          "number_prefix": "4",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Leave in Excess of Entitlement",
+          "body": "<p>Where employees exceed their approved leave entitlement, additional conditions apply.</p><h3>Sick Leave in Excess</h3><p>Company may:</p><ul><li>Require a medical assessment report.</li><li>Treat additional days as unpaid leave</li><li>Deduct additional days from annual leave balance at its discretion.</li></ul><h3>Annual Leave in Excess</h3><p>Any annual leave taken beyond entitlement:</p><ul><li>Will not be paid unless approved in writing.</li><li>Will be treated as unauthorised if taken without approval.</li></ul><h6>General Impact</h6><p>Excess leave may be considered in:</p><ul><li>Attendance records</li><li>Performance evaluations</li><li>Disciplinary processes</li></ul><p>Any absence without approval:</p><ul><li>Will result in loss of pay.</li><li>Will be subject to disciplinary action.</li></ul>"
+        },
+        {
+          "sort_order": 5,
+          "number_prefix": "5",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Unpaid Leave Conditions",
+          "body": "<p>Unpaid leave is not a standard entitlement and is granted only under exceptional and unavoidable circumstances. The Company expects employees to manage personal commitments primarily through available paid leave entitlements.</p><p>To ensure fairness and maintain operational continuity, unpaid leave is strictly limited.</p><p>Employees may be granted unpaid leave subject to the following condition:</p><p>Where unpaid leave is approved:</p><ul><li>It must be authorised in advance.</li><li>It will not accrue benefits.</li><li>It will be considered in performance and attendance records.</li></ul><h6>Limitation on Unpaid Leave</h6><p>All employees are required to comply with the updated policy from this date onward. Any leave applications or approvals from this date will be assessed based on these revised conditions.</p><ul><li>Unpaid leave must not exceed a maximum of three (3) days per calendar year</li></ul><p>This limit applies regardless of the reason for unpaid leave and includes all instances approved within the year.</p><p>All unpaid leave requests:</p><ul><li>Must be approved in advance by Management.</li><li>Will be assessed based on operational requirements and workload impact.</li><li>Will be recorded and monitored as part of attendance and performance evaluation.</li></ul><p>Any request exceeding this limit will generally not be approved unless under exceptional circumstances and with specific written approval from senior management.</p><p>Frequent or repeated requests for unpaid leave, even within the allowed limit, may indicate attendance concerns and may be reviewed as part of performance management.</p><h6>Absence Without Notice</h6><p>Absence without communication is treated as serious misconduct.</p><p>If an employee is absent for more than three consecutive working days without notifying the Company:</p><ul><li>It may be treated as abandonment of employment.</li><li>It may lead to termination following due process.</li></ul><p>The Company will make reasonable attempts to contact the employee before acting.</p><h6>Absence Trends</h6><p>Frequent or patterned absence is treated as a performance concern.</p><p>A trend may include:</p><ul><li>Excessive sick leave usage</li><li>Repeated unplanned leave.</li><li>Leave disproportionate to days worked.</li></ul><p>Where such patterns are identified:</p><ul><li>The Company may require medical reports.</li><li>The employee may be subject to performance review.</li><li>Continued issues may lead to disciplinary action.</li></ul>"
+        },
+        {
+          "sort_order": 6,
+          "number_prefix": "6",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Employee Responsibilities Before and During Leave",
+          "body": "<p>Employees remain responsible for ensuring continuity of work when taking leave.</p><h6>Annual Leave – Work Completion and Handover</h6><p>Before proceeding on annual leave, employees must:</p><ul><li>Complete all assigned work due prior to leave OR agree on revised timelines.</li><li>Provide a proper handover to a colleague or supervisor.</li></ul><p>Employees must also:</p><ul><li>Ensure all files and systems are updated.</li><li>Set out-of-office notifications.</li><li>Provide alternative contacts if required.</li></ul><p>Failure to comply may result in leave being deferred or performance impact.</p><h6>Other Leave – Availability</h6><p>For non-annual leave types, employees are expected to remain reasonably reachable where practicable.</p><p>This includes:</p><ul><li>Providing clarification when required</li><li>Supporting continuity of work</li></ul><p>This does not require full work engagement but ensures operational continuity.</p><h6>General Responsibilities</h6><p>All employees must:</p><ul><li>Ensure leave is properly approved.</li><li>Return to work as scheduled.</li><li>Submit required documentation upon return.</li></ul><h6>Non-Compliance</h6><p>Failure to meet leave responsibilities:</p><ul><li>Will be treated as a performance issue.</li><li>May lead to disciplinary action.</li></ul><p>Reasonable exceptions may apply in genuine medical or compassionate situations.</p>"
+        }
+      ]
+    },
+    {
+      "sort_order": 5,
+      "number_prefix": "5",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "Communication Policy",
+      "body": "<p>At Oceanic, we have established clear communication channels to ensure professionalism, accountability, traceability, and operational efficiency across all internal and external communications.</p>",
+      "sub_clauses": [
+        {
+          "sort_order": 1,
+          "number_prefix": "1",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Approved Communication Channel",
+          "body": "<h3>External Communications</h3><p>All official communication with clients, partners, vendors, regulators, and external stakeholders must be conducted via Company owned channels only.</p><p>Purpose</p><p>Channels</p><p>Approved Format</p><p>Management</p><p>Client/ Vendor/ Partners</p><p>Email</p><p>Company Email</p><p>Manager in cc always</p><p>Verbal</p><p>Company Phone</p><p>Must be captured via email</p><p>Text Msg</p><p>Not official/ recommended</p><p>Must be captured via email</p><p>Chat Messaging</p><p>Not official/ recommended</p><p>Must be captured via email</p><p>Communication via personal email accounts, messaging apps, or social media for official external matters is not permitted, unless expressly approved by Manager.</p><h3>Internal Communications</h3><p>Purpose</p><p>Channels</p><p>Approved Format</p><p>Management</p><p>Personal Employment Matters</p><p>Email</p><ul><li>Via Company Email</li><li>Personal email in cc</li></ul><p>Direct reporting manager in cc where possible</p><p>Attendance Related</p><ul><li>In Person</li><li>Direct Phone Call</li><li>Email documents</li><li>Via Company Email</li><li>Personal email in cc</li></ul><p>Direct reporting manager in cc where possible</p><p>Project &amp; Task Communication</p><p>Bitrix Task</p><p>Via Comment on task</p><ul><li>Related people marked on task.</li><li>Related project correctly tagged.</li></ul><p>General</p><p>Bitrix Feed</p><p>-</p><p>All or relevant employees tagged</p><h3>Mandatory Project &amp; Task Management</h3><p>Bitrix is the mandatory platform for all project-related and task-related communication, including:</p><ul><li>Task briefs and instructions.</li><li>Updates, progress tracking, and follow-ups.</li><li>Queries, clarifications, and feedback related to work execution.</li><li>File sharing, comments, timelines, and approvals linked to tasks.</li></ul><h4>Key Requirements for Bitrix Communications</h4><ul><li>All instructions impacting scope, deadlines, or deliverables must be documented in Bitrix</li><li>Verbal or informal instructions must be recorded in Bitrix</li></ul><h4>Communication Style</h4><p>All external communications MUST be friendly but professional with</p><ul><li>Proper information structure and flow</li><li>Appropriate tone.</li><li>Clearly state the purpose, context, and required action.</li><li>Supervisors or Managers Must be included for visibility and continuity.</li></ul><p>All internal communication must follow the Company’s 4W+1H Rule:</p><ul><li>What?</li><li>Why?</li><li>When?</li><li>Who?</li><li>How it should/ will be executed.</li></ul><p>Incomplete or unclear communication may result in delays and will be treated as a performance issue.</p><p>Failure to comply with this Communication Policy may result in:</p><ul><li>Instructions being considered invalid or unactionable.</li><li>Delays or errors being attributed to the employee.</li><li>Review under the Company’s performance management and disciplinary process.</li></ul>"
+        },
+        {
+          "sort_order": 2,
+          "number_prefix": "2",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Use of Cell Phone",
+          "body": "<p>We recognize that cell phones (and smartphones especially) have become an integral part of everyday life. They may be a great asset if used correctly (for productivity apps, calendars, business calls etc). Despite their benefits, personal cell phones may cause problems in the workplace. Employees who use their cell phones may:</p><p>Get distracted from their work.</p><p>May disturb colleagues.</p><p>We encourage employees to use their cell phones prudently during working hours.</p><p>Use company-issued phones for business purposes only and preserve them in perfect condition.</p><p>Surf the internet, text, and talk on the phone sensitively.</p><p>Be considerate when having voice call in the office. (Exceptional for the client-facing team)</p><p>Be cautious as your phone usage create an impression of your work behavior on your manager as well as other team members.</p><h4>Use of company phones are allowed for:</h4><p>Making business calls.</p><p>Using work related apps.</p><p>Checking important messages from client.</p><h4>Use of phone are not permitted for:</h4><ul><li>Constant intermittent use of phone for personal purpose while working.</li><li>Playing of games on the cell phone during working hours.</li><li>Use their cell phone’s camera or microphone to record confidential information unless for the sole purpose of work.</li><li>Use their phones in areas/ situations that are inappropriate. (e.g., Meetings) unless required for specific purpose in the situation.</li></ul>"
+        },
+        {
+          "sort_order": 3,
+          "number_prefix": "3",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Internet & Email Usage Policy",
+          "body": "<p>Oceanic provides access to internet and email services to support business operations. These resources must be used responsibly, professionally, and primarily for work purposes.</p><h3>Acceptable Use:</h3><ul><li>Accessing websites and platforms necessary for project work.</li><li>Using productivity tools and cloud services related to your role.</li><li>Communicating with clients, vendors, or team members via email in a professional manner.</li></ul><h3>Unacceptable Use:</h3><ul><li>Downloading personal software, games, or movies.</li><li>Accessing streaming services, gambling sites, or inappropriate content during work hours.</li><li>Using company email to subscribe to non-work-related services or newsletters.</li><li>Sharing passwords or unauthorized access to Oceanic systems.</li></ul><h3>Data Privacy and Security:</h3><ul><li>Be alert to phishing emails and suspicious links.</li><li>Do not open unknown attachments or download files unless verified.</li><li>Report any suspected breach or suspicious email to the IT/Admin team immediately.</li><li>Employees must never share client information or internal data over unsecured or unauthorized platforms.</li></ul>"
+        },
+        {
+          "sort_order": 4,
+          "number_prefix": "4",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Non-Disclosure & Confidentiality",
+          "body": "<p>All employees of Oceanic are required to uphold the highest level of confidentiality in relation to company operations, client matters, and internal information. Confidentiality is a fundamental expectation of employment and is essential to maintaining trust, professionalism, and the integrity of the organisation.</p><p>Employees must ensure that any information obtained through their role is handled responsibly and is not disclosed, shared, or discussed inappropriately.</p><p>This policy is intended to protect the interests of the Company, its clients, and its employees. Maintaining confidentiality ensures trust, professionalism, and the proper functioning of the organisation.</p><p>Employees are expected to act with integrity and exercise sound judgment in all matters relating to confidential information.</p><ul><li>Share or discuss confidential information about Oceanic’s clients, projects, pricing, or strategy with anyone outside the organization.</li><li>Disclose sensitive internal information with friends, family, vendors, or on social platforms.</li><li>Forward internal documents or client briefs to personal emails or third-party platforms without approval.</li><li>This obligation continues even after the termination of your employment with Oceanic.</li><li>Breach of this policy is considered serious misconduct and may lead to disciplinary action including termination and legal consequences.</li></ul><h3>Confidential Information</h3><p>Confidential information includes, but is not limited to:</p><p>Company operational information</p><p>Client data, strategies, and communications</p><p>Internal discussions, decisions, and directives</p><p>Financial and commercial information</p><p>Employment-related information</p><p>Employees must treat all such information as strictly confidential unless authorised otherwise.</p><h3>Prohibited Disclosure</h3><p>Employees must not share or disclose confidential information to any unauthorised person, whether within or outside the organisation.</p><p>This specifically includes:</p><p>Sharing of salary or remuneration information between staff</p><p>Sharing of information communicated by management that is not intended for wider distribution.</p><p>Sharing of employment-related information, including contract details, resignations, or internal staffing matters, prior to official company communication</p><p>Such information must only be communicated through formal and authorised company channels.</p><h3>Responsibility of Employees</h3><p>Employees are responsible for:</p><p>Maintaining confidentiality at all times during employment</p><p>Exercising discretion in conversations, both within and outside the workplace</p><p>Ensuring that sensitive information is not discussed in public or unsecured environments.</p><p>This obligation continues even after the employee has left the organisation.</p><h3>Breach of Confidentiality</h3><p>Any breach of confidentiality will be treated as a serious matter.</p><p>Depending on the severity, this may result in:</p><p>Disciplinary action</p><p>Escalation under the company’s disciplinary process</p><p>Termination of employment in cases of serious or intentional breach</p>"
+        }
+      ]
+    },
+    {
+      "sort_order": 6,
+      "number_prefix": "6",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "Social Media Conduct",
+      "body": "<p>Oceanic recognises the power of social media in building brand visibility, employer reputation, and team pride. This policy is designed to:</p><p>Encourage positive and responsible sharing of Oceanic content.</p><p>Protect client confidentiality and project integrity.</p><p>Set clear boundaries on what can and cannot be shared.</p><p>Ensure employees act as responsible brand ambassadors.</p><p>This policy applies to all employees, across all personal and professional social media platforms.</p><h3>General Principles</h3><p>When using social media, employees must always:</p><ul><li>Act in a manner that protects Oceanic’s reputation, credibility, and relationships.</li><li>Be mindful that personal posts can still be associated with Oceanic.</li><li>Exercise professional judgment, discretion, and respect</li></ul><p>Nothing shared online should compromise:</p><ul><li>Client trust</li><li>Confidential information</li><li>Brand reputation</li></ul><h3>Encouraged Social Media Behaviour</h3><p>Oceanic actively encourages employees to support and celebrate the organisation through social media.</p><ul><li>Share, repost, or engage with official Oceanic posts from company social media pages.</li><li>Amplify approved campaign launches, announcements, and milestones.</li><li>Tag Oceanic appropriately when resharing official content</li></ul><p>This helps increase reach, visibility, and collective pride in our work.</p><h3>Restricted &amp; Prohibited Social Media Behaviour</h3><ul><li>No Sharing Prior to Project or Campaign Launch</li></ul><p>Employees must not post or share any content related to:</p><ul><li>Client projects</li><li>Campaign concepts</li><li>Creative materials</li><li>Filming, shoots, designs, layouts, scripts, or drafts</li></ul><p>This includes:</p><ul><li>“Sneak peeks”</li><li>Behind-the-scenes content</li><li>Partial visuals</li><li>Casual mentions of upcoming projects</li></ul><p>Premature sharing may:</p><ul><li>Breach client confidentiality</li><li>Undermine campaign strategy.</li><li>Jeopardise contractual obligations.</li></ul>",
+      "sub_clauses": []
+    },
+    {
+      "sort_order": 7,
+      "number_prefix": "7",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "Confidential & Sensitive Information",
+      "body": "<p>Employees must never share:</p><ul><li>Client names, briefs, pricing, timelines, or strategies (unless officially approved)</li><li>Internal discussions, disagreements, or operational issues</li><li>Screenshots of internal systems, emails, Bitrix tasks, or documents</li><li>Personal data of colleagues, clients, or partners</li></ul><h6>Reputation &amp; Conduct Online</h6><p>Employees must not:</p><ul><li>Post content that could damage Oceanic’s brand or professional image.</li><li>Make negative, offensive, discriminatory, or defamatory remarks about:</li><li>Oceanic</li><li>Clients</li><li>Colleagues</li><li>Partners</li><li>Engage in online arguments or public disputes related to work matters.</li></ul><h6>Approval &amp; Guidance</h6><p>If unsure whether content is appropriate:</p><ul><li>Seek guidance from your manager or Marketing Lead before posting.</li><li>When in doubt — do not post.</li></ul><h6>Breach of Policy</h6><p>Failure to comply with this Social Media Conduct Policy may result in:</p><ul><li>Content removal request</li><li>Formal warning</li><li>Disciplinary action in line with the Company’s Disciplinary Policy</li><li>Termination of employment in serious cases</li></ul><p>Each case will be assessed based on:</p><ul><li>Severity</li><li>Intent</li><li>Impact on Oceanic or its clients</li></ul><p>Every employee is a brand ambassador of Oceanic.Your online conduct contributes to how our clients, partners, and community perceive us. We encourage pride, celebration, and positivity — while expecting responsibility, discretion, and professionalism at all times.</p>",
+      "sub_clauses": []
+    },
+    {
+      "sort_order": 8,
+      "number_prefix": "8",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "Dress Code & Office Hygiene Policy",
+      "body": "",
+      "sub_clauses": [
+        {
+          "sort_order": 1,
+          "number_prefix": "1",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Dress Code for Client Facing Employees",
+          "body": "<p>Employees who are in client-facing roles or are scheduled to attend meetings with clients—either in person or virtually—are expected to maintain a polished and professional appearance that reflects the credibility and quality of the Oceanic brand. The following guidelines apply:</p><ul><li>Attire: Business casual or formal, depending on the nature of the client or meeting.</li><li>Footwear: Closed-toe shoes or dress shoes.</li><li>Personal hygiene: Employee must be well grooming with personal hygiene maintained.</li><li>Virtual Meetings: Attire should be the same as if you were meeting in person. Your workspace background should also be tidy and professional.</li><li>What’s not allowed:</li><li>Flip Flops</li><li>Faded jeans.</li></ul>"
+        },
+        {
+          "sort_order": 2,
+          "number_prefix": "2",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Dress Code for Non-Client-Facing Employees",
+          "body": "<p>For employees not engaged in client-facing duties or meetings, Oceanic maintains a relaxed but respectable dress policy to support comfort and creativity in the workplace.</p><h6>Acceptable</h6><ul><li>Attire: Smart casual wear, such as jeans, collared shirts and t-shirts, blouses, dresses, and skirts.</li><li>Footwear: Neat sneakers, flats, or other clean casual shoes are permitted.</li></ul><h6>Unacceptable</h6><ul><li>Attire:Clothing with offensive graphics or language</li><li>Ripped or excessively worn clothing.</li><li>Pyjamas, loungewear</li></ul><p>Oceanic encourages team members to use good judgment and dress in a manner that is respectful to colleagues and aligned with the company&#x27;s values and culture.</p>"
+        },
+        {
+          "sort_order": 3,
+          "number_prefix": "3",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Workspace Hygiene",
+          "body": "<p>All employees are expected to take personal responsibility for maintaining the cleanliness of their own workstations and equipment.</p><p>Desk Area: Keep your desk surface tidy and free from clutter. Avoid leaving food wrappers, used cups, or personal belongings that create a mess.</p><p>Drawers &amp; Storage: Organize and regularly clean drawers or storage cabinets. Avoid hoarding unnecessary materials.</p><p>Equipment Care: Ensure that laptops, monitors, keyboards, and other electronic devices are wiped down and maintained in clean working condition. Do not place food or drinks in areas that could risk equipment damage.</p><p>Daily Clean-Up: Before leaving for the day, clear your desk and dispose of any rubbish in the appropriate bins.</p><p>Shared Areas: When using shared spaces (meeting rooms, kitchen, or printers), clean up after yourself and leave the space ready for the next person.</p><p>Failure to maintain a clean and respectful workspace may lead to formal reminders and repeated cases shall attract performance discussion and notice.</p>"
+        }
+      ]
+    },
+    {
+      "sort_order": 9,
+      "number_prefix": "9",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "JOB ROLE DELIVERY & QUALITY REQUIREMENTS",
+      "body": "<p>The purpose of this policy is to ensure that all work delivered by Oceanic meets a consistent and professional standard.</p><p>Employees are expected to approach their work with care, accountability, and a commitment to continuous improvement.</p><p>Maintaining high standards of delivery and quality is essential to:</p><p>Client satisfaction</p><p>Team efficiency</p><p>Business performance</p><p>At Oceanic, every role contributes directly to client delivery and overall business performance. The quality of work delivered by each employee reflects not only on the individual but on the organisation as a whole.</p><p>Work is expected to meet defined standards of accuracy, completeness, and professionalism at all times. Delivery is not measured only by completion of tasks, but by how well the work meets requirements, aligns with briefs, and supports client outcomes.</p><p>Employees must understand that quality and delivery are not separate expectations. Work must be delivered on time and at the required standard, without compromising either.</p>",
+      "sub_clauses": [
+        {
+          "sort_order": 1,
+          "number_prefix": "1",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Job Role Delivery Responsibility",
+          "body": "<p>Each employee is accountable for the delivery of work assigned to them. This includes understanding the requirement, planning execution, managing timelines, and ensuring that output is complete and usable.</p><p>Employees are expected to take ownership of their work from start to finish.</p><p>This means that employees must:</p><p>Fully understand the task, brief, or requirement before starting work</p><p>Seek clarification where instructions are unclear or incomplete</p><p>Manage their time to ensure deadlines are met</p><p>Track progress and flag risks early</p><p>Ensure that deliverables are aligned with expectations before submission</p><p>Work must not be treated as complete simply because it has been passed on. Responsibility remains with the employee until the output is confirmed as acceptable.</p>"
+        },
+        {
+          "sort_order": 2,
+          "number_prefix": "2",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Quality Responsibility",
+          "body": "<p>Every employee is responsible for the quality of their own work.</p><p>Quality includes:</p><p>Accuracy of information</p><p>Completeness of output</p><p>Alignment with the brief or requirement</p><p>Professional standard of presentation</p><p>Employees must review their work before submission, regardless of:</p><p>Seniority</p><p>Experience level</p><p>Urgency of the task</p><p>“Rush work” or “deadline pressure” is not an acceptable reason for avoidable errors. Employees are expected to manage time effectively to allow for proper review before submission.</p>"
+        },
+        {
+          "sort_order": 3,
+          "number_prefix": "3",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Work Review & Submission Standards",
+          "body": "<p>Before submitting any work, employees must ensure that it has been properly reviewed.</p><p>A proper review includes:</p><p>Checking for errors, omissions, and inconsistencies</p><p>Confirming alignment with the original brief</p><p>Ensuring that all required elements are included</p><p>Verifying that the output is clear and usable by the next stage</p><p>Work that has not been reviewed is considered incomplete.</p><p>Repeated submission of unreviewed or poor-quality work will be treated as a performance issue.</p>"
+        },
+        {
+          "sort_order": 4,
+          "number_prefix": "4",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Error Identification & Reporting",
+          "body": "<p>Errors may occur, but how they are handled is critical.</p><p>Employees are expected to take immediate responsibility when an error is identified.</p><p>This includes:</p><p>Acknowledging the error without delay</p><p>Informing the relevant Manager or Project Lead as soon as possible</p><p>Providing clear information on the nature and impact of the error</p><p>Concealing, ignoring, or delaying the reporting of errors is considered misconduct and may result in disciplinary action.</p>"
+        },
+        {
+          "sort_order": 5,
+          "number_prefix": "5",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Correction & Learning",
+          "body": "<p>Errors must be corrected promptly and professionally.</p><p>Employees are expected to:</p><p>Take ownership of correcting the issue</p><p>Ensure that corrections are completed accurately</p><p>Support any follow-up actions required</p><p>In addition to correction, employees must demonstrate learning from errors.</p><p>Repeated errors of the same nature indicate a lack of improvement and may result in further action.</p><p>This may include:</p><p>Performance discussion</p><p>Additional supervision or review requirements</p><p>Retraining or skill development</p><p>Disciplinary action in line with Company policy</p>"
+        },
+        {
+          "sort_order": 6,
+          "number_prefix": "6",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Rework & Accountability",
+          "body": "<p>Rework has a direct impact on productivity, timelines, and team efficiency.</p><p>Where rework is caused by avoidable factors, it will be considered in performance evaluation.</p><p>Avoidable factors include:</p><p>Negligence</p><p>Lack of attention to detail</p><p>Failure to follow instructions or briefs.</p><p>Incomplete understanding of requirements</p><p>Employees are expected to minimise rework by ensuring that work is done correctly the first time.</p>"
+        },
+        {
+          "sort_order": 7,
+          "number_prefix": "7",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Monitoring of Performance and Quality Trends",
+          "body": "<p>The Company will monitor patterns in delivery and quality to ensure consistent standards are maintained.</p><p>This includes tracking:</p><p>Frequency of errors</p><p>Types of errors</p><p>Rework requirements</p><p>Missed deadlines</p><p>Where patterns of concern are identified, the employee may be subject to:</p><p>Performance discussion</p><p>Structured improvement plans</p><p>Escalation under the disciplinary process if required.</p>"
+        },
+        {
+          "sort_order": 8,
+          "number_prefix": "8",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Ownership and Professional Standard",
+          "body": "<p>Employees are expected to demonstrate ownership and professionalism in all work delivered.</p><p>This includes:</p><p>Taking responsibility for outcomes</p><p>Maintaining attention to detail</p><p>Delivering work that meets expected standards.</p><p>Being accountable for both successes and errors</p><p>Quality is not the responsibility of the reviewer alone. It is the responsibility of the person delivering the work.</p>"
+        }
+      ]
+    },
+    {
+      "sort_order": 10,
+      "number_prefix": "10",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "IT & Data Security Policy (Brief)",
+      "body": "<p>To protect Oceanic’s systems, data, intellectual property, and client information from misuse, loss, or security breaches.</p><p>Applies to all employees, contractors, and interns using Company systems, devices, networks, or data.</p>",
+      "sub_clauses": [
+        {
+          "sort_order": 1,
+          "number_prefix": "1",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Acceptable Use",
+          "body": "<p>Company IT resources must be used primarily for work purposes.</p><p>Access systems and data strictly on a need-to-know basis.</p><p>Use strong passwords and keep login credentials confidential.</p>"
+        },
+        {
+          "sort_order": 2,
+          "number_prefix": "2",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Unacceptable Use",
+          "body": "<p>Employees must not:</p><p>Share client or internal data without authorisation.</p><p>Download, forward, or store Company data on unauthorised devices or platforms.</p><p>Use personal email or messaging apps for official work unless approved.</p>"
+        },
+        {
+          "sort_order": 3,
+          "number_prefix": "3",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Security Awareness",
+          "body": "<p>Be alert to phishing, suspicious links, or unusual system activity.</p><p>Report any suspected data breach, loss, or security incident immediately.</p><p>Failure to comply with this policy may result in:</p><ul><li>Restricted system access</li><li>Disciplinary action</li><li>Termination in serious cases</li><li>Legal consequences where applicable</li></ul>"
+        }
+      ]
+    },
+    {
+      "sort_order": 11,
+      "number_prefix": "11",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "Asset & Equipment Policy (Brief)",
+      "body": "<p>This policy is designed to ensure that company resources are used effectively, protected from risk, and maintained in a condition that supports business operations.</p><p>Employees are expected to act responsibly and professionally in the use of all company-issued assets, recognising that misuse or negligence can impact both operational efficiency and security.</p><p>Applies to all Company-issued assets including laptops, phones, peripherals, software, and access credentials.</p><p>Oceanic provides employees with company-issued assets and equipment to support the effective performance of their roles. These assets include, but are not limited to, laptops, mobile devices, peripherals, software, and system access credentials.</p><p>All company-issued assets remain the property of Oceanic at all times. Employees are granted access to these resources strictly for the purpose of carrying out their work responsibilities.</p><p>Employees are expected to use these assets responsibly, maintain them in good condition, and ensure that they are not misused, damaged, or exposed to risk.</p><p>This policy applies to all employees who are assigned or have access to company assets.</p>",
+      "sub_clauses": [
+        {
+          "sort_order": 1,
+          "number_prefix": "1",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Employee Responsibilities",
+          "body": "<p>Employees are responsible for the proper use, care, and security of all company-issued assets assigned to them.</p><p>This responsibility includes ensuring that equipment is handled with care and used only for authorised purposes.</p><p>Employees must:</p><p>Take reasonable care of all assigned equipment at all times</p><p>Use company assets strictly for work-related purposes</p><p>Ensure that equipment is protected from damage, loss, or theft</p><p>Prevent unauthorised access or use of devices and systems</p><p>Report any faults, damage, or loss immediately upon discovery</p><p>Employees must also ensure that assets are stored securely when not in use and are not left unattended in unsecured environments.</p><p>Failure to exercise reasonable care may result in accountability under this policy.</p>"
+        },
+        {
+          "sort_order": 2,
+          "number_prefix": "2",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Acceptable Use",
+          "body": "<p>Company assets are provided to support work and must be used in a professional and responsible manner.</p><p>Employees are expected to ensure that all usage aligns with company policies, security requirements, and professional standards.</p><p>Any use that compromises system performance, data security, or the reputation of the Company is strictly prohibited.</p>"
+        },
+        {
+          "sort_order": 3,
+          "number_prefix": "3",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Prohibited Use",
+          "body": "<p>Employees must not use company assets in a manner that is inappropriate, unauthorised, or in breach of policy.</p><p>This includes, but is not limited to:</p><p>Using company equipment for illegal, unethical, or inappropriate activities</p><p>Installing or downloading unauthorised software, applications, or files</p><p>Sharing company devices, login credentials, or system access without approval</p><p>Allowing unauthorised individuals to access company systems or information</p><p>Such actions may expose the Company to security risks and will be treated as serious policy violations.</p>"
+        },
+        {
+          "sort_order": 4,
+          "number_prefix": "4",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Loss, Damage, and Reporting",
+          "body": "<p>Employees are required to report any loss, damage, or malfunction of company assets immediately.</p><p>Timely reporting ensures that risks can be managed and corrective action can be taken.</p><p>Where assets are lost or damaged due to negligence, misuse, or failure to follow policy, the employee may be held accountable.</p><p>This may include recovery of costs, subject to:</p><p>Applicable laws</p><p>Company procedures</p><p>Fair and reasonable assessment of responsibility</p>"
+        },
+        {
+          "sort_order": 5,
+          "number_prefix": "5",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Return of Assets",
+          "body": "<p>All company-issued assets must be returned when required.</p><p>This includes situations such as:</p><p>Resignation or termination of employment</p><p>Role changes or reassignment</p><p>Replacement or upgrade of equipment</p><p>Assets must be returned in good working condition, allowing for normal wear and tear.</p><p>Failure to return company property may result in:</p><p>Recovery of costs</p><p>Withholding of final payments where permitted by law</p><p>Further action under company policy</p>"
+        },
+        {
+          "sort_order": 6,
+          "number_prefix": "6",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Company Laptop Usage & Take-Home Policy",
+          "body": "<p>The Company may assign laptops to employees for use both within the office and outside the workplace. This is done to ensure continuity of work and to enable employees to respond to operational and client needs when required.</p><p>The primary purpose of allowing laptops to be taken home is to support work responsibilities beyond standard office hours where necessary. This includes situations where tasks need to be completed within tight deadlines or where urgent matters arise that require immediate attention.</p><p>Employees must understand that company-issued laptops are provided strictly for work-related purposes and not for general personal use.</p><p>This policy is designed to provide employees with the tools required to perform their roles effectively while ensuring that company assets are used responsibly and securely.</p><p>The flexibility provided through take-home laptops must be balanced with accountability and adherence to company standards.</p><h3>Purpose of Take-Home Laptop</h3><p>Employees who are issued a laptop and permitted to take it offsite are expected to use it for the following purposes:</p><p>To ensure they have access to systems, files, and tools required to complete assigned work</p><p>To address urgent client or project-related matters outside standard working hours when required</p><p>To maintain continuity of work where deadlines or operational needs extend beyond office hours</p><p>The ability to take a laptop home does not change working hour expectations but provides flexibility to manage workload effectively.</p><h3>Responsibility and Care</h3><p>Employees are responsible for the proper care and security of company-issued laptops at all times.</p><p>This includes ensuring that:</p><p>The laptop is kept safe from theft, loss, or damage</p><p>The device is not left unattended in unsecured locations</p><p>Appropriate precautions are taken when transporting or storing the device</p><p>Any loss, damage, or security concern must be reported to the Company immediately.</p><h3>Acceptable Use</h3><p>Company laptops must be used in a manner that reflects professional and responsible behaviour.</p><p>Employees must ensure that:</p><p>Usage is primarily for work-related activities</p><p>Company systems, files, and data are not accessed or shared inappropriately</p><p>The device is not used for activities that may compromise security or performance</p><p>Excessive personal use or misuse of the device may result in review and disciplinary action.</p><h3>Return and Access</h3><p>All company-issued laptops remain the property of the Company.</p><p>Employees must:</p><p>Return the laptop upon request</p><p>Return the laptop upon termination of employment</p><p>Ensure that all company data remains intact and accessible</p><p>The Company reserves the right to:</p><p>Monitor usage where required</p><p>Restrict access if misuse is identified</p>"
+        }
+      ]
+    },
+    {
+      "sort_order": 12,
+      "number_prefix": "12",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "Performance Discussion & Disciplinary Procedure",
+      "body": "<p>The purpose of the Performance Discussion and Disciplinary Process is to:</p><ul><li>Address repeated performance concerns or breaches of company policies.</li><li>Provide employees with clear feedback and an opportunity to improve.</li><li>Ensure consistency, fairness, and transparency in people management.</li><li>Protect the organisation’s standards, productivity, and reputation.</li></ul><p>This process is corrective, not punitive, and is intended to support improvement before escalation. Reasonable steps for improvement and ensures employees are given clear feedback and the opportunity to respond.</p>",
+      "sub_clauses": [
+        {
+          "sort_order": 1,
+          "number_prefix": "1",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Performance Feedback Forms (Foundation)",
+          "body": "<p>Oceanic uses a Performance Feedback Form to document both:</p><ul><li>Positive performance</li><li>Negative performance (errors, delays, quality gaps, non-compliance, conduct issues)</li></ul><p>Trigger for Performance Disciplinary</p><p>A Performance Disciplinary process may be initiated when any of the following occurs:</p><p>More than two (2) negative Performance Feedback Forms are recorded for an employee within a single calendar month, OR</p><p>A serious or repeated breach of company policies, including but not limited to:</p><ul><li>Attendance &amp; punctuality</li><li>Workplace hygiene and conduct</li><li>Leave procedures and approvals.</li><li>Communication protocols</li><li>Any other policy outlined.</li></ul><p class=\"important-note\"><strong>Positive feedbacks do not negate repeated negative performance concerns.</strong></p>"
+        },
+        {
+          "sort_order": 2,
+          "number_prefix": "2",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Formal Disciplinary",
+          "body": "<ul><li>Repeated issues that have been raised through the feedback form or coaching but remain uncorrected.</li><li>Serious breaches of company policies, procedures, or standards.</li><li>Issues that significantly impact the workplace, company reputation, or employee safety.</li></ul><p>The disciplinary process is not a substitute for regular performance discussions but a structured escalation when initial feedback has not resulted in improvement or when serious misconduct occurs.</p><p>Disciplinary action will be considered when an employee:</p><ul><li>Commits a breach of company policies, procedures, or code of conduct.</li><li>Fails to meet expected performance standards after coaching and support.</li><li>Demonstrates behaviour that impacts team morale, productivity, or Oceanics’ reputation.</li></ul><p>These issues are grouped into two categories for clarity:</p><p>Work-Related Conduct5</p><ul><li>Attendance and punctuality issues (e.g., tardiness, absenteeism)</li><li>Not following instructions</li><li>Not following defined processes and protocols</li><li>For patterns of poor or incomplete communication (including Bitrix, emails or assignment related)</li><li>Non-compliance with company procedures and workflows</li><li>Failure to carry out required quality checks impacting service quality.</li><li>Incompetence (e.g., low productivity, repeated errors)</li><li>Loafing or time-wasting during work hours</li><li>Refusal to accept reasonable job assignments.</li><li>Negligence in task performance</li><li>Failure to uphold Oceanics’ service standards.</li></ul><p>Behavioral, Ethical, and Integrity-Related Issues</p><ul><li>Abusive, obscene, or immoral conduct</li><li>Threatening or bullying behaviour</li><li>Disloyalty to the employer (e.g., conflicts of interest, competing business)</li><li>Falsifying company records or documents</li><li>Theft or dishonest behaviour</li><li>Assault or fighting at work.</li><li>Damage to or loss of company property (deliberate or negligent)</li><li>Insubordination or disrespect toward management</li><li>Breach of confidentiality</li><li>Personal conduct that undermines workplace harmony or brand reputation</li><li>Discrimination or harassment</li></ul>"
+        }
+      ]
+    },
+    {
+      "sort_order": 13,
+      "number_prefix": "13",
+      "numbering_style": "decimal",
+      "number_separator": ".",
+      "title": "PERFORMANCE MANAGEMENT & DISCIPLINARY PROCESS",
+      "body": "",
+      "sub_clauses": [
+        {
+          "sort_order": 1,
+          "number_prefix": "1",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Performance Discussion vs Disciplinary Action",
+          "body": "<p>At Oceanic, performance concerns are addressed through a structured approach that distinguishes between early intervention and formal disciplinary action.</p><p>A Performance Discussion is used as an initial step to address concerns early, provide clarity, and support improvement. A Disciplinary Action is a formal step taken when performance does not improve or when policy breaches occur.</p><p>Both processes are documented and form part of the employee’s record.</p><p>The distinction is as follows:</p><p>Type</p><p>Purpose</p><p>Formal Record</p><p>Performance Discussion</p><p>Early intervention, clarification, and guidance</p><p>Yes</p><p>Disciplinary Action</p><p>Formal corrective action for non-improvement or breaches</p><p>Yes</p><p>A Performance Discussion may or may not lead to disciplinary action, depending on whether improvement is demonstrated.</p>"
+        },
+        {
+          "sort_order": 2,
+          "number_prefix": "2",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Stages of the Performance & Disciplinary Process",
+          "body": "<p>The Company follows a progressive approach to managing performance concerns. Each stage is intended to provide the employee with a clear opportunity to improve before escalation.</p><h3>Stage 1: Performance Discussion (Informal but Documented)</h3><p>This stage is used to address concerns at an early stage before formal disciplinary action is required.</p><p>It is typically initiated where there are initial signs of performance decline or where patterns are beginning to emerge but are not yet severe.</p><p>This stage may be triggered by:</p><ul><li>First instance of repeated concerns</li><li>Early signs of declining performance</li><li>Emerging patterns that require intervention</li></ul><p>During this stage, the focus is on clarity and improvement.</p><p>The process will include:</p><ul><li>A discussion of specific performance concerns, supported by clear examples</li><li>Reference to documented Performance Feedback Forms or relevant policy expectations</li><li>An opportunity for the employee to respond and explain contributing factors</li><li>Clarification of expected standards and required corrective actions</li><li>Agreement on a short review period, typically between 2 to 4 weeks</li></ul><p>The outcome of this stage will be:</p><ul><li>Confirmation of expected performance standards</li><li>Agreement on improvement actions</li><li>Documentation of the discussion for record purposes</li></ul><p>This stage does not constitute a formal warning but forms part of the employee’s performance history.</p><h3>Stage 2: Verbal Warning (Formal)</h3><p>Where there is no improvement following a Performance Discussion, or where concerns persist, the process will escalate to a Verbal Warning.</p><p>This stage represents the first formal level of disciplinary action.</p><p>This stage may be initiated where:</p><ul><li>There is no improvement after Stage 1</li><li>Negative Performance Feedback Forms continue to be received</li><li>Minor policy breaches are repeated</li></ul><p>The process will include:</p><ul><li>A formal meeting with the employee</li><li>Clear explanation of performance concerns, including dates and examples</li><li>Reference to relevant policies or standards that have not been met</li><li>Definition of required improvements with measurable expectations</li><li>Issuance of a verbal warning, which will be formally recorded in writing</li></ul><p>The outcome of this stage will be:</p><ul><li>A Verbal Warning placed on the employee’s file</li><li>Commencement of a defined performance monitoring period</li><li>Clear notice that failure to improve may lead to further escalation</li></ul><h3>Stage 3: First Written Warning</h3><p>If performance does not improve or if concerns escalate, a First Written Warning will be issued.</p><p>This stage represents a formal escalation and clearly signals that performance must improve.</p><p>This stage may be initiated where:</p><ul><li>Poor performance continues</li><li>Improvement plans are not met</li><li>Policy non-compliance escalates</li></ul><p>The process will include:</p><ul><li>A formal disciplinary meeting</li><li>Issuance of a Written Warning outlining:</li></ul><p>Nature of the performance or policy breach</p><p>Previous discussions and warnings</p><p>Required corrective actions</p><p>Defined monitoring timeframe</p><p>The employee will be required to acknowledge the warning, typically through signature.</p><p>The outcome of this stage will be:</p><ul><li>A Written Warning placed on the personnel file</li><li>Clear notice that further issues may lead to a Final Written Warning</li></ul><h3>Stage 4: Final Written Warning</h3><p>This stage is reached where there is no sustained improvement or where serious concerns persist.</p><p>It represents the final opportunity for the employee to correct their performance.</p><p>This stage may be initiated where:</p><ul><li>There is no improvement after a First Written Warning</li><li>There are repeated or serious breaches impacting operations, quality, or team environment</li></ul><p>The process will include:</p><ul><li>Involvement of Senior Management</li><li>Issuance of a Final Written Warning</li><li>Clear communication that this is the final opportunity to improve</li></ul><p>Explicit notice that failure to meet expectations may result in termination</p><p>The outcome of this stage will be:</p><ul><li>A Final Written Warning placed on file</li><li>A strict and closely monitored improvement period</li></ul><h3>Stage 5: Termination of Employment</h3><p>Termination may occur where there is continued failure to improve or in cases of serious misconduct.</p><p>This stage may be initiated where:</p><ul><li>There is no improvement after a Final Written Warning</li><li>Serious misconduct or gross negligence has occurred</li></ul><p>Termination will be carried out in accordance with:</p><ul><li>The employee’s contract of employment</li><li>Company policies</li><li>Applicable employment laws</li></ul><h6>Immediate Escalation Clause</h6><p>While the process is generally progressive, Oceanic reserves the right to escalate directly to a higher stage where circumstances warrant it.</p><p>This may occur where:</p><ul><li>The issue is serious in nature</li><li>There is risk to client relationships</li><li>There is risk to safety or company reputation</li><li>The conduct constitutes gross misconduct</li></ul><h6>Documentation &amp; Records</h6><p>All stages of performance management and disciplinary action will be formally documented.</p><p>This includes:</p><ul><li>Performance discussions</li><li>Warnings</li><li>Disciplinary actions</li></ul><p>Records will be:</p><ul><li>Maintained confidentially</li><li>Stored within employee records</li></ul><p>Documentation ensures:</p><ul><li>Fairness</li><li>Consistency</li><li>Legal compliance</li></ul><h6>Employee Responsibility</h6><p>Employees are responsible for maintaining acceptable performance standards and complying with company policies at all times.</p><p>Once concerns are raised, employees are expected to actively engage in improvement efforts.</p><p>This includes:</p><ul><li>Taking feedback seriously</li><li>Making necessary changes</li><li>Demonstrating improvement within agreed timeframes</li></ul><p>Failure to take corrective action will result in escalation under this policy.</p>"
+        },
+        {
+          "sort_order": 3,
+          "number_prefix": "3",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Gross Misconduct Resulting in Summary Dismissal",
+          "body": ""
+        },
+        {
+          "sort_order": 4,
+          "number_prefix": "4",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "13.5. Summary Dismissal / Gross Misconduct",
+          "body": "<p class=\"policy-note\"><strong>Oceanic reserves the right to summarily dismiss an employee, without notice or payment in lieu of notice, where the employee is found to have engaged in gross misconduct, serious misconduct, or conduct that fundamentally breaches trust, safety, professionalism, company policy, legal obligations, or the employment relationship.</strong></p><p class=\"policy-note\"><strong>Summary dismissal may occur where the severity of the conduct justifies immediate termination and where continued employment is considered inappropriate or damaging to the Company, its clients, employees, operations, or reputation.</strong></p><p class=\"policy-note\"><strong>All matters will be assessed fairly, reasonably, and in accordance with applicable employment laws and principles of procedural fairness.</strong></p><h3>Definition of Gross Misconduct</h3><p class=\"policy-note\"><strong>Gross misconduct refers to behaviour that is serious in nature and incompatible with continued employment.</strong></p><p class=\"policy-note\"><strong>This includes conduct that:</strong></p><p>Causes or may cause serious harm to the Company, its employees, clients, systems, reputation, or operations.</p><p>Represents a serious breach of Company policies, confidentiality obligations, or professional standards.</p><p>Demonstrates dishonesty, deliberate misconduct, wilful negligence, abuse of trust, or intentional non-compliance.</p><p>Creates significant operational, legal, reputational, financial, or security risk.</p><h3>Examples of Gross Misconduct</h3><p class=\"policy-note\"><strong>Examples include, but are not limited to:</strong></p><h4>Integrity, Fraud &amp; Dishonesty</h4><p>Theft, fraud, or dishonest conduct.</p><p>Falsification of records, timesheets, reports, invoices, leave applications, or company documents.</p><p>Fraudulent expense claims.</p><p>Deliberate misrepresentation to clients, management, or stakeholders.</p><p>Unauthorized use or misuse of Company funds, systems, or assets.</p><h4>Confidentiality &amp; Client Information</h4><p>Unauthorised disclosure or sharing of confidential Company or client information.</p><p>Leaking client campaigns, concepts, designs, strategies, tenders, or internal documents.</p><p>Sharing internal pricing, proposals, financial information, or commercial data without authorization.</p><p>Posting confidential work or information on social media or external platforms without approval.</p><p>Serious breach of non-disclosure obligations.</p><h4>IT, Systems &amp; Security</h4><p>Unauthorized access to Company systems, files, accounts, or data.</p><p>Deliberate deletion, destruction, manipulation, or misuse of Company or client data.</p><p>Sharing passwords, login credentials, or security access without authorization.</p><p>Installing unauthorized or malicious software.</p><p>Serious cybersecurity breaches caused intentionally or through reckless behaviour.</p><p>Use of Company systems or devices for illegal, unethical, or prohibited activities.</p><h4>Workplace Conduct &amp; Behaviour</h4><p>Assault, violence, threats, intimidation, bullying, or aggressive behaviour.</p><p>Serious harassment, including sexual harassment.</p><p>Discrimination or abusive conduct.</p><p>Possession, use, or distribution of illegal substances in the workplace.</p><p>Reporting to work under the influence of drugs or alcohol in a manner that impacts safety, professionalism, or work performance.</p><h4>Insubordination &amp; Deliberate Non-Compliance</h4><p>Serious insubordination or refusal to follow lawful and reasonable instructions.</p><p>Wilful refusal to carry out assigned responsibilities.</p><p>Deliberate bypassing of required approval processes, controls, or procedures.</p><p>Intentional concealment of errors, incidents, or issues impacting clients or operations.</p><p>Deliberate disruption or sabotage of workflow, projects, systems, or team operations.</p><h4>Company Reputation &amp; Client Relationships</h4><p>Conduct that seriously damages or risks damaging the reputation of Oceanic or its clients.</p><p>Public defamatory, offensive, or inappropriate remarks about the Company, clients, or employees.</p><p>Serious unprofessional behaviour in front of clients, partners, or stakeholders.</p><p>Actions resulting in significant loss of client trust or commercial harm.</p><h4>Conflict of Interest &amp; Misuse of Position</h4><p>Operating or participating in competing business activities without approval.</p><p>Soliciting Company clients, suppliers, or opportunities for personal benefit.</p><p>Using Company resources, systems, or time for unauthorized personal commercial activity.</p><p>Abuse of authority, trust, or position for personal gain.</p><h4>Attendance &amp; Employment Abandonment</h4><p>Absence from work for more than three consecutive working days without communication or authorization.</p><p>Deliberate abandonment of employment responsibilities.</p><p>Leaving the workplace during critical operational activities without authorization where it materially impacts delivery or safety.</p><h3>Immediate Escalation</h3><p class=\"policy-note\"><strong>Oceanic reserves the right to bypass progressive disciplinary stages and proceed directly to summary dismissal where the seriousness of the matter warrants immediate action.</strong></p><p class=\"policy-note\"><strong>This may occur where:</strong></p><p>There is significant risk to client relationships or Company reputation.</p><p>There is serious breach of trust or confidentiality.</p><p>There is operational, financial, legal, or security risk.</p><p>The conduct is deliberate, reckless, malicious, or unlawful.</p><p>Continued employment is no longer reasonably sustainable.</p><h3>Investigation &amp; Procedural Fairness</h3><p class=\"policy-note\"><strong>Before summary dismissal is confirmed, the Company will, where reasonably practicable:</strong></p><p>Conduct an investigation into the matter.</p><p>Provide the employee an opportunity to respond.</p><p>Review relevant evidence and circumstances.</p><p>Assess the seriousness, intent, and impact of the conduct.</p><p class=\"policy-note\"><strong>Where required, employees may be suspended during investigation proceedings.</strong></p><h3>Non-Exhaustive List</h3><p class=\"policy-note\"><strong>The examples listed in this section are not exhaustive.</strong></p><p class=\"policy-note\"><strong>Oceanic reserves the right to determine whether conduct constitutes gross misconduct based on:</strong></p><p>Severity of the conduct.</p><p>Operational impact.</p><p>Reputational damage.</p><p>Legal or compliance exposure.</p><p>Breach of trust and professional standards.</p><p>Risk posed to the Company, its employees, clients, or stakeholders.</p>"
+        },
+        {
+          "sort_order": 5,
+          "number_prefix": "5",
+          "numbering_style": "decimal",
+          "number_separator": ".",
+          "title": "Appeals",
+          "body": "<p>Employees have the right to appeal any formal disciplinary decision.</p><p>To ensure fairness:</p><p>Appeals must be submitted in writing within 5 working days of receiving the decision.</p><p>The appeal must clearly state the grounds for review.</p><p>The appeal will be reviewed by:</p><p>A more senior manager, or</p><p>A panel not involved in the original decision.</p><p>The outcome of the appeal will be communicated following review.</p>"
+        }
+      ]
+    }
+  ]
+}

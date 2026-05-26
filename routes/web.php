@@ -46,7 +46,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/notifications/{notification}/read', [PortalNotificationController::class, 'markRead'])
         ->name('portal.notifications.read');
 
-    Route::get('/induction/certificate', [InductionEmployeeController::class, 'certificate'])->name('portal.induction.certificate');
+    Route::get('/induction/certificate/{induction_policy_version}', [InductionEmployeeController::class, 'certificate'])->name('portal.induction.certificate');
     Route::get('/induction/master-policy/{induction_policy_version}', [InductionEmployeeController::class, 'masterPolicy'])->name('portal.induction.master-pdf');
     Route::get('/my/acknowledgements', [PortalEmployeeAcknowledgementHistoryController::class, 'index'])->name('portal.acknowledgements');
 
@@ -199,6 +199,9 @@ Route::middleware('auth')->group(function () {
             });
 
             Route::middleware(['permission:'.PortalPermissions::INDUCTION_POLICY_UPDATE])->group(function () {
+                Route::post('/policies/{policy}/reorder', [InductionPolicyAdminController::class, 'reorderPolicy'])
+                    ->whereNumber('policy')
+                    ->name('policies.reorder');
                 Route::put('/policies/{policy}', [InductionPolicyAdminController::class, 'updatePolicy'])->name('policies.update');
                 Route::put('/policies/{policy}/clauses/{section}', [InductionPolicyAdminController::class, 'updateSection'])->name('policies.clauses.update');
                 Route::put('/policies/{policy}/clauses/{section}/sub-clauses/{sub_clause}', [InductionPolicyAdminController::class, 'updateSubClause'])->name('policies.clauses.sub-clauses.update');

@@ -16,44 +16,44 @@ final class InductionUserProgressService
 
     /**
      * @return array{
-     *     version: InductionPolicyVersion|null,
-     *     total_sections: int,
-     *     rows: Collection<int, array{
-     *         user: User,
-     *         sections_completed: int,
-     *         sections_total: int,
-     *         progress_percent: int,
-     *         status: string,
-     *         started_at: \Illuminate\Support\Carbon|null,
-     *         completed_at: \Illuminate\Support\Carbon|null,
+     *     programmes: array<int, array{
+     *         version: InductionPolicyVersion,
+     *         total_sections: int,
+     *         rows: Collection<int, array{
+     *             user: User,
+     *             sections_completed: int,
+     *             sections_total: int,
+     *             progress_percent: int,
+     *             status: string,
+     *             started_at: \Illuminate\Support\Carbon|null,
+     *             completed_at: \Illuminate\Support\Carbon|null,
+     *         }>
      *     }>
      * }
      */
     public function report(): array
     {
-        $version = $this->flowService->currentPublishedVersion();
-        if ($version === null) {
-            return [
-                'version' => null,
-                'total_sections' => 0,
-                'rows' => collect(),
-            ];
+        $versions = $this->flowService->activePublishedVersions();
+        if ($versions->isEmpty()) {
+            return ['programmes' => []];
         }
 
-        $totalSections = $version->activeSections()->count();
-
-        $enrollments = InductionEnrollment::query()
-            ->where('induction_policy_version_id', $version->id)
-            ->withCount('sectionCompletions')
-            ->get()
-            ->keyBy('user_id');
-
-        $rows = User::query()
+        $users = User::query()
             ->active()
             ->orderBy('last_name')
             ->orderBy('first_name')
-            ->get()
-            ->map(function (User $user) use ($enrollments, $totalSections): array {
+            ->get();
+
+        $programmes = $versions->map(function (InductionPolicyVersion $version) use ($users): array {
+            $totalSections = $version->activeSections()->count();
+
+            $enrollments = InductionEnrollment::query()
+                ->where('induction_policy_version_id', $version->id)
+                ->withCount('sectionCompletions')
+                ->get()
+                ->keyBy('user_id');
+
+            $rows = $users->map(function (User $user) use ($enrollments, $totalSections): array {
                 $enrollment = $enrollments->get($user->id);
                 $completed = (int) ($enrollment?->section_completions_count ?? 0);
                 $progressPercent = $totalSections > 0
@@ -80,68 +80,77 @@ final class InductionUserProgressService
                 ];
             });
 
-        return [
-            'version' => $version,
-            'total_sections' => $totalSections,
-            'rows' => $rows,
-        ];
+            return [
+                'version' => $version->loadMissing('policy'),
+                'total_sections' => $totalSections,
+                'rows' => $rows,
+            ];
+        })->all();
+
+        return ['programmes' => $programmes];
     }
 
     /**
      * @return array{
-     *     version: InductionPolicyVersion|null,
-     *     total_sections: int,
-     *     enrollment: InductionEnrollment|null,
-     *     summary: array{
-     *         user: User,
-     *         sections_completed: int,
-     *         sections_total: int,
-     *         progress_percent: int,
-     *         status: string,
-     *         started_at: \Illuminate\Support\Carbon|null,
-     *         completed_at: \Illuminate\Support\Carbon|null,
-     *     },
-     *     completions: Collection<int, InductionSectionCompletion>
+     *     programmes: array<int, array{
+     *         version: InductionPolicyVersion,
+     *         total_sections: int,
+     *         enrollment: InductionEnrollment|null,
+     *         summary: array{
+     *             user: User,
+     *             sections_completed: int,
+     *             sections_total: int,
+     *             progress_percent: int,
+     *             status: string,
+     *             started_at: \Illuminate\Support\Carbon|null,
+     *             completed_at: \Illuminate\Support\Carbon|null,
+     *         },
+     *         completions: Collection<int, InductionSectionCompletion>
+     *     }>
      * }
      */
     public function detailFor(User $user): array
     {
         $report = $this->report();
-        $version = $report['version'];
-        $totalSections = $report['total_sections'];
+        $programmes = [];
 
-        $summaryRow = $report['rows']->firstWhere(fn (array $row): bool => $row['user']->id === $user->id);
-        $summary = $summaryRow ?? [
-            'user' => $user,
-            'sections_completed' => 0,
-            'sections_total' => $totalSections,
-            'progress_percent' => 0,
-            'status' => 'not_started',
-            'started_at' => null,
-            'completed_at' => null,
-        ];
+        foreach ($report['programmes'] as $programme) {
+            $version = $programme['version'];
+            $totalSections = $programme['total_sections'];
 
-        $enrollment = $version !== null
-            ? InductionEnrollment::query()
+            $summaryRow = $programme['rows']->firstWhere(fn (array $row): bool => $row['user']->id === $user->id);
+            $summary = $summaryRow ?? [
+                'user' => $user,
+                'sections_completed' => 0,
+                'sections_total' => $totalSections,
+                'progress_percent' => 0,
+                'status' => 'not_started',
+                'started_at' => null,
+                'completed_at' => null,
+            ];
+
+            $enrollment = InductionEnrollment::query()
                 ->where('user_id', $user->id)
                 ->where('induction_policy_version_id', $version->id)
-                ->first()
-            : null;
+                ->first();
 
-        $completions = $enrollment !== null
-            ? InductionSectionCompletion::query()
-                ->where('induction_enrollment_id', $enrollment->id)
-                ->with('section')
-                ->orderBy('completed_at')
-                ->get()
-            : collect();
+            $completions = $enrollment !== null
+                ? InductionSectionCompletion::query()
+                    ->where('induction_enrollment_id', $enrollment->id)
+                    ->with('section')
+                    ->orderBy('completed_at')
+                    ->get()
+                : collect();
 
-        return [
-            'version' => $version,
-            'total_sections' => $totalSections,
-            'enrollment' => $enrollment,
-            'summary' => $summary,
-            'completions' => $completions,
-        ];
+            $programmes[] = [
+                'version' => $version,
+                'total_sections' => $totalSections,
+                'enrollment' => $enrollment,
+                'summary' => $summary,
+                'completions' => $completions,
+            ];
+        }
+
+        return ['programmes' => $programmes];
     }
 }

@@ -49,4 +49,17 @@ class RichTextHelperTest extends TestCase
         $this->assertStringContainsString('Hello', $clean);
         $this->assertStringContainsString('border-radius', $clean);
     }
+
+    #[Test]
+    public function purifier_keeps_table_markup(): void
+    {
+        $dirty = '<table><thead><tr><th>Col A</th></tr></thead><tbody><tr><td>Cell</td></tr></tbody></table>';
+        $clean = RichHtmlPurifier::purify($dirty);
+
+        $this->assertStringContainsString('<table', $clean);
+        $this->assertStringContainsString('<th', $clean);
+        $this->assertStringContainsString('<td', $clean);
+        $this->assertStringContainsString('Col A', $clean);
+        $this->assertStringContainsString('Cell', $clean);
+    }
 }
